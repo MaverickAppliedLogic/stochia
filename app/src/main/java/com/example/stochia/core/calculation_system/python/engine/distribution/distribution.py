@@ -1,4 +1,4 @@
-def get_distribution(datos: list[int]):
+def get_distribution(datos: list[int]) -> dict:
     # 1. Limpiar datos
     datos = [d for d in datos if d is not None]
 
