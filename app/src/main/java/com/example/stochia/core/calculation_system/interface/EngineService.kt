@@ -6,5 +6,5 @@ interface EngineService {
 
     fun gen_markov()
 
-    fun get_distribution() : Map<String, Any>
+    fun get_distribution(data: Iterable<Int>) : Map<String, Any>
 }
