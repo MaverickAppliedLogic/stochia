@@ -5,6 +5,7 @@ def gen_multinomial_montecarlo(n: int, p: list[float], size: int) -> dict:
     values = np.random.multinomial(n, p, size)
 
     return {
+        "distribution": "multinomial",
         "mean": np.mean(values, axis=0),
         "std": np.std(values, axis=0),
         "p5": np.percentile(values, 5, axis=0),

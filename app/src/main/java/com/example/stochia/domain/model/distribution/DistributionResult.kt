@@ -14,15 +14,14 @@ data class DistributionResult(
     val total: Double
 )
 
-fun PyObject.toDomain(result: PyObject): DistributionResult {
+fun PyObject.toDistributionResult(result: PyObject): DistributionResult {
     val mapPy = result.asMap().mapKeys { it.key.toString() }
 
     // FREQUENCIES
     val frequencies = mapPy["frequencies"]!!
         .asMap()
-        .map { (k, v) -> k.toInt() to v.toInt() }
+        .map { (_, v) ->  v.toDouble() }
         .toList()
-        .map { it.second.toDouble() }
 
     // PROBABILITIES
     val probabilities = mapPy["probabilities"]!!
