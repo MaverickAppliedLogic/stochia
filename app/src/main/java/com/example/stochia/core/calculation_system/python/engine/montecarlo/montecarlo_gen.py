@@ -29,8 +29,10 @@ def generate_sim_montecarlo(dist_type: str, params: dict, size: int) -> dict:
             return psim.gen_poisson_montecarlo(params["p1"], size)
         case "multinomial":
             return msim.gen_multinomial_montecarlo(
-                params["p1"], [
-                    params["p2"], params["p3"], 1-(params["p2"] + params["p3"])], size )
+                params["p1"],
+                [params["p2"], params["p3"], 1-(params["p2"] + params["p3"])],
+                size
+            )
         case _:
             raise ValueError(f"Unknown distribution type: {dist_type}")
 

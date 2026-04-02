@@ -43,6 +43,11 @@ android {
     }
 }
 chaquopy{
+    sourceSets {
+        getByName("main") {
+            srcDir("src/main/java/com/example/stochia/core/calculation_system/python")
+        }
+    }
     defaultConfig{
         version = "3.12"
 
