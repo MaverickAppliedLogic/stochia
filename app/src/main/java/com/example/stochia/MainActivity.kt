@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        Log.d("Python dist: ", "${LocalEngineServiceImpl.get_distribution(listOf(40,3,2,4,3,45,5,2,3,4))}")
         setContent {
             StochiaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
