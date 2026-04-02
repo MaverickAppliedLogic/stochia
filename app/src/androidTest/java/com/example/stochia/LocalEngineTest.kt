@@ -3,6 +3,7 @@ package com.example.stochia
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.stochia.core.calculation_system.python.LocalEngineServiceImpl
 import junit.framework.TestCase
+import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -12,25 +13,24 @@ class LocalEngineTest{
     @Test
     fun test_get_distribution() {
         //Given
-        val expectedKeys = listOf(
-            "frecuencias", "probabilidades", "media", "desviacion",
-            "p5", "p95", "min", "max", "total_datos"
-        )
+        val data = listOf(40,3,2,4,3,45,5,2,3,4)
 
         //When
-        val result = LocalEngineServiceImpl.get_distribution(listOf(40,3,2,4,3,45,5,2,3,4))
+        val result = LocalEngineServiceImpl.get_distribution(data)
 
         //Then
-        TestCase.assertTrue(result.keys.containsAll(expectedKeys))
-        result.forEach { (k, value) ->
-            TestCase.assertTrue(k.isNotEmpty())
-            TestCase.assertTrue(value.isNotEmpty())
-        }
+        assertTrue(result.frecuencias.isNotEmpty())
+        assertTrue(result.probabilidades.isNotEmpty())
+        assertTrue(result.frecuencias.size == result.probabilidades.size)
+        assertTrue(result.min <= result.max)
+        assertTrue(result.p5 <= result.p95)
+        assertTrue(result.total > 0)
     }
 
     @Test
     fun test_gen_montecarlo(){
         //Given
+
         //When
         //Then
     }
