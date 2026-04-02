@@ -12,7 +12,7 @@ def generate_sim_montecarlo(dist_type: str, params: dict, size: int) -> dict:
 
     match dist_type:
         case "normal":
-            return nsim.gen_normal_montecarlo(params["p1"],params["p2"], size)
+            return nsim.gen_normal_montecarlo(params[0],params[1], size)
         case "uniform":
             return usim.gen_uniform_montecarlo(params["p1"],params["p2"], size)
         case "exponential":
@@ -20,7 +20,7 @@ def generate_sim_montecarlo(dist_type: str, params: dict, size: int) -> dict:
         case "beta":
             return btsim.gen_beta_montecarlo(params["p1"], params["p2"], size)
         case "bernoulli":
-            return besim.gen_bernoulli_montecarlo(params["p1"], params["p2"], params["p3"])
+            return besim.gen_bernoulli_montecarlo(params[0], params[1], size)
         case "binomial":
             return bisim.gen_binomial_montecarlo(params["p1"], params["p2"], size)
         case "geometrical":
