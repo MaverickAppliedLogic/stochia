@@ -14,8 +14,8 @@ data class DistributionResult(
     val total: Double
 )
 
-fun PyObject.toDistributionResult(result: PyObject): DistributionResult {
-    val mapPy = result.asMap().mapKeys { it.key.toString() }
+fun PyObject.toDistributionResult(): DistributionResult {
+    val mapPy = asMap().mapKeys { it.key.toString() }
 
     // FREQUENCIES
     val frequencies = mapPy["frequencies"]!!

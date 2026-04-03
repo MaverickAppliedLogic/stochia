@@ -13,9 +13,9 @@ data class MontecarloResult(
     val results: List<MontecarloResult>?
 )
 
-fun PyObject.toMontecarloResult(result: PyObject): MontecarloResult {
-    val mapPy = result.asMap().mapKeys { it.key.toString() }
-    return when(mapPy["distribution"]!!.toString()) {
+fun PyObject.toMontecarloResult(): MontecarloResult{
+    val mapPy = asMap().mapKeys { it.key.toString() }
+     return when (mapPy["distribution"]!!.toString()) {
         "bernoulli" -> MontecarloResultFactory.fromBernoulli(mapPy)
         "multinomial" -> MontecarloResultFactory.fromMultinomial(mapPy)
         "geometrical" -> MontecarloResultFactory.fromGeometrical(mapPy)
