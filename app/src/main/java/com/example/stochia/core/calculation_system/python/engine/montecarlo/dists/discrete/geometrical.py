@@ -6,5 +6,5 @@ def gen_geometrical_montecarlo(p: int) -> dict:
 
     return {
         "distribution": "geometrical",
-        "tries": [tries],
+        "tries": tries,
     }
