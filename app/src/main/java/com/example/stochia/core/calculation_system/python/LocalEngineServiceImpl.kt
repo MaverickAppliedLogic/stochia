@@ -5,6 +5,9 @@ import com.example.stochia.core.calculation_system.`interface`.EngineService
 import com.example.stochia.domain.model.distribution.DistributionParams
 import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.distribution.toDistributionResult
+import com.example.stochia.domain.model.markov.MarkovParams
+import com.example.stochia.domain.model.markov.MarkovResult
+import com.example.stochia.domain.model.markov.toMarkovResult
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.model.montecarlo.MontecarloResult
 import com.example.stochia.domain.model.montecarlo.toMontecarloResult
@@ -22,12 +25,22 @@ object LocalEngineServiceImpl : EngineService {
             .getModule("engine.montecarlo.montecarlo_gen")
             .callAttr("generate_sim_montecarlo", distribution, params, size)
 
-        return result.toMontecarloResult(result)
+        return result.toMontecarloResult()
 
     }
 
-    override fun gen_markov() {
-        TODO("Not yet implemented")
+    override fun gen_markov(data: MarkovParams): MarkovResult {
+        val states = data.states.toIntArray()
+        val probs = data.probs.toDoubleArray()
+
+        val result = py
+            .getModule("engine.markov.markov")
+            .callAttr(
+                "gen_sim_markov",
+                states, probs, data.init_state, data.steps
+            )
+        return result.toMarkovResult()
+
     }
 
     override fun get_distribution(params: DistributionParams): DistributionResult {
@@ -37,7 +50,7 @@ object LocalEngineServiceImpl : EngineService {
             .getModule("engine.distribution")
             .callAttr("get_distribution", dataPy)
 
-        return result.toDistributionResult(result)
+        return result.toDistributionResult()
 
     }
 

@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.stochia.core.calculation_system.python.LocalEngineServiceImpl
 import com.example.stochia.domain.model.distribution.toPy
+import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.model.montecarlo.MontecarloType
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -187,9 +189,40 @@ class LocalEngineTest{
     }
 
     @Test
-    fun test_gen_markov(){
-        //Given
-        //When
-        //Then
+    fun test_gen_markov() {
+
+        // Given
+        val states = listOf(0, 1, 2)
+
+        // Matriz:
+        // 0→0,0→1,0→2
+        // 1→0,1→1,1→2
+        // 2→0,2→1,2→2
+        val flatProbs = listOf(
+            0.1, 0.6, 0.3,
+            0.2, 0.2, 0.6,
+            0.5, 0.3, 0.2
+        )
+
+        val params = MarkovParams(
+            states = states,
+            probs = flatProbs,
+            init_state = 0,
+            steps = 10
+        )
+
+        // When
+        val result = LocalEngineServiceImpl.gen_markov(params)
+
+        // Then
+        Log.d("test_gen_markov", "result: $result")
+
+        assertNotNull(result.path)
+        assertTrue(result.path.isNotEmpty())
+        assertEquals(0, result.path.first())
+        assertEquals(params.steps + 1, result.path.size)
+
+
     }
+
 }
