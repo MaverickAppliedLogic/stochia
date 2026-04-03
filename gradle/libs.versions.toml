@@ -1,5 +1,7 @@
 [versions]
 agp = "8.9.1"
+koinTest = "3.5.3"
+koinTestJunit4 = "3.5.3"
 kotlin = "2.0.0"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -13,6 +15,7 @@ koin-bom = "4.1.1" #Stable version
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 insert-koin-koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+insert-koin-koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinTest" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -39,6 +42,7 @@ koin-ktor = { module = "io.insert-koin:koin-ktor" }
 koin-test = { module = "io.insert-koin:koin-test" }
 insert-koin-koin-android = { module = "io.insert-koin:koin-android" }
 insert-koin-koin-bom = { module = "io.insert-koin:koin-bom" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koinTestJunit4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

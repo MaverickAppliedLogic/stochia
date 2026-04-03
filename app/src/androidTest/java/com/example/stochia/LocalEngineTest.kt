@@ -2,33 +2,37 @@ package com.example.stochia
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.stochia.core.calculation_system.python.LocalEngineServiceImpl
 import com.example.stochia.domain.model.distribution.toPy
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.model.montecarlo.MontecarloType
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertTrue
+import com.example.stochia.domain.usecase.GetDistributionUsecase
+import com.example.stochia.domain.usecase.GenMarkovUsecase
+import com.example.stochia.domain.usecase.GenMontecarloUsecase
+import junit.framework.TestCase.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
 @RunWith(AndroidJUnit4::class)
-class LocalEngineTest{
+class LocalEngineTest : KoinTest {
+
+    private val getDistribution: GetDistributionUsecase by inject()
+    private val genMontecarlo: GenMontecarloUsecase by inject()
+    private val genMarkov: GenMarkovUsecase by inject()
 
     @Test
     fun test_get_distribution() {
-        //Given
         val params = listOf(40,3,2,4,3,45,5,2,3,4).toPy()
 
-        //When
-        val result = LocalEngineServiceImpl.get_distribution(params)
+        val result = getDistribution(params)
 
-        //Then
         Log.d("test_get_distribution", "result: $result")
+
         assertTrue(result.frequencies.isNotEmpty())
         assertTrue(result.probabilities.isNotEmpty())
-        assertTrue(result.frequencies.size == result.probabilities.size)
+        assertEquals(result.frequencies.size, result.probabilities.size)
         assertTrue(result.min <= result.max)
         assertTrue(result.p5 <= result.p95)
         assertTrue(result.total > 0)
@@ -36,28 +40,25 @@ class LocalEngineTest{
 
     @Test
     fun test_gen_montecarlo_bernoulli() {
-        // Given
         val params = MontecarloParams(
             distribution = MontecarloType.BERNOULLI.key,
             params = listOf(0.6, 100.0),
             size = 100
         )
 
-        // When
-        val result = LocalEngineServiceImpl.gen_montecarlo(params)
+        val result = genMontecarlo(params)
 
-        // Then
         Log.d("test_gen_montecarlo", "result: $result")
 
-        assertTrue(result.distribution == MontecarloType.BERNOULLI)
-        assertTrue(result.results != null)
+        assertEquals(MontecarloType.BERNOULLI, result.distribution)
+        assertNotNull(result.results)
         assertTrue(result.results!!.isNotEmpty())
 
         val first = result.results[0]
 
-        assertTrue(first.mean != null)
-        assertTrue(first.stdDev != null)
-        assertTrue(first.tries != null)
+        assertNotNull(first.mean)
+        assertNotNull(first.stdDev)
+        assertNotNull(first.tries)
         assertTrue(first.mean!! >= 0.0)
         assertTrue(first.stdDev!! >= 0.0)
         assertTrue(first.tries!! > 0)
@@ -65,40 +66,30 @@ class LocalEngineTest{
 
     @Test
     fun test_gen_montecarlo_multinomial() {
-        // Given
         val params = MontecarloParams(
             distribution = MontecarloType.MULTINOMIAL.key,
             params = listOf(10.0, 0.3, 0.4),
             size = 100
         )
 
-        // When
-        val result = LocalEngineServiceImpl.gen_montecarlo(params)
+        val result = genMontecarlo(params)
 
-        // Then
         Log.d("test_gen_montecarlo_multinomial", "result: $result")
 
-        assertTrue(result.distribution == MontecarloType.MULTINOMIAL)
-        assertTrue(result.results != null)
-        assertTrue(result.results!!.isNotEmpty())
+        assertEquals(MontecarloType.MULTINOMIAL, result.distribution)
+        assertNotNull(result.results)
+        assertEquals(3, result.results!!.size)
 
-        val results = result.results
-
-        assertEquals(3, results.size)
-
-        results.forEach { result ->
-            assertTrue(result.mean != null)
-            assertTrue(result.stdDev != null)
-            assertTrue(result.p5 != null)
-            assertTrue(result.p95 != null)
-
-            assertTrue(result.mean!! >= 0.0)
-            assertTrue(result.stdDev!! >= 0.0)
-
-            assertTrue(result.p5!! <= result.p95!!)
+        result.results.forEach { r ->
+            assertNotNull(r.mean)
+            assertNotNull(r.stdDev)
+            assertNotNull(r.p5)
+            assertNotNull(r.p95)
+            assertTrue(r.mean!! >= 0.0)
+            assertTrue(r.stdDev!! >= 0.0)
+            assertTrue(r.p5!! <= r.p95!!)
         }
     }
-
 
     @Test
     fun test_montecarlo_geometrical() {
@@ -108,13 +99,12 @@ class LocalEngineTest{
             size = 1
         )
 
-        val result = LocalEngineServiceImpl.gen_montecarlo(params)
+        val result = genMontecarlo(params)
 
         Log.d("test_montecarlo_geometrical", "result=$result")
 
-        assertTrue(result.distribution == MontecarloType.GEOMETRICAL)
-        assertTrue(result.tries != null)
-
+        assertEquals(MontecarloType.GEOMETRICAL, result.distribution)
+        assertNotNull(result.tries)
     }
 
     @Test
@@ -133,18 +123,18 @@ class LocalEngineTest{
                 size = 100
             )
 
-            val result = LocalEngineServiceImpl.gen_montecarlo(params)
+            val result = genMontecarlo(params)
 
             Log.d("test_montecarlo_with_values", "dist=$dist result=$result")
 
-            assertTrue(result.distribution == dist)
-            assertTrue(result.values != null)
+            assertEquals(dist, result.distribution)
+            assertNotNull(result.values)
             assertTrue(result.values!!.isNotEmpty())
 
-            assertTrue(result.mean != null)
-            assertTrue(result.stdDev != null)
-            assertTrue(result.p5 != null)
-            assertTrue(result.p95 != null)
+            assertNotNull(result.mean)
+            assertNotNull(result.stdDev)
+            assertNotNull(result.p5)
+            assertNotNull(result.p95)
         }
     }
 
@@ -158,46 +148,34 @@ class LocalEngineTest{
         distributionsWithoutValues.forEach { dist ->
             val params = MontecarloParams(
                 distribution = dist.key,
-                params = listOf(0.5, 0.2, 0.8), // dummy params
+                params = listOf(0.5, 0.2, 0.8),
                 size = 100
             )
 
-            val result = LocalEngineServiceImpl.gen_montecarlo(params)
+            val result = genMontecarlo(params)
 
             Log.d("test_montecarlo_without_values", "dist=$dist result=$result")
 
-            assertTrue(result.distribution == dist)
-            assertTrue(result.values == null)
-            if (result.results!= null){
+            assertEquals(dist, result.distribution)
+
+            if (result.results != null) {
                 val first = result.results[0]
-
-                assertTrue(first.mean != null)
-                assertTrue(first.stdDev != null)
-                assertTrue(first.tries != null)
+                assertNotNull(first.mean)
+                assertNotNull(first.stdDev)
+                assertNotNull(first.tries)
+            } else {
+                assertNotNull(result.mean)
+                assertNotNull(result.stdDev)
+                assertNotNull(result.p5)
+                assertNotNull(result.p95)
             }
-            else if (dist == MontecarloType.GEOMETRICAL){
-                assertTrue(result.tries != null)
-            }
-            else{
-                assertTrue(result.mean != null)
-                assertTrue(result.stdDev != null)
-                assertTrue(result.p5 != null)
-                assertTrue(result.p95 != null)
-            }
-
         }
     }
 
     @Test
     fun test_gen_markov() {
-
-        // Given
         val states = listOf(0, 1, 2)
 
-        // Matriz:
-        // 0→0,0→1,0→2
-        // 1→0,1→1,1→2
-        // 2→0,2→1,2→2
         val flatProbs = listOf(
             0.1, 0.6, 0.3,
             0.2, 0.2, 0.6,
@@ -211,18 +189,13 @@ class LocalEngineTest{
             steps = 10
         )
 
-        // When
-        val result = LocalEngineServiceImpl.gen_markov(params)
+        val result = genMarkov(params)
 
-        // Then
         Log.d("test_gen_markov", "result: $result")
 
         assertNotNull(result.path)
         assertTrue(result.path.isNotEmpty())
         assertEquals(0, result.path.first())
         assertEquals(params.steps + 1, result.path.size)
-
-
     }
-
 }

@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.androidTestImplementation
+import org.gradle.kotlin.dsl.testImplementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -45,7 +48,7 @@ android {
 chaquopy{
     sourceSets {
         getByName("main") {
-            srcDir("src/main/java/com/example/stochia/core/calculation_system/python")
+            srcDir("/src/main/java/com/example/stochia/core/services/calculation_system/local/python")
         }
     }
     defaultConfig{
@@ -85,4 +88,11 @@ dependencies {
     implementation(libs.insert.koin.koin.android)
     implementation(libs.insert.koin.koin.androidx.compose)
     implementation(libs.koin.androidx.compose.navigation)
+    // Testing (unit tests)
+    testImplementation(libs.insert.koin.koin.test)
+    testImplementation(libs.koin.test.junit4)
+
+// Testing (instrumented tests)
+    androidTestImplementation(libs.insert.koin.koin.test)
+    androidTestImplementation(libs.koin.test.junit4)
 }
