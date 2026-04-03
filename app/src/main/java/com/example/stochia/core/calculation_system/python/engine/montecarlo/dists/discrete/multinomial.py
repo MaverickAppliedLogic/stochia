@@ -1,9 +1,9 @@
 import numpy as np
 
 
-def gen_multinomial_montecarlo(n: int, p: list[float], size: int) -> dict:
-    values = np.random.multinomial(n, p, size)
+def gen_multinomial_montecarlo(n: int, p: list[float], simulations: int) -> dict:
 
+    values = np.random.multinomial(n, p, simulations)
     return {
         "distribution": "multinomial",
         "mean": np.mean(values, axis=0),

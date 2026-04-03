@@ -6,8 +6,8 @@ def gen_poisson_montecarlo(p: float, size: int) -> dict:
 
     return {
         "distribution": "poisson",
-        "mean": [float(np.mean(values))],
-        "std": [float(np.std(values))],
-        "p5": [float(np.percentile(values, 5))],
-        "p95": [float(np.percentile(values, 95))]
+        "mean": float(np.mean(values)),
+        "std": float(np.std(values)),
+        "p5": float(np.percentile(values, 5)),
+        "p95": float(np.percentile(values, 95))
     }

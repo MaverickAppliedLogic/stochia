@@ -8,12 +8,13 @@ import com.example.stochia.domain.model.distribution.toDistributionResult
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.model.montecarlo.MontecarloResult
 import com.example.stochia.domain.model.montecarlo.toMontecarloResult
+import kotlin.collections.toDoubleArray
 
 object LocalEngineServiceImpl : EngineService {
     val py = Python.getInstance()
 
     override fun gen_montecarlo(data: MontecarloParams): MontecarloResult {
-        val params = listOf(data.params[0], data.params[1]).toDoubleArray()
+        val params = data.params.filterNotNull().toDoubleArray()
         val size = data.size
         val distribution = data.distribution
 

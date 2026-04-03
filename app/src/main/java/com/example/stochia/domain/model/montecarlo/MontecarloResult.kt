@@ -15,12 +15,12 @@ data class MontecarloResult(
 
 fun PyObject.toMontecarloResult(result: PyObject): MontecarloResult {
     val mapPy = result.asMap().mapKeys { it.key.toString() }
-    when(mapPy["distribution"]!!.toString()) {
-        "bernoulli" -> return MontecarloResultFactory.fromBernoulli(mapPy)
-        "binomial" -> TODO()
-        "geometrical" -> TODO()
-        "poisson" -> TODO()
-        "multinomial" -> TODO()
-        else -> TODO()
+    return when(mapPy["distribution"]!!.toString()) {
+        "bernoulli" -> MontecarloResultFactory.fromBernoulli(mapPy)
+        "multinomial" -> MontecarloResultFactory.fromMultinomial(mapPy)
+        "geometrical" -> MontecarloResultFactory.fromGeometrical(mapPy)
+        "binomial" -> MontecarloResultFactory.withoutValues(mapPy)
+        "poisson" -> MontecarloResultFactory.withoutValues(mapPy)
+        else -> MontecarloResultFactory.withValues(mapPy)
     }
 }
