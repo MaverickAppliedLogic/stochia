@@ -1,5 +1,6 @@
 package com.example.stochia.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -13,11 +14,16 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.stochia.ui.theme.Neutral
+import com.example.stochia.ui.theme.NeutralDark
+import com.example.stochia.ui.theme.PrimaryLight
+import com.example.stochia.ui.theme.Secondary
 import com.example.stochia.ui.theme.StochiaTheme
 import com.example.stochia.ui.viewmodel.MainViewModel
 import com.example.stochia.ui.viewmodel.Screen
@@ -32,22 +38,35 @@ fun MainScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                BottomAppBar {
+                BottomAppBar(
+                    containerColor = Neutral
+                ) {
                     Row(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .background(color = NeutralDark)
+                            .fillMaxSize()
                     ) {
                         Spacer(modifier = Modifier.weight(0.75f))
-                        IconButton(onClick = { viewModel.navigateTo(Screen.DISTRIBUTION) }) {
+                        IconButton(
+                            onClick = { viewModel.navigateTo(Screen.DISTRIBUTION) },
+                            colors = IconButtonDefaults.iconButtonColors(contentColor = PrimaryLight)
+                        ) {
                             Icon(Icons.Default.AddCircle, contentDescription = "Distribution")
                         }
                         Spacer(modifier = Modifier.weight(1f))
-                        IconButton(onClick = { viewModel.navigateTo(Screen.MONTECARLO) }) {
+                        IconButton(
+                            onClick = { viewModel.navigateTo(Screen.MONTECARLO) },
+                            colors = IconButtonDefaults.iconButtonColors(contentColor = Secondary)
+                        ) {
                             Icon(Icons.Default.MoreVert, contentDescription = "Montecarlo")
                         }
                         Spacer(modifier = Modifier.weight(1f))
-                        IconButton(onClick = { viewModel.navigateTo(Screen.MARKOV) }) {
+                        IconButton(
+                            onClick = { viewModel.navigateTo(Screen.MARKOV) },
+                            colors = IconButtonDefaults.iconButtonColors(contentColor = Secondary)
+                        ) {
                             Icon(Icons.Default.PlayArrow, contentDescription = "Markov")
                         }
                         Spacer(modifier = Modifier.weight(0.75f))
@@ -55,7 +74,10 @@ fun MainScreen(
                 }
             }
         ) { padding ->
-            Box(modifier = Modifier.padding(padding)) {
+            Box(modifier = Modifier
+                .padding(padding)
+                .background(color = Neutral)
+                .fillMaxSize()) {
                 when (current) {
                     Screen.RESULT -> ResultForm()
                     Screen.DISTRIBUTION -> DistributionForm()
