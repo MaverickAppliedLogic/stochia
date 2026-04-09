@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
     }
 }
 
-enum class Screen {
+enum class Screen{
     RESULT,
     DISTRIBUTION,
     MONTECARLO,
