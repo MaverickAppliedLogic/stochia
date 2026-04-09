@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -27,10 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.stochia.ui.screen.main_screen_components.BarButtonType
+import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralDark
 import com.example.stochia.ui.theme.PrimaryLight
-import com.example.stochia.ui.theme.Secondary
 import com.example.stochia.ui.theme.StochiaTheme
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainViewModel
@@ -46,19 +44,22 @@ fun MainScreen(
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = {
-                Row(horizontalArrangement = Arrangement.Center,
+                Row(
+                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.08f)
-                    .background(color = NeutralDark)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.08f)
+                        .background(color = NeutralDark)
                 ) {
                     Spacer(modifier = Modifier.weight(0.15f))
                     IconButton(
-                        onClick = {TODO() },
+                        onClick = { TODO() },
                         colors = IconButtonDefaults.iconButtonColors(contentColor = PrimaryLight),
                         modifier = Modifier.size(40.dp)
                     ) {
-                        Icon(Icons.Default.Settings,
+                        Icon(
+                            Icons.Default.Settings,
                             contentDescription = "Distribution",
                             modifier = Modifier.fillMaxSize()
                         )
@@ -81,46 +82,34 @@ fun MainScreen(
                             .fillMaxSize()
                     ) {
                         Spacer(modifier = Modifier.weight(0.50f))
-                        IconButton(
-                            onClick = { viewModel.navigateTo(Screen.DISTRIBUTION) },
-                            colors = IconButtonDefaults.iconButtonColors(contentColor = PrimaryLight),
-                            modifier = Modifier.size(50.dp)
-                        ) {
-                            Icon(Icons.Default.Home,
-                                contentDescription = "Distribution",
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        BottomBarButton(
+                            current = current,
+                            type = BarButtonType.DISTRIBUTION,
+                            onClick = { viewModel.navigateTo(Screen.DISTRIBUTION) }
+                        )
                         Spacer(modifier = Modifier.weight(1f))
-                        IconButton(
-                            onClick = { viewModel.navigateTo(Screen.MONTECARLO) },
-                            colors = IconButtonDefaults.iconButtonColors(contentColor = Secondary),
-                            modifier = Modifier.size(50.dp)
-                        ) {
-                            Icon(Icons.Default.DateRange,
-                                contentDescription = "Montecarlo",
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
+                        BottomBarButton(
+                            current = current,
+                            type = BarButtonType.MONTECARLO,
+                            onClick = { viewModel.navigateTo(Screen.MONTECARLO) }
+                        )
                         Spacer(modifier = Modifier.weight(1f))
-                        IconButton(
-                            onClick = { viewModel.navigateTo(Screen.MARKOV) },
-                            colors = IconButtonDefaults.iconButtonColors(contentColor = Secondary),
-                            modifier = Modifier.size(50.dp)
-                        ) {
-                            Icon(Icons.Default.AccountBox,
-                                contentDescription = "Markov",
-                                modifier = Modifier.fillMaxSize())
-                        }
+                        BottomBarButton(
+                            current = current,
+                            type = BarButtonType.MARKOV,
+                            onClick = { viewModel.navigateTo(Screen.MARKOV) }
+                        )
                         Spacer(modifier = Modifier.weight(0.50f))
                     }
                 }
             }
         ) { padding ->
-            Box(modifier = Modifier
-                .padding(padding)
-                .background(color = Neutral)
-                .fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .padding(padding)
+                    .background(color = Neutral)
+                    .fillMaxSize()
+            ) {
                 when (current) {
                     Screen.RESULT -> ResultForm()
                     Screen.DISTRIBUTION -> DistributionForm()
