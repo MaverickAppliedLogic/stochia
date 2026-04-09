@@ -32,11 +32,11 @@ val Typography = Typography(
     ),
     headlineLarge = TextStyle(
         fontFamily = spaceGroteskFonts,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Bold,
         color = Color.White,
-        fontSize = 22.sp,
+        fontSize = 26.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 3.sp
     ),
     labelSmall = TextStyle(
         fontFamily = interFonts,
