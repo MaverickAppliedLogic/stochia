@@ -91,8 +91,7 @@ dependencies {
     // Testing (unit tests)
     testImplementation(libs.insert.koin.koin.test)
     testImplementation(libs.koin.test.junit4)
-
-// Testing (instrumented tests)
+    // Testing (instrumented tests)
     androidTestImplementation(libs.insert.koin.koin.test)
     androidTestImplementation(libs.koin.test.junit4)
 }
