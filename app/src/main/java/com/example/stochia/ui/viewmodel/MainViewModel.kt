@@ -1,24 +1,38 @@
 package com.example.stochia.ui.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class MainViewModel : ViewModel() {
 
-    var currentScreen by mutableStateOf(value = Screen.RESULT)
-        private set
+    private var _state = MutableStateFlow(MainScreenState())
+    val state = _state.asStateFlow()
 
-    fun navigateTo(screen: Screen) {
-        currentScreen = if (currentScreen == screen) Screen.RESULT
-        else screen
+
+    private fun navigateTo(screen: Screen) {
+        _state.update {
+            val nextScreen = if (_state.value.currentScreen == screen) Screen.RESULT
+            else screen
+            it.copy(currentScreen = nextScreen)
+        }
+    }
+
+    fun onEvent(event: MainScreenEvent) {
+        when (event) {
+            is MainScreenEvent.SettingsButtonClicked ->
+                _state.update { it.copy(settingsVisible = !it.settingsVisible) }
+
+            is MainScreenEvent.ScreenButtonClicked ->
+                navigateTo(event.screen)
+        }
     }
 }
 
-enum class Screen{
-    RESULT,
-    DISTRIBUTION,
-    MONTECARLO,
-    MARKOV
-}
+    enum class Screen {
+        RESULT,
+        DISTRIBUTION,
+        MONTECARLO,
+        MARKOV
+    }
