@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
 import com.example.stochia.ui.theme.Neutral
-import com.example.stochia.ui.theme.NeutralDark
+import com.example.stochia.ui.theme.NeutralDarker
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainViewModel
 import com.example.stochia.ui.viewmodel.Screen
@@ -42,16 +42,16 @@ fun MainScreen(
 
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
-        containerColor = NeutralDark,
+        containerColor = NeutralDarker,
         modifier = Modifier
             .fillMaxSize()
-            .background(NeutralDark),
+            .background(NeutralDarker),
         topBar = {
             TopAppBar(
                 title = {
                     Row(modifier = Modifier
                         .fillMaxWidth(0.9f)
-                        .background(NeutralDark),
+                        .background(NeutralDarker),
                         horizontalArrangement = Arrangement.Center) {
                             Text("STOCHIA",
                                 style = Typography.headlineLarge,
@@ -66,20 +66,20 @@ fun MainScreen(
                         onClick = {viewModel.onEvent(it)},
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = NeutralDark)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = NeutralDarker)
             )
 
         },
         bottomBar = {
             BottomAppBar(
-                containerColor = NeutralDark,
+                containerColor = NeutralDarker,
                 modifier = Modifier.fillMaxHeight(0.11f)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .background(color = NeutralDark)
+                        .background(color = NeutralDarker)
                         .fillMaxSize()
                 ) {
                     Spacer(modifier = Modifier.weight(0.50f))
@@ -114,7 +114,10 @@ fun MainScreen(
             when (state.currentScreen) {
                 Screen.RESULT -> ResultForm()
                 Screen.DISTRIBUTION -> DistributionForm()
-                Screen.MONTECARLO -> MontecarloForm()
+                Screen.MONTECARLO -> MontecarloForm(
+                    modifier = Modifier.padding(padding),
+                    onClick = {}
+                )
                 Screen.MARKOV -> MarkovForm()
             }
         }
