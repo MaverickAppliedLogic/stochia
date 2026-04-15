@@ -33,7 +33,7 @@ import com.example.stochia.ui.theme.PrimaryLight
 import com.example.stochia.ui.theme.Secondary
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
-import com.example.stochia.ui.viewmodel.Screen
+import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 
 
 @Composable
