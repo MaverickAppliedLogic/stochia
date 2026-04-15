@@ -26,8 +26,9 @@ import androidx.compose.ui.unit.dp
 import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralDarker
-import com.example.stochia.ui.theme.NeutralLight
+import com.example.stochia.ui.theme.Secondary
 import com.example.stochia.ui.theme.SecondaryDarkest
+import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
 
@@ -44,7 +45,7 @@ fun CustomDropdownMenu(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(Neutral)
             .innerShadow(
             shape = RoundedCornerShape(10.dp),
@@ -65,7 +66,9 @@ fun CustomDropdownMenu(
             },
             singleLine = true,
             readOnly = true,
-            modifier = modifier.menuAnchor(),
+            modifier = modifier
+                .menuAnchor()
+                ,
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -73,22 +76,22 @@ fun CustomDropdownMenu(
                 errorTrailingIconColor = Color.Red,
                 errorContainerColor = Color.Transparent,
                 errorIndicatorColor = Color.Transparent,
+                focusedTextColor = SecondaryLight,
+                unfocusedTextColor = SecondaryLight,
             )
         )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = modifier
-                .clip(
-                    shape = RoundedCornerShape(5.dp)
-                )
+               .background(Neutral)
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
                     text = {
                         Text(
                             text = option.first()+option.substring(1).lowercase(),
-                            color = NeutralLight,
+                            color = Secondary,
                         )
                     },
                     onClick = {
@@ -99,13 +102,15 @@ fun CustomDropdownMenu(
                         )
                               },
                     colors = MenuItemColors(
-                        textColor = SecondaryDarkest,
-                        disabledTextColor = SecondaryDarkest,
+                        textColor = SecondaryLight,
+                        disabledTextColor = SecondaryLight  ,
                         leadingIconColor = Color.Transparent,
                         trailingIconColor = Color.Transparent,
                         disabledLeadingIconColor = Color.Transparent,
                         disabledTrailingIconColor = Color.Transparent
-                    )
+                    ),
+                    modifier = Modifier.background(Neutral)
+
                 )
             }
         }
