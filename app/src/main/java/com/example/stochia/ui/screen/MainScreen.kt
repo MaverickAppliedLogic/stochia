@@ -115,8 +115,9 @@ fun MainScreen(
                 Screen.RESULT -> ResultForm()
                 Screen.DISTRIBUTION -> DistributionForm()
                 Screen.MONTECARLO -> MontecarloForm(
+                    type = state.distributionTypeSelected,
                     modifier = Modifier.padding(padding),
-                    onClick = {}
+                    onClick = {viewModel.onEvent(it)}
                 )
                 Screen.MARKOV -> MarkovForm()
             }
