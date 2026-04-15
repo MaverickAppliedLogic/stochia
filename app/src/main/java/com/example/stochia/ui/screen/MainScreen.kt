@@ -30,7 +30,7 @@ import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralDarker
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainViewModel
-import com.example.stochia.ui.viewmodel.Screen
+import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -21,5 +21,8 @@ val appModule = module {
 }
 
 val uiModule = module {
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(
+        get(),
+        get(),
+        get()) }
 }
