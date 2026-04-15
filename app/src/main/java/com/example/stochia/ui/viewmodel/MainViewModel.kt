@@ -26,6 +26,8 @@ class MainViewModel : ViewModel() {
 
             is MainScreenEvent.ScreenButtonClicked ->
                 navigateTo(event.screen)
+            is MainScreenEvent.ChangedDistributionType ->
+                _state.update { it.copy(distributionTypeSelected = event.type) }
         }
     }
 }
