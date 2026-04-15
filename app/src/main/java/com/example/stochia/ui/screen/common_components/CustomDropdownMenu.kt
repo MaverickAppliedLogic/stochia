@@ -8,8 +8,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MenuItemColors
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDropdownMenu(
+    selected: String,
     options: List<String>,
     modifier: Modifier = Modifier,
     onClick: (MainScreenEvent) -> Unit
@@ -53,18 +55,17 @@ fun CustomDropdownMenu(
             )
         )
     ) {
-
-        TextField(
-            value =  "Normal",
+        OutlinedTextField(
+            value =  selected,
             textStyle = Typography.bodyLarge,
-            onValueChange = { expanded = !expanded },
+            onValueChange = { },
             trailingIcon = {
                 Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "",
                     tint = SecondaryDarkest)
             },
             singleLine = true,
             readOnly = true,
-            modifier = modifier,
+            modifier = modifier.menuAnchor(),
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -77,7 +78,7 @@ fun CustomDropdownMenu(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier
+            modifier = modifier
                 .clip(
                     shape = RoundedCornerShape(5.dp)
                 )
@@ -86,14 +87,25 @@ fun CustomDropdownMenu(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = option,
+                            text = option.first()+option.substring(1).lowercase(),
                             color = NeutralLight,
                         )
                     },
                     onClick = {
-                        expanded = false
-                        MainScreenEvent
-                            .ChangedDistributionType(DistributionType.valueOf(option)) },
+                        expanded = !expanded
+                        onClick(
+                            MainScreenEvent
+                                .ChangedDistributionType(DistributionType.valueOf(option))
+                        )
+                              },
+                    colors = MenuItemColors(
+                        textColor = SecondaryDarkest,
+                        disabledTextColor = SecondaryDarkest,
+                        leadingIconColor = Color.Transparent,
+                        trailingIconColor = Color.Transparent,
+                        disabledLeadingIconColor = Color.Transparent,
+                        disabledTrailingIconColor = Color.Transparent
+                    )
                 )
             }
         }
