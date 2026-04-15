@@ -70,7 +70,8 @@ fun MontecarloFormFields(
         )
         Spacer(modifier = Modifier.weight(0.05f))
         CustomDropdownMenu(
-            options = DistributionType.entries.map { it.label },
+            selected = type.label,
+            options = DistributionType.entries.map { it.name},
             modifier = Modifier,
             onClick = {onClick(it)}
         )
