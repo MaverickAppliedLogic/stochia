@@ -10,6 +10,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +28,7 @@ import com.example.stochia.ui.theme.Primary
 import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
+import kotlin.collections.listOf
 
 enum class DistributionType(val label: String) {
     NORMAL("Normal"),
@@ -43,7 +47,11 @@ fun MontecarloFormFields(
     type: DistributionType,
     modifier: Modifier = Modifier,
     onClick: (MainScreenEvent) -> Unit
-){
+) {
+    val distribution = remember { mutableStateOf(type) }
+    val params = remember { mutableStateOf(listOf(0.0,0.0,0.0)) }
+    val size = remember { mutableIntStateOf(0) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -61,7 +69,8 @@ fun MontecarloFormFields(
     )
     {
         Spacer(modifier = Modifier.weight(0.5f))
-        Text("TIPO DE DISTRIBUCION",
+        Text(
+            "TIPO DE DISTRIBUCION",
             color = SecondaryLight,
             textAlign = TextAlign.Start,
             style = Typography.bodyLarge,
@@ -71,9 +80,9 @@ fun MontecarloFormFields(
         Spacer(modifier = Modifier.weight(0.05f))
         CustomDropdownMenu(
             selected = type.label,
-            options = DistributionType.entries.map { it.name},
+            options = DistributionType.entries.map { it.name },
             modifier = Modifier,
-            onClick = {onClick(it)}
+            onClick = { onClick(it) }
         )
         Spacer(modifier = Modifier.weight(0.5f))
         when (type) {
@@ -82,20 +91,42 @@ fun MontecarloFormFields(
             DistributionType.BETA,
             DistributionType.BERNOULLI,
             DistributionType.BINOMIAL -> {
-                TwoParamsFieldsWithSize(Modifier.weight(0.2f))
+                TwoParamsFieldsWithSize(
+                    params = params.value.toMutableList(),
+                    size = size.intValue,
+                    onParamsChange = { params.value = it },
+                    onSizeChange = { size.intValue = it },
+                    modifier = Modifier.weight(0.2f)
+                )
             }
 
             DistributionType.EXPONENTIAL,
             DistributionType.POISSON -> {
-                OneParamFieldsWithSize(Modifier.weight(0.2f))
+                OneParamFieldsWithSize(
+                    params = params.value.toMutableList(),
+                    size = size.intValue,
+                    onParamsChange = { params.value = it },
+                    onSizeChange = { size.intValue = it },
+                    modifier = Modifier.weight(0.2f)
+                )
             }
 
             DistributionType.GEOMETRICA -> {
-                OneParamFields(Modifier.weight(0.2f))
+                OneParamFields(
+                    params = params.value.toMutableList(),
+                    onParamsChange = { params.value = it },
+                    modifier = Modifier.weight(0.2f)
+                )
             }
 
             DistributionType.MULTINOMIAL -> {
-                OneParamFieldsWithSize(Modifier.weight(0.2f))
+                OneParamFieldsWithSize(
+                    params = params.value.toMutableList(),
+                    size = size.intValue,
+                    onParamsChange = { params.value = it },
+                    onSizeChange = { size.intValue = it },
+                    modifier = Modifier.weight(0.2f)
+                )
             }
         }
 
@@ -106,17 +137,21 @@ fun MontecarloFormFields(
                 containerColor = Primary,
                 contentColor = SecondaryLight,
                 disabledContainerColor = Primary,
-                disabledContentColor = SecondaryLight),
+                disabledContentColor = SecondaryLight
+            ),
             modifier = Modifier
                 .fillMaxWidth(0.65f)
                 .height(70.dp),
-            onClick = {TODO()}
+            onClick = { TODO() }
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            Text("SIMULAR",
+            Text(
+                "SIMULAR",
                 textAlign = TextAlign.Center,
                 style = Typography.bodyLarge,
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.weight(1f))
 
@@ -127,9 +162,14 @@ fun MontecarloFormFields(
 
 @Composable
 fun TwoParamsFieldsWithSize(
+    params: MutableList<Double>,
+    size: Int,
+    onParamsChange: (List<Double>) -> Unit,
+    onSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier
-){
-    Text("PARAMETRO 1",
+) {
+    Text(
+        "PARAMETRO 1",
         color = SecondaryLight,
         textAlign = TextAlign.Start,
         style = Typography.bodyLarge,
@@ -137,10 +177,17 @@ fun TwoParamsFieldsWithSize(
             .fillMaxWidth(0.65f)
     )
     Spacer(modifier = modifier)
-    CustomEditText()
+    CustomEditText(
+        value = params[0].toString(),
+        onValueChange = {
+            params[0] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params.toList())
+        }
+    )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
-    Text("PARAMETRO 2",
+    Text(
+        "PARAMETRO 2",
         color = SecondaryLight,
         textAlign = TextAlign.Start,
         style = Typography.bodyLarge,
@@ -148,7 +195,13 @@ fun TwoParamsFieldsWithSize(
             .fillMaxWidth(0.65f)
     )
     Spacer(modifier = modifier)
-    CustomEditText()
+    CustomEditText(
+        value = params[1].toString(),
+        onValueChange = {
+            params[1] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params)
+        }
+    )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
     Text(
@@ -161,14 +214,22 @@ fun TwoParamsFieldsWithSize(
 
     )
     Spacer(modifier = modifier)
-    CustomEditText()
+    CustomEditText(
+        value = size.toString(),
+        onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) }
+    )
 }
 
 @Composable
 fun OneParamFieldsWithSize(
+    params: MutableList<Double>,
+    size: Int,
+    onParamsChange: (List<Double>) -> Unit,
+    onSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier
-){
-    Text("PARAMETRO 1",
+) {
+    Text(
+        "PARAMETRO 1",
         color = SecondaryLight,
         textAlign = TextAlign.Start,
         style = Typography.bodyLarge,
@@ -176,7 +237,12 @@ fun OneParamFieldsWithSize(
             .fillMaxWidth(0.65f)
     )
     Spacer(modifier = modifier)
-    CustomEditText()
+    CustomEditText(
+        value = params[0].toString(),
+        onValueChange = {
+            params[0] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params.toList())
+        })
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
     Text(
@@ -189,14 +255,22 @@ fun OneParamFieldsWithSize(
 
     )
     Spacer(modifier = modifier)
-    CustomEditText()
+    CustomEditText(
+        value = size.toString(),
+        onValueChange = {
+            onSizeChange(it.toIntOrNull() ?: 0)
+        }
+    )
 }
 
 @Composable
 fun OneParamFields(
+    params: MutableList<Double>,
+    onParamsChange: (List<Double>) -> Unit,
     modifier: Modifier = Modifier
-){
-    Text("PARAMETRO 1",
+) {
+    Text(
+        "PARAMETRO 1",
         color = SecondaryLight,
         textAlign = TextAlign.Start,
         style = Typography.bodyLarge,
@@ -204,5 +278,11 @@ fun OneParamFields(
             .fillMaxWidth(0.65f)
     )
     Spacer(modifier = modifier)
-    CustomEditText()
+    CustomEditText(
+        value = params[0].toString(),
+        onValueChange = {
+            params[0] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params.toList())
+        }
+    )
 }
