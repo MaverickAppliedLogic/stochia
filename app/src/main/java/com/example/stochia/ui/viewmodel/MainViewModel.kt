@@ -1,5 +1,6 @@
 package com.example.stochia.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.usecase.GenMarkovUsecase
@@ -28,10 +29,15 @@ class MainViewModel(
     }
 
     private fun genMontecarlo(data: MontecarloParams) {
-        genMontecarloUsecase(data)
+       _state.update {
+           it.copy(montecarloResult = genMontecarloUsecase(data))
+       }
+        Log.d("MainViewModel", "genMontecarlo: ${_state.value.montecarloResult}")
+
     }
 
     fun onEvent(event: MainScreenEvent) {
+        Log.d("MainViewModel", "onEvent: $event")
         when (event) {
             is MainScreenEvent.SettingsButtonClicked ->
                 _state.update { it.copy(settingsVisible = !it.settingsVisible) }
@@ -42,8 +48,10 @@ class MainViewModel(
             is MainScreenEvent.ChangedDistributionType ->
                 _state.update { it.copy(distributionTypeSelected = event.type) }
 
-            is MainScreenEvent.SimulateMontecarloButtonClicked ->
+            is MainScreenEvent.SimulateMontecarloButtonClicked ->{
+                Log.d("MainViewModel", "SimulateMontecarloButtonClicked")
                 genMontecarlo(event.data)
+            }
 
         }
     }

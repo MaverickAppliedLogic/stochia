@@ -1,5 +1,6 @@
 package com.example.stochia.ui.screen.montecarlo_form_components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.innerShadow
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.common_components.CustomDropdownMenu
 import com.example.stochia.ui.screen.common_components.CustomEditText
 import com.example.stochia.ui.theme.NeutralDarker
@@ -38,7 +40,7 @@ enum class DistributionType(val label: String) {
     BINOMIAL("Binomial"),
     EXPONENTIAL("Exponential"),
     POISSON("Poisson"),
-    GEOMETRICA("Geométrica"),
+    GEOMETRICAL("Geométrica"),
     MULTINOMIAL("Multinomial")
 }
 
@@ -48,7 +50,7 @@ fun MontecarloFormFields(
     modifier: Modifier = Modifier,
     onClick: (MainScreenEvent) -> Unit
 ) {
-    val distribution = remember { mutableStateOf(type) }
+    val distribution = remember(type) { mutableStateOf(type) }
     val params = remember { mutableStateOf(listOf(0.0,0.0,0.0)) }
     val size = remember { mutableIntStateOf(0) }
 
@@ -111,7 +113,7 @@ fun MontecarloFormFields(
                 )
             }
 
-            DistributionType.GEOMETRICA -> {
+            DistributionType.GEOMETRICAL -> {
                 OneParamFields(
                     params = params.value.toMutableList(),
                     onParamsChange = { params.value = it },
@@ -142,7 +144,16 @@ fun MontecarloFormFields(
             modifier = Modifier
                 .fillMaxWidth(0.65f)
                 .height(70.dp),
-            onClick = { TODO() }
+            onClick = {
+                Log.d("MontecarloFormFields", "onClick")
+                onClick( MainScreenEvent.SimulateMontecarloButtonClicked(
+                    MontecarloParams(
+                        distribution = distribution.value.name,
+                        params = params.value,
+                        size = size.intValue
+                    )
+                ))
+            }
         ) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
@@ -182,7 +193,7 @@ fun TwoParamsFieldsWithSize(
         onValueChange = {
             params[0] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params.toList())
-        }
+        },
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -200,7 +211,8 @@ fun TwoParamsFieldsWithSize(
         onValueChange = {
             params[1] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params)
-        }
+        },
+
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -216,7 +228,7 @@ fun TwoParamsFieldsWithSize(
     Spacer(modifier = modifier)
     CustomEditText(
         value = size.toString(),
-        onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) }
+        onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) },
     )
 }
 
