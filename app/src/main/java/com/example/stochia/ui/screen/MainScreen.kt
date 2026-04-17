@@ -112,7 +112,7 @@ fun MainScreen(
                 .padding(padding)
         ) {
             when (state.currentScreen) {
-                Screen.RESULT -> ResultForm()
+                Screen.RESULT -> ResultForm(state.montecarloResult)
                 Screen.DISTRIBUTION -> DistributionForm()
                 Screen.MONTECARLO -> MontecarloForm(
                     type = state.distributionTypeSelected,
