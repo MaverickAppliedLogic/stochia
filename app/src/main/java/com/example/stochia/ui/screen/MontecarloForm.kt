@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import com.example.stochia.ui.screen.montecarlo_form_components.MontecarloFormFields
-import com.example.stochia.ui.theme.Neutral
+import com.example.stochia.ui.theme.NeutralDarker
 import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
@@ -28,7 +28,7 @@ fun MontecarloForm(
 ) {
     Column(
         modifier = Modifier
-            .background(color = Neutral)
+            .background(color = NeutralDarker)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

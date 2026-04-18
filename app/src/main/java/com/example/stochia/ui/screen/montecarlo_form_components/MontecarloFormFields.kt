@@ -17,15 +17,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.innerShadow
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.common_components.CustomDropdownMenu
 import com.example.stochia.ui.screen.common_components.CustomEditText
-import com.example.stochia.ui.theme.NeutralDarker
-import com.example.stochia.ui.theme.NeutralLight
+import com.example.stochia.ui.theme.LocalDimens
+import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.Primary
 import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
@@ -58,15 +56,7 @@ fun MontecarloFormFields(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
-            .background(color = NeutralLight)
-            .innerShadow(
-                shape = RoundedCornerShape(10.dp),
-                shadow = Shadow(
-                    radius = 10.dp,
-                    spread = 5.dp,
-                    color = NeutralDarker
-                )
-            )
+            .background(color = Neutral)
             .fillMaxWidth(0.9f)
     )
     {
@@ -143,7 +133,7 @@ fun MontecarloFormFields(
             ),
             modifier = Modifier
                 .fillMaxWidth(0.65f)
-                .height(70.dp),
+                .height(LocalDimens.current.commitButton),
             onClick = {
                 Log.d("MontecarloFormFields", "onClick")
                 onClick( MainScreenEvent.SimulateMontecarloButtonClicked(
@@ -194,6 +184,7 @@ fun TwoParamsFieldsWithSize(
             params[0] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params.toList())
         },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -212,7 +203,7 @@ fun TwoParamsFieldsWithSize(
             params[1] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params)
         },
-
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -229,6 +220,7 @@ fun TwoParamsFieldsWithSize(
     CustomEditText(
         value = size.toString(),
         onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
     )
 }
 
