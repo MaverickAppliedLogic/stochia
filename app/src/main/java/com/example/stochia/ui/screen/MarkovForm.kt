@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.stochia.ui.screen.markov_form_components.HeaderMatrixRow
 import com.example.stochia.ui.screen.markov_form_components.MatrixRow
 import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
@@ -59,15 +60,20 @@ fun MarkovForm() {
                 modifier = Modifier
             )
             Spacer(modifier = Modifier.weight(0.1f))
+            HeaderMatrixRow(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.weight(0.01f))
             MatrixRow(
+                state = "Desde A",
                 modifier = Modifier.height(LocalDimens.current.editTextHeight)
             )
             Spacer(modifier = Modifier.weight(0.07f))
             MatrixRow(
+                state = "Desde B",
                 modifier = Modifier.height(LocalDimens.current.editTextHeight)
             )
             Spacer(modifier = Modifier.weight(0.07f))
             MatrixRow(
+                state = "Desde C",
                 modifier = Modifier.height(LocalDimens.current.editTextHeight)
             )
             Spacer(modifier = Modifier.weight(0.5f))

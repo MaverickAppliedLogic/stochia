@@ -8,46 +8,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.example.stochia.ui.screen.common_components.CustomEditText
 import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
 
 @Composable
-fun MatrixRow(
-    state: String,
+fun HeaderMatrixRow(
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.weight(0.05f))
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.weight(0.23f))
         Text(
-            state,
+            "A",
             color = SecondaryLight,
             textAlign = TextAlign.Center,
             style = Typography.bodyLarge,
-            modifier = Modifier
-                .fillMaxWidth(0.20f)
-        )
-        Spacer(modifier = Modifier.weight(0.025f))
-        CustomEditText(
-            value = "",
-            onValueChange = {
-            },
             modifier = Modifier.weight(0.15f)
         )
         Spacer(modifier = Modifier.weight(0.025f))
-        CustomEditText(
-            value = "",
-            onValueChange = {
-            },
+        Text(
+            "B",
+            color = SecondaryLight,
+            textAlign = TextAlign.Center,
+            style = Typography.bodyLarge,
             modifier = Modifier.weight(0.15f)
         )
         Spacer(modifier = Modifier.weight(0.025f))
-        CustomEditText(
-            value = "",
-            onValueChange = {
-            },
+        Text(
+            "C",
+            color = SecondaryLight,
+            textAlign = TextAlign.Center,
+            style = Typography.bodyLarge,
             modifier = Modifier.weight(0.15f)
         )
         Spacer(modifier = Modifier.weight(0.05f))
