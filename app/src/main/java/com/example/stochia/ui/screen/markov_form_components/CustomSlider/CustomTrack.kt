@@ -1,0 +1,42 @@
+package com.example.stochia.ui.screen.markov_form_components.CustomSlider
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.stochia.ui.theme.Primary
+import com.example.stochia.ui.theme.Secondary
+
+@Composable
+fun CustomTrack(
+    sliderValue: Float,
+    valueRange: ClosedFloatingPointRange<Float>,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(2.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Secondary)
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(sliderValue.fractionOfRange(valueRange))
+                .background(Primary)
+        )
+    }
+}
+
+private fun Float.fractionOfRange(range: ClosedFloatingPointRange<Float>): Float {
+    return (this - range.start) / (range.endInclusive - range.start)
+}

@@ -32,7 +32,7 @@ fun responsiveDimens(): AppDimens {
 
         else -> AppDimens(
             commitButton = 60.dp,
-            editTextHeight = 60.dp
+            editTextHeight = 70.dp
         )
     }
 }

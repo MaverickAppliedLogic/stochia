@@ -1,8 +1,8 @@
 package com.example.stochia.domain.model.markov
 
-class MarkovParams (
-    val states: List<Int>,
-    val probs: List<Double>,
-    val init_state: Int,
-    val steps: Int
+data class MarkovParams (
+    val states: List<Int> = emptyList(),
+    val probs: List<Double> = emptyList(),
+    val init_state: Int = 0,
+    val steps: Int = 0
 )

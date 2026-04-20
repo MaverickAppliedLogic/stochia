@@ -6,10 +6,17 @@ import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 
 
 sealed class MainScreenEvent{
+    data object SimulateMarkovButtonClicked: MainScreenEvent()
     data object SettingsButtonClicked: MainScreenEvent()
     data class ScreenButtonClicked(val screen: Screen): MainScreenEvent()
     data class ChangedDistributionType(val type: DistributionType): MainScreenEvent()
     data class SimulateMontecarloButtonClicked(val data: MontecarloParams): MainScreenEvent()
-
-
+    data class ChangeMarkovStates(val states: List<Int>): MainScreenEvent()
+    data class ChangeMarkovProbs(val probs: List<Double>): MainScreenEvent()
+    data class ChangeMarkovInitState(val state: Int): MainScreenEvent()
+    data class ChangeMarkovSteps(val steps: Int): MainScreenEvent()
 }
+
+
+
+

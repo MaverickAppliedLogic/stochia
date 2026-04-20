@@ -118,7 +118,10 @@ fun MainScreen(
                     modifier = Modifier.padding(padding),
                     onClick = {viewModel.onEvent(it)}
                 )
-                Screen.MARKOV -> MarkovForm()
+                Screen.MARKOV -> MarkovForm(
+                    params = state.markovParams,
+                    onEvent = {viewModel.onEvent(it)}
+                )
             }
         }
     }
