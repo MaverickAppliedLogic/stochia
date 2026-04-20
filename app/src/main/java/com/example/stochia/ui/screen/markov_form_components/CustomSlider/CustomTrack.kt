@@ -21,7 +21,7 @@ fun CustomTrack(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(5.dp)
+            .height(2.dp)
     ) {
         Box(
             modifier = Modifier

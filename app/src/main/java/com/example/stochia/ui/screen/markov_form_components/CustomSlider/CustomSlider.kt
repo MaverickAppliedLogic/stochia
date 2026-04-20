@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CustomSlider(
     value: Float,
+    steps: Int = 0,
     valueRange: ClosedFloatingPointRange<Float>,
     onValueChange: (Float) -> Unit
 ) {
@@ -19,7 +20,7 @@ fun CustomSlider(
     value = value,
     onValueChange = { onValueChange(it) },
     valueRange = valueRange,
-    steps = 100,
+    steps = steps,
     track = { slider ->
         CustomTrack(
             sliderValue = slider.value,

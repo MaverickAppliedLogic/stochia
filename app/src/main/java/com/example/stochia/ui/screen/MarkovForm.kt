@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.ui.screen.markov_form_components.CustomSlider.CustomSlider
 import com.example.stochia.ui.screen.markov_form_components.TransitionMatrix
 import com.example.stochia.ui.theme.LocalDimens
@@ -30,12 +31,11 @@ import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
-import com.example.stochia.ui.viewmodel.MarkovParamsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MarkovForm(
-    params: MarkovParamsState,
+    params: MarkovParams,
     onEvent: (MainScreenEvent) -> Unit
 ) {
     Column(
@@ -59,7 +59,7 @@ fun MarkovForm(
                 .background(color = Neutral)
                 .fillMaxSize(0.9f)
         ) {
-            Spacer(modifier = Modifier.weight(0.5f))
+            Spacer(modifier = Modifier.weight(0.15f))
             Text(
                 "MATRIZ DE TRANSICIÓN",
                 color = SecondaryLight,
@@ -72,9 +72,9 @@ fun MarkovForm(
                modifier = Modifier,
                onEvent = {onEvent(MainScreenEvent.ChangeMarkovStates(it))}
            )
-            Spacer(modifier = Modifier.weight(0.25f))
+            Spacer(modifier = Modifier.weight(0.15f))
             Text(
-                "PASOS",
+                "PASOS: ${params.steps}",
                 color = SecondaryLight,
                 textAlign = TextAlign.Start,
                 style = Typography.bodyLarge,
@@ -83,11 +83,13 @@ fun MarkovForm(
             Spacer(modifier = Modifier.weight(0.1f))
             CustomSlider(
                 value = params.steps.toFloat(),
-                valueRange = 0f..100f,
+                valueRange = 0f..50f,
+                steps = 50,
                 onValueChange = {
                     onEvent(MainScreenEvent.ChangeMarkovSteps(it.toInt()))
                 }
             )
+            Spacer(modifier = Modifier.weight(0.2f))
             Card(
                 shape = RoundedCornerShape(5.dp),
                 colors = CardDefaults.cardColors(
@@ -115,7 +117,7 @@ fun MarkovForm(
                 Spacer(modifier = Modifier.weight(1f))
 
             }
-            Spacer(modifier = Modifier.weight(0.1f))
+            Spacer(modifier = Modifier.weight(0.15f))
         }
 
     }

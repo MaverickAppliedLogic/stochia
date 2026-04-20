@@ -57,7 +57,10 @@ class MainViewModel(
                 Log.d("MainViewModel", "SimulateMontecarloButtonClicked")
                 genMontecarlo(event.data)
             }
-            is MainScreenEvent.SimulateMarkovButtonClicked ->{}
+            is MainScreenEvent.SimulateMarkovButtonClicked ->{
+                Log.d("MainViewModel", "SimulateMarkovButtonClicked")
+                genMarkovUsecase(_state.value.markovParams)
+            }
             is MainScreenEvent.ChangeMarkovStates ->
                 _state.update { it.copy(
                     markovParams = it.markovParams.copy(states = event.states)
