@@ -2,6 +2,7 @@ package com.example.stochia.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.usecase.GenMarkovUsecase
 import com.example.stochia.domain.usecase.GenMontecarloUsecase
@@ -36,6 +37,10 @@ class MainViewModel(
 
     }
 
+    private fun genMarkovUsecase(data: MarkovParams){
+
+    }
+
     fun onEvent(event: MainScreenEvent) {
         Log.d("MainViewModel", "onEvent: $event")
         when (event) {
@@ -52,6 +57,24 @@ class MainViewModel(
                 Log.d("MainViewModel", "SimulateMontecarloButtonClicked")
                 genMontecarlo(event.data)
             }
+            is MainScreenEvent.SimulateMarkovButtonClicked ->{}
+            is MainScreenEvent.ChangeMarkovStates ->
+                _state.update { it.copy(
+                    markovParams = it.markovParams.copy(states = event.states)
+                ) }
+            is MainScreenEvent.ChangeMarkovProbs ->
+                _state.update { it.copy(
+                    markovParams = it.markovParams.copy(probs = event.probs)
+                )}
+            is MainScreenEvent.ChangeMarkovInitState ->
+                _state.update { it.copy(
+                    markovParams = it.markovParams.copy(init_state = event.state)
+                )}
+            is MainScreenEvent.ChangeMarkovSteps ->
+                _state.update { it.copy(
+                    markovParams = it.markovParams.copy(steps = event.steps)
+                )}
+
 
         }
     }
