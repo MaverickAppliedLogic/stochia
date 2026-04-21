@@ -24,7 +24,7 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 fun MontecarloForm(
     type: DistributionType,
     modifier: Modifier = Modifier,
-    onClick: (MainScreenEvent) -> Unit
+    onEvent: (MainScreenEvent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -43,7 +43,7 @@ fun MontecarloForm(
         MontecarloFormFields(
             type = type,
             modifier = Modifier.weight(0.85f),
-            onClick = {onClick(it)}
+            onClick = {onEvent(it)}
         )
         Spacer(modifier = Modifier.weight(0.05f))
     }

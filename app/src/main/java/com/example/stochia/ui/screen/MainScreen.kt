@@ -113,12 +113,16 @@ fun MainScreen(
             when (state.currentScreen) {
                 Screen.RESULT -> ResultForm(
                     montecarloResult = state.montecarloResult,
-                    markovResult = state.markovResult)
-                Screen.DISTRIBUTION -> DistributionForm()
+                    markovResult = state.markovResult,
+                    distributionResult = state.distributionResult
+                )
+                Screen.DISTRIBUTION -> DistributionForm(
+                    onEvent = {viewModel.onEvent(it)}
+                )
                 Screen.MONTECARLO -> MontecarloForm(
                     type = state.distributionTypeSelected,
                     modifier = Modifier.padding(padding),
-                    onClick = {viewModel.onEvent(it)}
+                    onEvent = {viewModel.onEvent(it)}
                 )
                 Screen.MARKOV -> MarkovForm(
                     params = state.markovParams,

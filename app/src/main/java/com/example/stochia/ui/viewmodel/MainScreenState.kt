@@ -1,5 +1,7 @@
 package com.example.stochia.ui.viewmodel
 
+import com.example.stochia.domain.model.distribution.DistributionParams
+import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.markov.MarkovResult
 import com.example.stochia.domain.model.montecarlo.MontecarloResult
@@ -13,7 +15,8 @@ data class MainScreenState(
     val montecarloResult: MontecarloResult? = null,
     val markovResult: MarkovResult? = null,
     val markovParams: MarkovParams = MarkovParams(),
-    val markovStates: MarkovResult? = null,
+    val distributionParams: DistributionParams = DistributionParams(),
+    val distributionResult: DistributionResult? = null,
     val settingsVisible: Boolean = false,
 )
 

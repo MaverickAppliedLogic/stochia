@@ -2,6 +2,7 @@ package com.example.stochia.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.stochia.domain.model.distribution.DistributionParams
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.usecase.GenMarkovUsecase
@@ -27,6 +28,11 @@ class MainViewModel(
             else screen
             it.copy(currentScreen = nextScreen)
         }
+    }
+
+    private fun analyzeDistribution(data: DistributionParams) {
+        _state.update { it.copy(distributionResult = getDistributionUsecase(data)) }
+        Log.d("MainViewModel", "analyzeDistribution: ${_state.value.distributionResult}")
     }
 
     private fun genMontecarlo(data: MontecarloParams) {
@@ -63,6 +69,11 @@ class MainViewModel(
                 Log.d("MainViewModel", "SimulateMarkovButtonClicked")
                 genMarkov(_state.value.markovParams)
             }
+            is MainScreenEvent.DistributionButtonClicked ->{
+                Log.d("MainViewModel", "DistributionButtonClicked")
+                analyzeDistribution(_state.value.distributionParams)
+            }
+
             is MainScreenEvent.ChangeMarkovStates ->
                 _state.update { it.copy(
                     markovParams = it.markovParams.copy(states = event.states)
@@ -79,8 +90,10 @@ class MainViewModel(
                 _state.update { it.copy(
                     markovParams = it.markovParams.copy(steps = event.steps)
                 )}
-
-
+            is MainScreenEvent.ChangeDistributionData ->
+                _state.update { it.copy(
+                    distributionParams = it.distributionParams.copy(data = event.data)
+                )}
         }
     }
 
