@@ -37,8 +37,10 @@ class MainViewModel(
 
     }
 
-    private fun genMarkovUsecase(data: MarkovParams){
-
+    private fun genMarkov(data: MarkovParams){
+        _state.update {
+            it.copy(markovResult = genMarkovUsecase(data))
+        }
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -59,7 +61,7 @@ class MainViewModel(
             }
             is MainScreenEvent.SimulateMarkovButtonClicked ->{
                 Log.d("MainViewModel", "SimulateMarkovButtonClicked")
-                genMarkovUsecase(_state.value.markovParams)
+                genMarkov(_state.value.markovParams)
             }
             is MainScreenEvent.ChangeMarkovStates ->
                 _state.update { it.copy(

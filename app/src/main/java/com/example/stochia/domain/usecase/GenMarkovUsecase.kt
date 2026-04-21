@@ -9,7 +9,12 @@ class GenMarkovUsecase(
     private val repository: CalculationSystemRepository
 ) {
     operator fun invoke(data: MarkovParams): MarkovResult{
-        val states = data.states.toIntArray()
+        val mapStates = mapOf(
+            data.states[0] to 0,
+            data.states[1] to 1,
+            data.states[2] to 2
+        )
+        val states = mapStates.values.toIntArray()
         val probs = data.probs.toDoubleArray()
 
         return repository

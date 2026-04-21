@@ -68,10 +68,12 @@ fun MarkovForm(
                 modifier = Modifier
             )
             Spacer(modifier = Modifier.weight(0.05f))
-           TransitionMatrix(
+            TransitionMatrix(
+                states = params.states,
+                probs = params.probs,
                modifier = Modifier,
-               onEvent = {onEvent(MainScreenEvent.ChangeMarkovStates(it))}
-           )
+               onEvent = {onEvent(MainScreenEvent.ChangeMarkovProbs(it))}
+            )
             Spacer(modifier = Modifier.weight(0.15f))
             Text(
                 "PASOS: ${params.steps}",

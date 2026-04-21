@@ -15,8 +15,11 @@ import com.example.stochia.ui.theme.Typography
 @Composable
 fun MatrixRow(
     state: String,
-    modifier: Modifier = Modifier
+    value:  List<String>,
+    modifier: Modifier = Modifier,
+    onEvent: (List<String>) -> Unit
 ) {
+    val data = value.toMutableList()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()) {
@@ -31,22 +34,28 @@ fun MatrixRow(
         )
         Spacer(modifier = Modifier.weight(0.025f))
         CustomEditText(
-            value = "",
+            value = value[0],
             onValueChange = {
+                data[0] = it
+                onEvent(data.toList())
             },
             modifier = Modifier.weight(0.15f)
         )
         Spacer(modifier = Modifier.weight(0.025f))
         CustomEditText(
-            value = "",
+            value = value[1],
             onValueChange = {
+                data[1] = it
+                onEvent(data.toList())
             },
             modifier = Modifier.weight(0.15f)
         )
         Spacer(modifier = Modifier.weight(0.025f))
         CustomEditText(
-            value = "",
+            value = value[2],
             onValueChange = {
+                data[2] = it
+                onEvent(data.toList())
             },
             modifier = Modifier.weight(0.15f)
         )
