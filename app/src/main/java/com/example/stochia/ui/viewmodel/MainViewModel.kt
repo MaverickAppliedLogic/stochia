@@ -31,22 +31,23 @@ class MainViewModel(
     }
 
     private fun analyzeDistribution(data: DistributionParams) {
-        _state.update { it.copy(distributionResult = getDistributionUsecase(data)) }
-        Log.d("MainViewModel", "analyzeDistribution: ${_state.value.distributionResult}")
+        _state.update { it.copy(result = getDistributionUsecase(data)) }
+        Log.d("MainViewModel", "analyzeDistribution: ${_state.value.result}")
     }
 
     private fun genMontecarlo(data: MontecarloParams) {
        _state.update {
-           it.copy(montecarloResult = genMontecarloUsecase(data))
+           it.copy(result = genMontecarloUsecase(data))
        }
-        Log.d("MainViewModel", "genMontecarlo: ${_state.value.montecarloResult}")
+        Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
 
     }
 
     private fun genMarkov(data: MarkovParams){
         _state.update {
-            it.copy(markovResult = genMarkovUsecase(data))
+            it.copy(result = genMarkovUsecase(data))
         }
+        Log.d("MainViewModel", "genMarkov: ${_state.value.result}")
     }
 
     fun onEvent(event: MainScreenEvent) {
