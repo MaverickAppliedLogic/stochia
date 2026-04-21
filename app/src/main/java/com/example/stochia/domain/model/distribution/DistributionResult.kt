@@ -1,8 +1,9 @@
 package com.example.stochia.domain.model.distribution
 
 import com.chaquo.python.PyObject
+import com.example.stochia.domain.model.result.Result
 
-data class DistributionResult(
+class DistributionResult(
     val frequencies: List<Double>,
     val probabilities: List<Double>,
     val mean: Double,
@@ -12,7 +13,20 @@ data class DistributionResult(
     val min: Double,
     val max: Double,
     val total: Double
-)
+): Result {
+    override fun toString(): String {
+        return "Frequencies: $frequencies\n" +
+                "Probabilities: $probabilities\n"+
+                "Mean: $mean\n" +
+                "Standard Deviation: $stdDev\n" +
+                "P5: $p5\n" +
+                "P95: $p95\n" +
+                "Min: $min\n" +
+                "Max: $max\n" +
+                "Total: $total"
+    }
+}
+
 
 fun PyObject.toDistributionResult(): DistributionResult {
     val mapPy = asMap().mapKeys { it.key.toString() }

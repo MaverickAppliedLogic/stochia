@@ -1,8 +1,9 @@
 package com.example.stochia.domain.model.montecarlo
 
 import com.chaquo.python.PyObject
+import com.example.stochia.domain.model.result.Result
 
-data class MontecarloResult(
+class MontecarloResult(
     val distribution: MontecarloType?,
     val values: List<Double>?,
     val mean: Double?,
@@ -11,7 +12,18 @@ data class MontecarloResult(
     val p95: Double?,
     val tries: Int?,
     val results: List<MontecarloResult>?
-)
+): Result {
+    override fun toString(): String {
+        return "Distribution: $distribution\n" +
+                "Values: $values\n" +
+                "Mean: $mean\n" +
+                "Standard Deviation: $stdDev\n" +
+                "P5: $p5\n" +
+                "P95: $p95\n" +
+                "Tries: $tries\n" +
+                "Results: $results"
+    }
+}
 
 fun PyObject.toMontecarloResult(): MontecarloResult{
     val mapPy = asMap().mapKeys { it.key.toString() }

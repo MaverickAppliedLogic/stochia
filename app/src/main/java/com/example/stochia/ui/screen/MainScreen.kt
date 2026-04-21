@@ -112,9 +112,7 @@ fun MainScreen(
         ) {
             when (state.currentScreen) {
                 Screen.RESULT -> ResultForm(
-                    montecarloResult = state.montecarloResult,
-                    markovResult = state.markovResult,
-                    distributionResult = state.distributionResult
+                    result = state.result
                 )
                 Screen.DISTRIBUTION -> DistributionForm(
                     onEvent = {viewModel.onEvent(it)}
