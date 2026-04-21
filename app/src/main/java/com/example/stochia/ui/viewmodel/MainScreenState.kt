@@ -11,6 +11,7 @@ data class MainScreenState(
     val currentScreen: Screen = Screen.RESULT,
     val distributionTypeSelected: DistributionType = DistributionType.NORMAL,
     val montecarloResult: MontecarloResult? = null,
+    val markovResult: MarkovResult? = null,
     val markovParams: MarkovParams = MarkovParams(),
     val markovStates: MarkovResult? = null,
     val settingsVisible: Boolean = false,

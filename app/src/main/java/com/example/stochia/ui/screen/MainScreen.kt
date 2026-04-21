@@ -111,7 +111,9 @@ fun MainScreen(
                 .padding(padding)
         ) {
             when (state.currentScreen) {
-                Screen.RESULT -> ResultForm(state.montecarloResult)
+                Screen.RESULT -> ResultForm(
+                    montecarloResult = state.montecarloResult,
+                    markovResult = state.markovResult)
                 Screen.DISTRIBUTION -> DistributionForm()
                 Screen.MONTECARLO -> MontecarloForm(
                     type = state.distributionTypeSelected,

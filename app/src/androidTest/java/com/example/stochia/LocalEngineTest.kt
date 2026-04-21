@@ -174,7 +174,7 @@ class LocalEngineTest : KoinTest {
 
     @Test
     fun test_gen_markov() {
-        val states = listOf(0, 1, 2)
+        val states = listOf("A", "B", "C")
 
         val flatProbs = listOf(
             0.1, 0.6, 0.3,
@@ -195,7 +195,7 @@ class LocalEngineTest : KoinTest {
 
         assertNotNull(result.path)
         assertTrue(result.path.isNotEmpty())
-        assertEquals(0, result.path.first())
+        assertEquals("A", result.path.first())
         assertEquals(params.steps + 1, result.path.size)
     }
 }
