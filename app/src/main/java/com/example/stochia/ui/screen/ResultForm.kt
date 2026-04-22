@@ -1,11 +1,8 @@
 package com.example.stochia.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.innerShadow
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -31,6 +27,8 @@ import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralDarkest
 import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.Typography
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 @Composable
 fun ResultForm(
@@ -90,14 +88,26 @@ fun ResultForm(
                 Spacer(modifier = Modifier.weight(0.05f))
                 ComplexResultCard(
                     title = "Frecuencia de valores",
-                    stats = result.frequencies,
-                    modifier = Modifier.weight(0.1f)
+                    stats = result.frequencies
+                        .toList() // convierte a lista de Pair(prob, lista)
+                        .sortedByDescending { it.second.toDouble() }
+                        .toMap()
+                        .mapValues { "${it.value} veces" },
+                    modifier = Modifier
                 )
                 Spacer(modifier = Modifier.weight(0.05f))
                 ComplexResultCard(
                     title = "Probabilidad de valores",
-                    stats = result.probabilities,
-                    modifier = Modifier.weight(0.1f)
+                    stats = result
+                        .probabilities
+                        .map { it.key to
+                                BigDecimal(it.value)
+                            .setScale(2, RoundingMode.HALF_UP).toDouble() }
+                        .toList()
+                        .sortedByDescending {it.second}
+                        .toMap()
+                        .mapValues { "${it.value}%" },
+                    modifier = Modifier
                 )
                 Spacer(modifier = Modifier.weight(0.05f))
             }

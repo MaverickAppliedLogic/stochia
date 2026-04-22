@@ -40,7 +40,7 @@ fun PyObject.toDistributionResult(): DistributionResult {
     // PROBABILITIES
     val probabilities = mapPy["probabilities"]!!
         .asMap()
-        .map { (k, v) -> k.toString() to v.toString() }
+        .map { (k, v) -> k.toString() to v.toDouble().times(100).toString()  }
         .toMap()
 
     // STATISTICS

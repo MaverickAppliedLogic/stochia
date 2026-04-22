@@ -8,10 +8,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.stochia.ui.theme.NeutralLight
 import com.example.stochia.ui.theme.PrimaryLightest
+import com.example.stochia.ui.theme.TertiaryLight
 import com.example.stochia.ui.theme.Typography
 
 @Composable
@@ -24,6 +28,13 @@ fun ComplexResultCard(
         colors = CardDefaults.cardColors(containerColor = NeutralLight),
         modifier = modifier.fillMaxWidth(0.7f)
     ) {
+        val groupedStats = stats
+            .entries
+            .groupBy { it.value }          // agrupa por probabilidad
+            .mapValues { entry ->
+                entry.value.map { it.key } // lista de statNames
+            }
+
         Text(
             title,
             style = Typography.headlineLarge,
@@ -31,11 +42,20 @@ fun ComplexResultCard(
             color = PrimaryLightest,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp)
         )
-        stats.forEach { (statName, stat) ->
+        groupedStats.forEach { (statName, stat) ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    "$statName: $stat",
-                    style = Typography.headlineLarge,
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = TertiaryLight)) {
+                            append("\n\n-$statName: \n")
+                        }
+                        stat.forEach { stat ->
+                            withStyle(SpanStyle(color = PrimaryLightest)) {
+                                append("$stat   ")
+                            }
+                        }
+
+                                         },
                     textAlign = TextAlign.Start,
                     color = PrimaryLightest,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
