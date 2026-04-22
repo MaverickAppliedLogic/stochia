@@ -30,6 +30,7 @@ import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
+import java.util.Locale.filter
 
 @Composable
 fun DistributionForm(
@@ -71,9 +72,10 @@ fun DistributionForm(
                 value = data ,
                 onValueChange = {
                     data = it
-                    val result = data
-                        .filter { dataVal -> dataVal.isDigit() }
-                        .map { dataVal -> dataVal.toString().toInt() }
+                    val result = Regex("\\d+")
+                            .findAll(data)
+                            .map { it.value.toInt() }
+                            .toList()
                     onEvent(MainScreenEvent.ChangeDistributionData(result))
                 },
                 modifier = Modifier
