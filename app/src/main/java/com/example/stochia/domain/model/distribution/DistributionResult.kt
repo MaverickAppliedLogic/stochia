@@ -4,8 +4,8 @@ import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.result.Result
 
 class DistributionResult(
-    val frequencies: List<Double>,
-    val probabilities: List<Double>,
+    val frequencies: Map<String, String>,
+    val probabilities: Map<String, String>,
     val mean: Double,
     val stdDev: Double,
     val p5: Double,
@@ -34,15 +34,14 @@ fun PyObject.toDistributionResult(): DistributionResult {
     // FREQUENCIES
     val frequencies = mapPy["frequencies"]!!
         .asMap()
-        .map { (_, v) ->  v.toDouble() }
-        .toList()
+        .map { (k, v) -> k.toString() to  v.toString() }
+        .toMap()
 
     // PROBABILITIES
     val probabilities = mapPy["probabilities"]!!
         .asMap()
-        .map { (k, v) -> k.toInt() to v.toDouble() }
-        .toList()
-        .map { it.second }
+        .map { (k, v) -> k.toString() to v.toString() }
+        .toMap()
 
     // STATISTICS
     val mean = mapPy["mean"]!!.toDouble()
