@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.innerShadow
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -64,43 +65,41 @@ fun ResultForm(
                     color = PrimaryLightest
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    SingleResultCard(
-                        title = "Media: ",
-                        stats = "%.2f".format(result.mean),
-                        modifier = Modifier.weight(0.3f)
-                    )
-                    SingleResultCard(
-                        title = "Desviación estándar: ",
-                        stats = "%.2f".format(result.stdDev),
-                        modifier = Modifier.weight(0.3f)
-                    )
-                }
+                SingleResultCard(
+                    title = "Media: ",
+                    stats = "%.2f".format(result.mean),
+                    modifier = Modifier.weight(0.2f)
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
+                SingleResultCard(
+                    title = "Desviación estándar: ",
+                    stats = "%.2f".format(result.stdDev),
+                    modifier = Modifier.weight(0.2f)
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
                 ComplexResultCard(
-                    title = "Minimo-Maximo",
+                    title = "Valores de rango",
                     stats = mapOf(
                         "Valor mínimo" to result.min.toString(),
-                        "Valor máxio" to result.max.toString()
-                    )
+                        "Valor máxio" to result.max.toString(),
+                        "Percentil 5" to result.min.toString(),
+                        "Percentil 95" to result.max.toString()
+                    ),
+                    modifier = Modifier.weight(0.1f)
                 )
-                ComplexResultCard(
-                    title = "Percentiles",
-                    stats = mapOf(
-                        "5% mínimo" to result.min.toString(),
-                        "95% máximo" to result.max.toString()
-                    )
-                )
+                Spacer(modifier = Modifier.weight(0.05f))
                 ComplexResultCard(
                     title = "Frecuencia de valores",
-                    stats = result.frequencies
+                    stats = result.frequencies,
+                    modifier = Modifier.weight(0.1f)
                 )
+                Spacer(modifier = Modifier.weight(0.05f))
                 ComplexResultCard(
                     title = "Probabilidad de valores",
-                    stats = result.probabilities
+                    stats = result.probabilities,
+                    modifier = Modifier.weight(0.1f)
                 )
+                Spacer(modifier = Modifier.weight(0.05f))
             }
         }
 
@@ -110,6 +109,7 @@ fun ResultForm(
                 style = Typography.headlineLarge
             )
         }
+
         is MarkovResult -> {
             Text(
                 result.toString(),

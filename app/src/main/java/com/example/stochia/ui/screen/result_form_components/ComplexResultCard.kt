@@ -17,11 +17,12 @@ import com.example.stochia.ui.theme.Typography
 @Composable
 fun ComplexResultCard(
     title: String,
-    stats: Map<String, String>
+    stats: Map<String, String>,
+    modifier: Modifier
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = NeutralLight),
-        modifier = Modifier.fillMaxWidth(0.7f)
+        modifier = modifier.fillMaxWidth(0.7f)
     ) {
         Text(
             title,
