@@ -72,9 +72,9 @@ fun DistributionForm(
                 value = data ,
                 onValueChange = {
                     data = it
-                    val result = Regex("\\d+")
+                    val result = Regex("\\d+(\\.\\d+)?")
                             .findAll(data)
-                            .map { it.value.toInt() }
+                            .map { it.value.toDouble().toInt() }
                             .toList()
                     onEvent(MainScreenEvent.ChangeDistributionData(result))
                 },

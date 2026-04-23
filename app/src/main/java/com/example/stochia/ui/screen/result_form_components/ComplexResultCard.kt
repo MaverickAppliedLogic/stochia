@@ -30,7 +30,7 @@ fun ComplexResultCard(
     ) {
         val groupedStats = stats
             .entries
-            .groupBy { it.value }          // agrupa por probabilidad
+            .groupBy { it.value }
             .mapValues { entry ->
                 entry.value.map { it.key } // lista de statNames
             }

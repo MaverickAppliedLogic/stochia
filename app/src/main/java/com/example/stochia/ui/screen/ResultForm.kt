@@ -3,6 +3,7 @@ package com.example.stochia.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.rememberScrollState
@@ -44,15 +45,7 @@ fun ResultForm(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Neutral)
-                    .fillMaxHeight(0.9f)
-                    .innerShadow(
-                        shape = RoundedCornerShape(5.dp),
-                        shadow = Shadow(
-                            radius = 10.dp,
-                            spread = 2.dp,
-                            color = NeutralDarkest
-                        )
-                    )
+                    .fillMaxHeight()
                     .verticalScroll(scrollState)
             )
             {
@@ -66,49 +59,57 @@ fun ResultForm(
                 SingleResultCard(
                     title = "Media: ",
                     stats = "%.2f".format(result.mean),
-                    modifier = Modifier.weight(0.2f)
+                    modifier = Modifier.weight(0.1f)
                 )
-                Spacer(modifier = Modifier.weight(0.1f))
+                Spacer(modifier = Modifier.weight(0.05f))
                 SingleResultCard(
                     title = "Desviación estándar: ",
                     stats = "%.2f".format(result.stdDev),
-                    modifier = Modifier.weight(0.2f)
-                )
-                Spacer(modifier = Modifier.weight(0.1f))
-                ComplexResultCard(
-                    title = "Valores de rango",
-                    stats = mapOf(
-                        "Valor mínimo" to result.min.toString(),
-                        "Valor máxio" to result.max.toString(),
-                        "Percentil 5" to result.min.toString(),
-                        "Percentil 95" to result.max.toString()
-                    ),
                     modifier = Modifier.weight(0.1f)
                 )
                 Spacer(modifier = Modifier.weight(0.05f))
                 ComplexResultCard(
-                    title = "Frecuencia de valores",
-                    stats = result.frequencies
-                        .toList() // convierte a lista de Pair(prob, lista)
-                        .sortedByDescending { it.second.toDouble() }
-                        .toMap()
-                        .mapValues { "${it.value} veces" },
-                    modifier = Modifier
+                    title = "Valores de rango",
+                    stats = mapOf(
+                        result.min.toString() to "Valor mínimo",
+                        result.max.toString() to "Valor máximo",
+                        result.p5.toString() to "Percentil 5",
+                        result.p95.toString() to "Percentil 95"
+                    ).toList()
+                        .sortedBy { it.first.toDouble() }
+                        .toMap(),
+                    modifier = Modifier.weight(1f)
                 )
                 Spacer(modifier = Modifier.weight(0.05f))
-                ComplexResultCard(
-                    title = "Probabilidad de valores",
-                    stats = result
-                        .probabilities
-                        .map { it.key to
-                                BigDecimal(it.value)
-                            .setScale(2, RoundingMode.HALF_UP).toDouble() }
-                        .toList()
-                        .sortedByDescending {it.second}
-                        .toMap()
-                        .mapValues { "${it.value}%" },
-                    modifier = Modifier
-                )
+                Row(modifier = Modifier.weight(0.1f)) {
+                    ComplexResultCard(
+                        title = "Frecuencia de valores",
+                        stats = result.frequencies
+                            .toList() // convierte a lista de Pair(prob, lista)
+                            .sortedByDescending { it.second.toDouble() }
+                            .toMap()
+                            .mapValues { "${it.value} veces" },
+                        modifier = Modifier
+                    )
+                }
+                Spacer(modifier = Modifier.weight(0.05f))
+                Row(modifier = Modifier.weight(0.1f)) {
+                    ComplexResultCard(
+                        title = "Probabilidad de valores",
+                        stats = result
+                            .probabilities
+                            .map {
+                                it.key to
+                                        BigDecimal(it.value)
+                                            .setScale(2, RoundingMode.HALF_UP).toDouble()
+                            }
+                            .toList()
+                            .sortedByDescending { it.second }
+                            .toMap()
+                            .mapValues { "${it.value}%" },
+                        modifier = Modifier
+                    )
+                }
                 Spacer(modifier = Modifier.weight(0.05f))
             }
         }
