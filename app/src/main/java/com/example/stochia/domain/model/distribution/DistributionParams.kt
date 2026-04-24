@@ -1,8 +1,8 @@
 package com.example.stochia.domain.model.distribution
 
 data class DistributionParams(
-    val data: List<Int> = emptyList()
+    val data: List<Double> = emptyList()
 )
 
-fun List<Int>.toPy() = DistributionParams(data = this.toList())
+fun List<Double>.toPy() = DistributionParams(data = this.toList())
 

@@ -30,7 +30,7 @@ class LocalEngineServiceImpl: EngineService {
         return result
     }
 
-    override fun getDistribution(params: IntArray): PyObject {
+    override fun getDistribution(params: DoubleArray): PyObject {
 
         val result = py
             .getModule("engine.distribution.distribution")

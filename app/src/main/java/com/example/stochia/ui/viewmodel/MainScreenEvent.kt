@@ -17,7 +17,7 @@ sealed class MainScreenEvent{
     data class ChangeMarkovInitState(val state: Int): MainScreenEvent()
     data class ChangeMarkovSteps(val steps: Int): MainScreenEvent()
 
-    data class ChangeDistributionData(val data: List<Int>): MainScreenEvent()
+    data class ChangeDistributionData(val data: List<Double>): MainScreenEvent()
     data object DistributionButtonClicked: MainScreenEvent()
 }
 

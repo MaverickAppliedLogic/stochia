@@ -2,6 +2,7 @@ package com.example.stochia.ui.screen.common_components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -60,6 +61,7 @@ fun CustomEditText(
             ),
             label = {  },
             modifier = Modifier.padding(bottom = 15.dp)
+                .fillMaxSize()
         )
     }
 }

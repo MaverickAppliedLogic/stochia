@@ -8,5 +8,5 @@ interface EngineService {
 
     fun genMarkov(states: IntArray, probs: DoubleArray, initState: Int, steps: Int): PyObject
 
-    fun getDistribution(params: IntArray): PyObject
+    fun getDistribution(params: DoubleArray): PyObject
 }

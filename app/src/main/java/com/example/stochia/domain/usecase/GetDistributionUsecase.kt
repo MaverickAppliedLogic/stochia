@@ -9,6 +9,6 @@ class GetDistributionUsecase(
     private val repository: CalculationSystemRepository
 ) {
     operator fun invoke(data: DistributionParams): DistributionResult {
-        return repository.getDistribution(data.data.toIntArray()).toDistributionResult()
+        return repository.getDistribution(data.data.toDoubleArray()).toDistributionResult()
     }
 }
