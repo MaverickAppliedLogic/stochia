@@ -5,7 +5,7 @@ import com.example.stochia.core.services.calculation_system.local.LocalEngineSer
 
 class CalculationSystemRepository(private val engineService: LocalEngineServiceImpl) {
 
-    fun getDistribution(data: IntArray): PyObject {
+    fun getDistribution(data: DoubleArray): PyObject {
         return engineService.getDistribution(data)
     }
 
