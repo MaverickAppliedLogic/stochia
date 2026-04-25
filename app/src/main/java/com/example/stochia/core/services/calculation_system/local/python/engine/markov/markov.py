@@ -26,7 +26,7 @@ def state_change(state, transitions: dict) -> str:
     return random.choices(population=states, weights=probs)[0]
 
 
-def sim_markov(init_state: str, transitions: dict, steps: int) -> list[str]:
+def sim_markov(init_state: str, transitions: dict, steps: int) -> dict:
     state = init_state
     record = [state]
 
@@ -37,6 +37,11 @@ def sim_markov(init_state: str, transitions: dict, steps: int) -> list[str]:
     return record
 
 
-def gen_sim_markov(states, probs, init_state, steps):
+def gen_sim_markov(states, probs, init_state, steps)->dict:
     transitions = build_transition_matrix(states, probs)
-    return sim_markov(init_state, transitions, steps)
+    return {
+        "path": sim_markov(init_state, transitions, steps),
+        "probs": probs
+    }
+
+
