@@ -10,6 +10,7 @@ import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.markov.MarkovResult
 import com.example.stochia.domain.model.montecarlo.MontecarloResult
 import com.example.stochia.ui.screen.result_form_components.DistributionResultScreen
+import com.example.stochia.ui.screen.result_form_components.MarkovResultScreen
 import com.example.stochia.ui.theme.Typography
 
 @Composable
@@ -36,9 +37,9 @@ fun ResultForm(
         }
 
         is MarkovResult -> {
-            Text(
-                result.toString(),
-                style = Typography.headlineLarge
+            MarkovResultScreen(
+                result = result,
+                scrollState = scrollState,
             )
         }
 
