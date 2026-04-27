@@ -34,7 +34,6 @@ fun ComplexResultCard(
     stats: Map<String, String>,
     modifier: Modifier
 ) {
-
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(5.dp))

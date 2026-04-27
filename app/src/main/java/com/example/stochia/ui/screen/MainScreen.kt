@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.stochia.domain.model.markov.MarkovResult
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
 import com.example.stochia.ui.theme.Neutral
@@ -111,8 +112,21 @@ fun MainScreen(
                 .padding(padding)
         ) {
             when (state.currentScreen) {
-                Screen.RESULT -> ResultForm(
-                    result = state.result
+                Screen.RESULT -> ResultScreen(
+                    result = MarkovResult(
+                        path = listOf(
+                            "A", "C", "B", "A", "A", "B", "B", "B",
+                            "C", "B", "B", "B", "A", "C", "B", "A",
+                            "C", "B", "A", "B", "B", "C", "A", "C",
+                            "B", "C", "A", "C"
+                        ),
+                        probs = mapOf(
+                            "A" to listOf(0.2, 0.5, 0.3),
+                            "B" to listOf(0.3, 0.4, 0.3),
+                            "C" to listOf(0.1, 0.9, 0.0)
+                        ),
+                        conv = listOf(0.23, 0.4,0.37)
+                    )
                 )
                 Screen.DISTRIBUTION -> DistributionForm(
                     onEvent = {viewModel.onEvent(it)}
