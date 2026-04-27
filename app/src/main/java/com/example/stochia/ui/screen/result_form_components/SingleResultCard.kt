@@ -23,9 +23,12 @@ import com.example.stochia.ui.theme.Typography
 
 @Composable
 fun SingleResultCard(
-    title: String,
-    stats: String,
-    modifier: Modifier
+    title: String? = null,
+    titleColor: Color = Tertiary,
+    stats: String? = null,
+    statsColor: Color = Color.White,
+    modifier: Modifier,
+    content: @Composable () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -39,31 +42,36 @@ fun SingleResultCard(
                     color = Neutral
                 ))
             .padding(10.dp)
-    ) {
+    )
+    {
         Card(
             colors = CardDefaults.cardColors(containerColor = NeutralLight),
             modifier = modifier.fillMaxWidth(0.7f)
         ) {
-            Text(
-                title,
-                style = Typography.bodyLarge,
-                textAlign = TextAlign.Start,
-                maxLines = 2,
-                color = Tertiary,
-                modifier = Modifier
-                    .weight(0.5f)
-                    .padding(start = 20.dp, end = 20.dp, top = 10.dp)
-            )
-
-            Text(
-                stats,
-                style = Typography.headlineLarge,
-                textAlign = TextAlign.Center,
-                color = Color.White,
-                modifier = Modifier
-                    .weight(0.5f)
-                    .fillMaxWidth()
-            )
+            if (title != null){
+                Text(
+                    title,
+                    style = Typography.bodyLarge,
+                    textAlign = TextAlign.Start,
+                    maxLines = 2,
+                    color = titleColor,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 20.dp, end = 20.dp, top = 10.dp)
+                )
+            }
+            if (stats != null){
+                Text(
+                    stats,
+                    style = Typography.headlineLarge,
+                    textAlign = TextAlign.Center,
+                    color = statsColor,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                )
+            }
+            content()
         }
     }
 }

@@ -111,7 +111,7 @@ fun MainScreen(
                 .padding(padding)
         ) {
             when (state.currentScreen) {
-                Screen.RESULT -> ResultForm(
+                Screen.RESULT -> ResultScreen(
                     result = state.result
                 )
                 Screen.DISTRIBUTION -> DistributionForm(

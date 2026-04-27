@@ -5,15 +5,17 @@ import com.example.stochia.domain.model.result.Result
 
 class MarkovResult(
     val path: List<String>,
-    val probs: List<Double>
+    val probs: Map<String, List<Double>>,
+    val conv: List<Double>
 ): Result {
     override fun toString(): String {
-        return path.joinToString(separator = " -> ") + probs.joinToString(separator = " ")
+        return path.joinToString(separator = " -> ") + probs
     }
 }
 
 fun PyObject.toMarkovResult(): MarkovResult {
     val mapPy = asMap().mapKeys { it.key.toString() }
+
     val flatPath = mapPy["path"]!!.asList().map { it.toInt() }
     val path = flatPath.let {
         it.map { value ->
@@ -24,8 +26,31 @@ fun PyObject.toMarkovResult(): MarkovResult {
             }
         }
     }
-    val probs = mapPy["probs"]!!.asList().map { it.toDouble() }
-    return MarkovResult(path = path, probs = probs)
+
+    val probsPy = mapPy["probs"]!!.asMap()
+    val probs: Map<String, List<Double>> = probsPy.map { (keyPy, valuePy) ->
+
+            val key = when(keyPy.toString()){
+                "0" -> "A"
+                "1" -> "B"
+                else -> "C"
+            }
+
+            val values = (valuePy as PyObject)
+                .asMap()
+                .values
+                .map { v ->
+                    (v as PyObject)
+                        .toJava(Number::class.java)
+                        .toDouble()
+                }
+            key to values
+        }.toMap()
+
+    val conv = mapPy["conv"]!!.asList().map { it.toDouble() }
+
+
+    return MarkovResult(path = path, probs = probs, conv = conv)
 }
 
 

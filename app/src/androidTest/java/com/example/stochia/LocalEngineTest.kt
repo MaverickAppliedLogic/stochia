@@ -24,7 +24,7 @@ class LocalEngineTest : KoinTest {
 
     @Test
     fun test_get_distribution() {
-        val params = listOf(40,3,2,4,3,45,5,2,3,4).toPy()
+        val params = listOf(40.0,3.0,2.0,4.0,3.0,45.0,5.0,2.0,3.0,4.0).toPy()
 
         val result = getDistribution(params)
 

@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 
 def build_transition_matrix(states, flat_probs):
@@ -37,11 +38,22 @@ def sim_markov(init_state: str, transitions: dict, steps: int) -> dict:
     return record
 
 
+def convergence_from_path(path, states):
+    path_arr = np.array(path)
+    total = len(path_arr)
+    return [(path_arr == s).sum() / total for s in states]
+
+
+
 def gen_sim_markov(states, probs, init_state, steps)->dict:
     transitions = build_transition_matrix(states, probs)
+    path = sim_markov(init_state, transitions, steps)
+    conv = convergence_from_path(path, states)
+
     return {
-        "path": sim_markov(init_state, transitions, steps),
-        "probs": probs
+        "path": path,
+        "probs": transitions,
+        "conv": conv
     }
 
 

@@ -14,7 +14,7 @@ import com.example.stochia.ui.screen.result_form_components.MarkovResultScreen
 import com.example.stochia.ui.theme.Typography
 
 @Composable
-fun ResultForm(
+fun ResultScreen(
     result: Result?
 ) {
     val scrollState = rememberScrollState()
