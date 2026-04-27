@@ -12,18 +12,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.markov.MarkovResult
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralDarker
+import com.example.stochia.ui.theme.PrimaryLight
 import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.SecondaryLight
+import com.example.stochia.ui.theme.Tertiary
 import com.example.stochia.ui.theme.TertiaryLight
 import com.example.stochia.ui.theme.Typography
 
@@ -71,7 +75,7 @@ fun MarkovResultScreen(
                         title = "Start",
                         titleColor = SecondaryLight,
                         stats = result.path[0],
-                        statsColor = PrimaryLightest,
+                        statsColor = PrimaryLight,
                         modifier = modifier.weight(0.4f)
                     )
                     Spacer(modifier.weight(0.05f))
@@ -79,7 +83,7 @@ fun MarkovResultScreen(
                         title = "End",
                         titleColor = SecondaryLight,
                         stats = result.path.last(),
-                        statsColor = PrimaryLightest,
+                        statsColor = Tertiary,
                         modifier =modifier.weight(0.4f)
                     )
                     Spacer(modifier.weight(0.05f))
@@ -111,25 +115,81 @@ fun MarkovResultScreen(
         }
         Spacer(modifier.height(50.dp))
         Card(
+            colors = CardDefaults.cardColors(containerColor = Neutral),
             modifier = Modifier
                 .fillMaxWidth(),
             elevation = CardDefaults.cardElevation(6.dp)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "State Path:",
-                    style = MaterialTheme.typography.titleMedium
+                    text = "Markov Path",
+                    style = Typography.headlineLarge,
+                    color = Color.White,
+                    modifier = Modifier.fillMaxWidth(0.9f)
                 )
                 var lastState = result.path[0]
-                Text("Initial State: $lastState")
+                Spacer(modifier.height(16.dp))
+                SingleResultCard(
+                    modifier= Modifier.height(50.dp).fillMaxWidth()
+                ){
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxSize()) {
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(color = SecondaryLight)) {
+                                    append("Step 0:")
+                                }
+                                append("   $lastState")},
+                            style = Typography.bodyLarge,
+                            color = PrimaryLight,
+                        )
+                        Spacer(modifier.weight(1f))
+                        Text(
+                            text = "Inicio",
+                            style = Typography.bodyLarge,
+                            color = SecondaryLight
+                        )
+                    }
+                }
+                Spacer(modifier.height(16.dp))
                 result.path.forEachIndexed { index, state ->
                     if (index != 0) {
                         val prob = getProb(lastState, state, result.probs)
-                        Text(
-                            text = "t=${index.toString().padStart(2, '0')} " +
-                                    " $lastState → $state           P= $prob%",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                        SingleResultCard(
+                            modifier= Modifier.height(50.dp).fillMaxWidth()
+                        ){
+                            Row(verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxSize()) {
+                                Text(
+                                    text = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = SecondaryLight)) {
+                                            append("Step $index")
+                                        }
+
+                                        append(":    $lastState -> ")
+
+                                        withStyle(SpanStyle(color =
+                                            if (result.path.size == index + 1) {
+                                                Tertiary
+                                            } else {
+                                                PrimaryLightest
+                                            })) {
+                                            append(state)
+                                        }
+                                    },
+                                    style = Typography.labelSmall
+                                )
+
+                                Spacer(modifier.weight(1f))
+                                Text(
+                                    text = "P= $prob%",
+                                    style = Typography.labelSmall,
+                                    color = TertiaryLight
+                                )
+                            }
+                        }
+                        Spacer(modifier.height(16.dp))
+
                         lastState = state
                     }
                 }

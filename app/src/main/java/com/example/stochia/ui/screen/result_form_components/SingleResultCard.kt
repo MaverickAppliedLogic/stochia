@@ -28,6 +28,7 @@ fun SingleResultCard(
     stats: String? = null,
     statsColor: Color = Color.White,
     modifier: Modifier,
+    content: @Composable () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -70,6 +71,7 @@ fun SingleResultCard(
                         .fillMaxWidth()
                 )
             }
+            content()
         }
     }
 }
