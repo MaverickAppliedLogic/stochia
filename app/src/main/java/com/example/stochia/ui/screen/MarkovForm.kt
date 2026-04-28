@@ -18,9 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.markov.MarkovParams
+import com.example.stochia.ui.screen.common_components.CustomEditText
 import com.example.stochia.ui.screen.markov_form_components.CustomSlider.CustomSlider
 import com.example.stochia.ui.screen.markov_form_components.TransitionMatrix
 import com.example.stochia.ui.theme.LocalDimens
@@ -59,6 +61,31 @@ fun MarkovForm(
                 .background(color = Neutral)
                 .fillMaxSize(0.9f)
         ) {
+            Spacer(modifier = Modifier.weight(0.15f))
+            Text(
+                "ESTADO INICIAL",
+                color = SecondaryLight,
+                textAlign = TextAlign.Start,
+                style = Typography.bodyLarge,
+            )
+            Spacer(modifier = Modifier.weight(0.05f))
+            CustomEditText(
+                value = when(params.init_state){
+                    0 -> "A"
+                    1-> "B"
+                    else -> "C"
+                },
+                type = KeyboardType.Text,
+                modifier = Modifier.weight(0.2f).fillMaxWidth(0.6f)
+                ) {
+                if (it.isNotBlank()) {
+                    when (it) {
+                        "A" -> onEvent(MainScreenEvent.ChangeMarkovInitState(0))
+                        "B" -> onEvent(MainScreenEvent.ChangeMarkovInitState(1))
+                        "C" -> onEvent(MainScreenEvent.ChangeMarkovInitState(2))
+                    }
+                }
+            }
             Spacer(modifier = Modifier.weight(0.15f))
             Text(
                 "MATRIZ DE TRANSICIÓN",

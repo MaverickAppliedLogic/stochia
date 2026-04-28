@@ -48,21 +48,24 @@ fun MainScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .background(Neutral),
-                        horizontalArrangement = Arrangement.Center) {
-                            Text("STOCHIA",
-                                style = Typography.headlineLarge,
-                                color = Color.White,
-                            )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .background(Neutral),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            "STOCHIA",
+                            style = Typography.headlineLarge,
+                            color = Color.White,
+                        )
                     }
 
                 },
                 navigationIcon = {
                     SettingsButton(
                         selected = state.settingsVisible,
-                        onClick = {viewModel.onEvent(it)},
+                        onClick = { viewModel.onEvent(it) },
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Neutral)
@@ -114,17 +117,20 @@ fun MainScreen(
                 Screen.RESULT -> ResultScreen(
                     result = state.result
                 )
+
                 Screen.DISTRIBUTION -> DistributionForm(
-                    onEvent = {viewModel.onEvent(it)}
+                    onEvent = { viewModel.onEvent(it) }
                 )
+
                 Screen.MONTECARLO -> MontecarloForm(
                     type = state.distributionTypeSelected,
                     modifier = Modifier.padding(padding),
-                    onEvent = {viewModel.onEvent(it)}
+                    onEvent = { viewModel.onEvent(it) }
                 )
+
                 Screen.MARKOV -> MarkovForm(
                     params = state.markovParams,
-                    onEvent = {viewModel.onEvent(it)}
+                    onEvent = { viewModel.onEvent(it) }
                 )
             }
         }

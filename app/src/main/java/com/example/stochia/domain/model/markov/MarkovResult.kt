@@ -2,6 +2,8 @@ package com.example.stochia.domain.model.markov
 
 import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.result.Result
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class MarkovResult(
     val path: List<String>,
@@ -47,7 +49,8 @@ fun PyObject.toMarkovResult(): MarkovResult {
             key to values
         }.toMap()
 
-    val conv = mapPy["conv"]!!.asList().map { it.toDouble() }
+    val conv = mapPy["conv"]!!.asList().map { BigDecimal(it.toString())
+        .setScale(2, RoundingMode.HALF_UP).toDouble()  }
 
 
     return MarkovResult(path = path, probs = probs, conv = conv)

@@ -37,7 +37,6 @@ fun MarkovResultScreen(
     scrollState: ScrollState,
     modifier: Modifier = Modifier
 ) {
-
     Column(
         modifier = modifier
             .background(NeutralDarker)
@@ -57,7 +56,8 @@ fun MarkovResultScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.65f)
-            ) {
+            )
+            {
                 Spacer(modifier.weight(0.05f))
                 Text(
                     text = "Markov Summary",
@@ -113,7 +113,7 @@ fun MarkovResultScreen(
                 Spacer(modifier.weight(0.05f))
             }
         }
-        Spacer(modifier.height(50.dp))
+        Spacer(modifier.height(30.dp))
         Card(
             colors = CardDefaults.cardColors(containerColor = Neutral),
             modifier = Modifier
