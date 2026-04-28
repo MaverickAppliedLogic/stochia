@@ -3,7 +3,6 @@ package com.example.stochia.ui.screen.common_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField
@@ -26,13 +25,14 @@ import com.example.stochia.ui.theme.NeutralLight
 
 @Composable
 fun CustomEditText(
-    value: String,
     modifier: Modifier = Modifier,
+    value: String,
+    type: KeyboardType = KeyboardType.Number,
     onValueChange : (String) -> Unit
 ){
     var text by remember{ mutableStateOf(value) }
     Box(
-        contentAlignment = Alignment.TopCenter,
+        contentAlignment = Alignment.Center,
         modifier = modifier
             .clip(RoundedCornerShape(5.dp))
             .background(color = NeutralLight)
@@ -44,6 +44,7 @@ fun CustomEditText(
                     color = NeutralDarkest
                 )
             )
+            .fillMaxSize()
     ) {
         TextField(
             value = text,
@@ -51,7 +52,7 @@ fun CustomEditText(
                 text = it
                 onValueChange(it)
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = type),
             colors = TextFieldDefaults.colors(
                 disabledContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -60,8 +61,7 @@ fun CustomEditText(
                 focusedIndicatorColor = Color.Transparent,
             ),
             label = {  },
-            modifier = Modifier.padding(bottom = 15.dp)
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
