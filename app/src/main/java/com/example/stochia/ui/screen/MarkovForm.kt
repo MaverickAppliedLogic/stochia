@@ -111,6 +111,7 @@ fun MarkovForm(
             )
             Spacer(modifier = Modifier.weight(0.1f))
             CustomSlider(
+                alignment = Alignment.CenterStart,
                 value = params.steps.toFloat(),
                 valueRange = 0f..50f,
                 steps = 50,

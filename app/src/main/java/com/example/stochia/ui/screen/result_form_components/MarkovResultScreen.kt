@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,14 +45,16 @@ fun MarkovResultScreen(
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(scrollState)
-    ) {
+    )
+    {
         Card(
             colors = CardDefaults.cardColors(containerColor = Neutral),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(350.dp),
             elevation = CardDefaults.cardElevation(6.dp)
-        ) {
+        )
+        {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -116,34 +120,43 @@ fun MarkovResultScreen(
         Spacer(modifier.height(30.dp))
         Card(
             colors = CardDefaults.cardColors(containerColor = Neutral),
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(6.dp)
-        ) {
+        )
+        {
             Column(modifier = Modifier.padding(16.dp)) {
+
                 Text(
                     text = "Markov Path",
                     style = Typography.headlineLarge,
                     color = Color.White,
                     modifier = Modifier.fillMaxWidth(0.9f)
                 )
+
                 var lastState = result.path[0]
-                Spacer(modifier.height(16.dp))
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 SingleResultCard(
-                    modifier= Modifier.height(50.dp).fillMaxWidth()
-                ){
-                    Row(verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxSize()) {
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(SpanStyle(color = SecondaryLight)) {
                                     append("Step 0:")
                                 }
-                                append("   $lastState")},
+                                append("   $lastState")
+                            },
                             style = Typography.bodyLarge,
-                            color = PrimaryLight,
+                            color = PrimaryLight
                         )
-                        Spacer(modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
                         Text(
                             text = "Inicio",
                             style = Typography.bodyLarge,
@@ -151,52 +164,74 @@ fun MarkovResultScreen(
                         )
                     }
                 }
-                Spacer(modifier.height(16.dp))
-                result.path.forEachIndexed { index, state ->
-                    if (index != 0) {
-                        val prob = getProb(lastState, state, result.probs)
-                        SingleResultCard(
-                            modifier= Modifier.height(50.dp).fillMaxWidth()
-                        ){
-                            Row(verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.fillMaxSize()) {
-                                Text(
-                                    text = buildAnnotatedString {
-                                        withStyle(SpanStyle(color = SecondaryLight)) {
-                                            append("Step $index")
-                                        }
 
-                                        append(":    $lastState -> ")
+                Spacer(modifier = Modifier.height(16.dp))
 
-                                        withStyle(SpanStyle(color =
-                                            if (result.path.size == index + 1) {
-                                                Tertiary
-                                            } else {
-                                                PrimaryLightest
-                                            })) {
-                                            append(state)
-                                        }
-                                    },
-                                    style = Typography.labelSmall
-                                )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                ) {
 
-                                Spacer(modifier.weight(1f))
-                                Text(
-                                    text = "P= $prob%",
-                                    style = Typography.labelSmall,
-                                    color = TertiaryLight
-                                )
+                    itemsIndexed(result.path) { index, state ->
+
+                        if (index != 0) {
+
+                            val prob = getProb(lastState, state, result.probs)
+
+                            SingleResultCard(
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+
+                                    Text(
+                                        text = buildAnnotatedString {
+                                            withStyle(SpanStyle(color = SecondaryLight)) {
+                                                append("Step $index")
+                                            }
+
+                                            append(":    $lastState -> ")
+
+                                            withStyle(
+                                                SpanStyle(
+                                                    color =
+                                                        if (result.path.size == index + 1)
+                                                            Tertiary
+                                                        else
+                                                            PrimaryLightest
+                                                )
+                                            ) {
+                                                append(state)
+                                            }
+                                        },
+                                        style = Typography.labelSmall
+                                    )
+
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    Text(
+                                        text = "P= $prob%",
+                                        style = Typography.labelSmall,
+                                        color = TertiaryLight
+                                    )
+                                }
                             }
-                        }
-                        Spacer(modifier.height(16.dp))
 
-                        lastState = state
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            lastState = state
+                        }
                     }
                 }
 
                 Spacer(Modifier.height(16.dp))
-
             }
+
         }
     }
 }

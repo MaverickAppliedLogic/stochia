@@ -15,12 +15,13 @@ import com.example.stochia.ui.theme.Secondary
 
 @Composable
 fun CustomTrack(
+    alignment: Alignment,
     sliderValue: Float,
     valueRange: ClosedFloatingPointRange<Float>,
     modifier: Modifier = Modifier
 ) {
     Box(
-        contentAlignment = Alignment.Center,
+        contentAlignment = alignment,
         modifier = modifier
             .fillMaxWidth()
             .height(2.dp)

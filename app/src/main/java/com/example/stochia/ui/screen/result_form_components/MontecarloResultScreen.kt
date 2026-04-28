@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,6 +35,8 @@ import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Tertiary
 import com.example.stochia.ui.theme.TertiaryLight
 import com.example.stochia.ui.theme.Typography
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +59,8 @@ fun MontecarloResultScreen(
                 .fillMaxWidth()
                 .height(700.dp),
             elevation = CardDefaults.cardElevation(6.dp)
-        ) {
+        )
+        {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -85,7 +90,7 @@ fun MontecarloResultScreen(
                 SingleResultCard(
                     title = "Media",
                     titleColor = SecondaryLight,
-                    stats = "%.2f".format(result.mean),
+                    stats = BigDecimal(result.mean!!).setScale(2, RoundingMode.HALF_UP).toString(),
                     statsColor = Tertiary,
                     modifier = modifier
                         .fillMaxWidth(0.9f)
@@ -101,7 +106,8 @@ fun MontecarloResultScreen(
                     SingleResultCard(
                         title = "Standard Dev",
                         titleColor = SecondaryLight,
-                        stats = "%.2f".format(result.stdDev),
+                        stats = BigDecimal(result.stdDev!!).setScale(2, RoundingMode.HALF_UP)
+                            .toString(),
                         statsColor = PrimaryLight,
                         modifier = modifier.weight(0.4f)
                     )
@@ -119,11 +125,11 @@ fun MontecarloResultScreen(
                 SingleResultCard(
                     title = "Percentiles (5% - 95%)",
                     titleColor = SecondaryLight,
-                    modifier= Modifier
+                    modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .weight(0.25f)
 
-                ){
+                ) {
                     val rangeSliderState = rememberRangeSliderState(
                         activeRangeStart = 5f,
                         activeRangeEnd = 95f,
@@ -133,36 +139,50 @@ fun MontecarloResultScreen(
                         state = rangeSliderState,
                         enabled = false,
                         track = {
-                           GlowCustomStaticTrack()
+                            GlowCustomStaticTrack()
                         },
                         startThumb = {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
 
-                                Text(text = "|",
+                                Text(
+                                    text = "|",
                                     style = Typography.labelSmall,
-                                    color = SecondaryLight)
-                                Text(text = "P5",
+                                    color = SecondaryLight
+                                )
+                                Text(
+                                    text = "P5",
                                     style = Typography.labelSmall,
-                                    color = SecondaryLight)
-                                Text("%.2f".format( result.p5),
-                                    color = TertiaryLight) }
+                                    color = SecondaryLight
+                                )
+                                Text(
+                                    "%.2f".format(result.p5),
+                                    color = TertiaryLight
+                                )
+                            }
 
                         },
                         endThumb = {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                             ) {
-                                Text(text = "|",
+                                Text(
+                                    text = "|",
                                     style = Typography.labelSmall,
-                                    color = SecondaryLight)
-                                Text(text = "P95",
+                                    color = SecondaryLight
+                                )
+                                Text(
+                                    text = "P95",
                                     style = Typography.labelSmall,
-                                    color = SecondaryLight)
+                                    color = SecondaryLight
+                                )
 
-                                Text("%.2f".format(result.p95),
-                                    color = TertiaryLight) }
+                                Text(
+                                    "%.2f".format(result.p95),
+                                    color = TertiaryLight
+                                )
+                            }
                         },
                         modifier = Modifier.weight(1f)
                     )
@@ -173,11 +193,12 @@ fun MontecarloResultScreen(
         Spacer(modifier.height(30.dp))
         Card(
             colors = CardDefaults.cardColors(containerColor = Neutral),
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(6.dp)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+        )
+        {
+            Column(modifier = Modifier.padding(16.dp))
+            {
                 Text(
                     text = "Simulations",
                     style = Typography.headlineLarge,
@@ -185,12 +206,18 @@ fun MontecarloResultScreen(
                     modifier = Modifier.fillMaxWidth(0.9f)
                 )
                 Spacer(modifier.height(16.dp))
-                SingleResultCard(
+
+                LazyColumn(
                     modifier = Modifier
-                        .height(50.dp)
                         .fillMaxWidth()
+                        .height(400.dp)   // o el alto que quieras
                 ) {
-                    result.values?.forEachIndexed { index, value ->
+                    itemsIndexed(result.values!!) { index, value ->
+
+                        val formatValue = BigDecimal(value)
+                            .setScale(2, RoundingMode.HALF_UP)
+                            .toString()
+
                         SingleResultCard(
                             modifier = Modifier
                                 .height(50.dp)
@@ -203,21 +230,27 @@ fun MontecarloResultScreen(
                                 Text(
                                     text = buildAnnotatedString {
                                         withStyle(SpanStyle(color = SecondaryLight)) {
-                                            append("Sim $index")
+                                            append("Sim $index:     ")
                                         }
-                                        append(":    $value")
                                     },
                                     style = Typography.labelSmall
                                 )
-                                Spacer(modifier.weight(1f))
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = buildAnnotatedString {
+                                        withStyle(SpanStyle(color = TertiaryLight)) {
+                                            append(formatValue)
+                                        }
+                                    },
+                                    style = Typography.labelSmall
+                                )
                             }
                         }
-                        Spacer(modifier.height(16.dp))
+
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-
-                    Spacer(Modifier.height(16.dp))
-
                 }
+
             }
         }
     }
