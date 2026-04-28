@@ -1,6 +1,7 @@
 package com.example.stochia.ui.screen.result_form_components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ fun SingleResultCard(
     content: @Composable () -> Unit = {}
 ) {
     Row(
+        horizontalArrangement = Arrangement.Center,
         modifier = modifier
             .clip(RoundedCornerShape(5.dp))
             .background(NeutralLight)
