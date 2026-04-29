@@ -10,7 +10,7 @@ class GenMontecarloUsecase(
     private val repository: CalculationSystemRepository
 ) {
     operator fun invoke(data: MontecarloParams): MontecarloResult {
-        Log.d("GenMontecarloUsecase", "invoke: $data")
+        Log.d("GenMontecarloUsecase", "invoke: ${data.params}")
         val params = data.params.filterNotNull().toDoubleArray()
         val size = data.size
         val distribution = data.distribution.lowercase()

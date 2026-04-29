@@ -32,9 +32,8 @@ import kotlin.collections.listOf
 
 enum class DistributionType(val label: String) {
     NORMAL("Normal"),
-    UNIFORME("Uniforme"),
+    UNIFORM("Uniform"),
     BETA("Beta"),
-    BERNOULLI("Bernoulli"),
     BINOMIAL("Binomial"),
     EXPONENTIAL("Exponential"),
     POISSON("Poisson"),
@@ -79,9 +78,8 @@ fun MontecarloFormFields(
         Spacer(modifier = Modifier.weight(0.5f))
         when (type) {
             DistributionType.NORMAL,
-            DistributionType.UNIFORME,
+            DistributionType.UNIFORM,
             DistributionType.BETA,
-            DistributionType.BERNOULLI,
             DistributionType.BINOMIAL -> {
                 TwoParamsFieldsWithSize(
                     params = params.value.toMutableList(),
@@ -112,7 +110,7 @@ fun MontecarloFormFields(
             }
 
             DistributionType.MULTINOMIAL -> {
-                OneParamFieldsWithSize(
+                ThreeParamsFieldsWithSize(
                     params = params.value.toMutableList(),
                     size = size.intValue,
                     onParamsChange = { params.value = it },
@@ -135,7 +133,7 @@ fun MontecarloFormFields(
                 .fillMaxWidth(0.65f)
                 .height(LocalDimens.current.commitButton),
             onClick = {
-                Log.d("MontecarloFormFields", "onClick")
+                Log.d("MontecarloFormFields", "onClick ${params.value}")
                 onClick( MainScreenEvent.SimulateMontecarloButtonClicked(
                     MontecarloParams(
                         distribution = distribution.value.name,
@@ -162,6 +160,90 @@ fun MontecarloFormFields(
 }
 
 @Composable
+fun ThreeParamsFieldsWithSize(
+    params: MutableList<Double>,
+    size: Int,
+    onParamsChange: (List<Double>) -> Unit,
+    onSizeChange: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    //TODO Binomial debe ser P1 Int, P2 0 < P2 < 1
+
+    Text(
+        "PARAMETRO 1",
+        color = SecondaryLight,
+        textAlign = TextAlign.Start,
+        style = Typography.bodyLarge,
+        modifier = Modifier
+            .fillMaxWidth(0.65f)
+    )
+    Spacer(modifier = modifier)
+    CustomEditText(
+        value = params[0].toString(),
+        onValueChange = {
+            params[0] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params.toList())
+        },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+    )
+    Spacer(modifier = modifier)
+    Spacer(modifier = modifier)
+    Text(
+        "PARAMETRO 2",
+        color = SecondaryLight,
+        textAlign = TextAlign.Start,
+        style = Typography.bodyLarge,
+        modifier = Modifier
+            .fillMaxWidth(0.65f)
+    )
+    Spacer(modifier = modifier)
+    CustomEditText(
+        value = params[1].toString(),
+        onValueChange = {
+            params[1] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params)
+        },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+    )
+    Spacer(modifier = modifier)
+    Spacer(modifier = modifier)
+    Text(
+        "PARAMETRO 2",
+        color = SecondaryLight,
+        textAlign = TextAlign.Start,
+        style = Typography.bodyLarge,
+        modifier = Modifier
+            .fillMaxWidth(0.65f)
+    )
+    Spacer(modifier = modifier)
+    CustomEditText(
+        value = params[2].toString(),
+        onValueChange = {
+            params[2] = it.toDoubleOrNull() ?: 0.0
+            onParamsChange(params)
+        },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+    )
+    Spacer(modifier = modifier)
+    Spacer(modifier = modifier)
+    Text(
+        "NUMERO DE INTERACCIONES (N)",
+        color = SecondaryLight,
+        textAlign = TextAlign.Start,
+        style = Typography.bodyLarge,
+        modifier = Modifier
+            .fillMaxWidth(0.65f)
+
+    )
+    Spacer(modifier = modifier)
+    CustomEditText(
+        value = size.toString(),
+        onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+    )
+}
+
+@Composable
 fun TwoParamsFieldsWithSize(
     params: MutableList<Double>,
     size: Int,
@@ -169,6 +251,8 @@ fun TwoParamsFieldsWithSize(
     onSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    //TODO Binomial debe ser P1 Int, P2 0 < P2 < 1
+
     Text(
         "PARAMETRO 1",
         color = SecondaryLight,
@@ -246,7 +330,9 @@ fun OneParamFieldsWithSize(
         onValueChange = {
             params[0] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params.toList())
-        })
+        },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+    )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
     Text(
@@ -263,8 +349,10 @@ fun OneParamFieldsWithSize(
         value = size.toString(),
         onValueChange = {
             onSizeChange(it.toIntOrNull() ?: 0)
-        }
+        },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
     )
+    Spacer(modifier = modifier)
 }
 
 @Composable
@@ -287,6 +375,7 @@ fun OneParamFields(
         onValueChange = {
             params[0] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params.toList())
-        }
+        },
+        modifier = Modifier.height(LocalDimens.current.editTextHeight)
     )
 }

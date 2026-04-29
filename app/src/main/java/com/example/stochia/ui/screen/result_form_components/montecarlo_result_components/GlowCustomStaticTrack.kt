@@ -8,17 +8,18 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GlowCustomStaticTrack(
-    activeWidth: Float = 0.9f,
+    modifier: Modifier = Modifier,
+    activeWidth: Float = 0.9f
 ) {
 
     CustomStaticTrack(
         activeWidth = activeWidth,
         alignment = Alignment.TopCenter,
-        modifier = Modifier
+        modifier = modifier
     )
     CustomStaticTrack(
         activeWidth = activeWidth,
         alignment = Alignment.TopCenter,
-        modifier = Modifier.blur(5.dp)
+        modifier = modifier.blur(5.dp)
     )
 }

@@ -37,7 +37,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="test_gen_markov()">
+      <SelectionState runConfigName="test_gen_montecarlo_bernoulli()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

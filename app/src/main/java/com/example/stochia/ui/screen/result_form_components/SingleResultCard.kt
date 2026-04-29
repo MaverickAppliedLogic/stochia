@@ -26,6 +26,7 @@ import com.example.stochia.ui.theme.Typography
 fun SingleResultCard(
     title: String? = null,
     titleColor: Color = Tertiary,
+    titleAlign: TextAlign = TextAlign.Start,
     stats: String? = null,
     statsColor: Color = Color.White,
     modifier: Modifier,
@@ -48,18 +49,19 @@ fun SingleResultCard(
     {
         Card(
             colors = CardDefaults.cardColors(containerColor = NeutralLight),
-            modifier = modifier.fillMaxWidth(0.7f)
+            modifier = modifier.fillMaxWidth()
         ) {
             if (title != null){
                 Text(
                     title,
                     style = Typography.bodyLarge,
-                    textAlign = TextAlign.Start,
+                    textAlign = titleAlign,
                     maxLines = 2,
                     color = titleColor,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 20.dp, end = 20.dp, top = 10.dp)
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
                 )
             }
             if (stats != null){
