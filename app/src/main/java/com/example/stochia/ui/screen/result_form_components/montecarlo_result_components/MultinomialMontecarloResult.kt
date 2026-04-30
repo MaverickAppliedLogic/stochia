@@ -1,5 +1,6 @@
 package com.example.stochia.ui.screen.result_form_components.montecarlo_result_components
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +40,7 @@ fun MultinomialMontecarloResult(result: MontecarloResult, modifier: Modifier)
         colors = CardDefaults.cardColors(containerColor = Neutral),
         modifier = Modifier
             .fillMaxWidth()
-            .height(700.dp),
+            .height(650.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     )
     {
@@ -122,17 +124,17 @@ fun MultinomialMontecarloResult(result: MontecarloResult, modifier: Modifier)
                 modifier = Modifier.fillMaxWidth(0.9f)
             )
             Spacer(modifier.height(16.dp))
+            val scrollState = rememberScrollState()
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(400.dp)   // o el alto que quieras
+                    .height(400.dp)
             ) {
                 itemsIndexed(result.results!!) { index, value ->
                     Card(
                         colors = CardDefaults.cardColors(containerColor = Neutral),
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
+                            .fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(6.dp)
                     )
                     {
@@ -140,22 +142,25 @@ fun MultinomialMontecarloResult(result: MontecarloResult, modifier: Modifier)
                             text = "Parametro $index",
                             style = Typography.bodyLarge,
                             color = Color.White,
-                            modifier = Modifier.weight(0.2f),
+                            modifier = Modifier.padding(start = 10.dp),
                         )
-                        Spacer(modifier.weight(0.05f))
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.weight(0.75f)
+                            modifier = Modifier
+                                .height(100.dp)
+                                .fillMaxWidth()
+                                .padding(10.dp)
+                                .horizontalScroll(scrollState)
                         )
                         {
 
                             SingleResultCard(
-                                title = "",
+                                title = "Std Desviación",
                                 titleColor = SecondaryLight,
                                 stats = BigDecimal(value.stdDev!!).setScale(2, RoundingMode.HALF_UP).toString(),
                                 statsColor = TertiaryLight,
-                                modifier = modifier
-                                    .weight(0.1f)
+                                modifier = Modifier
+                                    .weight(0.5f)
                             )
                             val rangeSliderState = rememberRangeSliderState(
                                 activeRangeStart = 5f,
@@ -184,7 +189,7 @@ fun MultinomialMontecarloResult(result: MontecarloResult, modifier: Modifier)
                                             color = SecondaryLight
                                         )
                                         Text(
-                                            "%.2f".format(result.p5),
+                                            "%.2f".format(value.p5),
                                             color = TertiaryLight
                                         )
                                     }
@@ -206,12 +211,12 @@ fun MultinomialMontecarloResult(result: MontecarloResult, modifier: Modifier)
                                         )
 
                                         Text(
-                                            "%.2f".format(result.p95),
+                                            "%.2f".format(value.p95),
                                             color = TertiaryLight
                                         )
                                     }
                                 },
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(0.5f)
                             )
                         }
                     }

@@ -5,7 +5,6 @@ enum class MontecarloType(val key: String) {
     UNIFORM("uniform"),
     EXPONENTIAL("exponential"),
     BETA("beta"),
-    BERNOULLI("bernoulli"),
     BINOMIAL("binomial"),
     GEOMETRICAL("geometrical"),
     POISSON("poisson"),
