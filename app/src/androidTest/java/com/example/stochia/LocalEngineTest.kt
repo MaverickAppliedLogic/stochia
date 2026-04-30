@@ -41,8 +41,8 @@ class LocalEngineTest : KoinTest {
     @Test
     fun test_gen_montecarlo_bernoulli() {
         val params = MontecarloParams(
-            distribution = MontecarloType.BERNOULLI.key,
-            params = listOf(0.6, 100.0),
+            distribution = MontecarloType.BINOMIAL.key,
+            params = listOf(0.6, 0.4),
             size = 100
         )
 
@@ -50,7 +50,7 @@ class LocalEngineTest : KoinTest {
 
         Log.d("test_gen_montecarlo", "result: $result")
 
-        assertEquals(MontecarloType.BERNOULLI, result.distribution)
+        assertEquals(MontecarloType.BINOMIAL, result.distribution)
         assertNotNull(result.results)
         assertTrue(result.results!!.isNotEmpty())
 

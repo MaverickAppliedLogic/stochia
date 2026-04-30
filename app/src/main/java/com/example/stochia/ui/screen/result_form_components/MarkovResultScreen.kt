@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.markov.MarkovResult
@@ -78,6 +79,7 @@ fun MarkovResultScreen(
                     SingleResultCard(
                         title = "Start",
                         titleColor = SecondaryLight,
+                        titleAlign = TextAlign.Center,
                         stats = result.path[0],
                         statsColor = PrimaryLight,
                         modifier = modifier.weight(0.4f)
@@ -86,6 +88,7 @@ fun MarkovResultScreen(
                     SingleResultCard(
                         title = "End",
                         titleColor = SecondaryLight,
+                        titleAlign = TextAlign.Center,
                         stats = result.path.last(),
                         statsColor = Tertiary,
                         modifier =modifier.weight(0.4f)
@@ -98,7 +101,6 @@ fun MarkovResultScreen(
                         statsColor = PrimaryLightest,
                         modifier =modifier.weight(0.4f)
                     )
-                    Spacer(modifier.weight(0.05f))
 
                 }
                 val conv1 = "${result.conv[0].times(100)}%"

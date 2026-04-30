@@ -9,6 +9,7 @@ class MontecarloResult(
     val mean: Double?,
     val stdDev: Double?,
     val p5: Double?,
+    val p50: Double? = null,
     val p95: Double?,
     val tries: Int?,
     val results: List<MontecarloResult>?
@@ -28,7 +29,6 @@ class MontecarloResult(
 fun PyObject.toMontecarloResult(): MontecarloResult{
     val mapPy = asMap().mapKeys { it.key.toString() }
      return when (mapPy["distribution"]!!.toString()) {
-        "bernoulli" -> MontecarloResultFactory.fromBernoulli(mapPy)
         "multinomial" -> MontecarloResultFactory.fromMultinomial(mapPy)
         "geometrical" -> MontecarloResultFactory.fromGeometrical(mapPy)
         "binomial" -> MontecarloResultFactory.withoutValues(mapPy)
