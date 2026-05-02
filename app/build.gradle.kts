@@ -96,4 +96,9 @@ dependencies {
     // Testing (instrumented tests)
     androidTestImplementation(libs.insert.koin.koin.test)
     androidTestImplementation(libs.koin.test.junit4)
+
+//Kstore
+    implementation(libs.kstore)
+    implementation(libs.kstore.file)
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -4,7 +4,7 @@ package com.example.stochia.ui.screen
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.stochia.domain.model.result.Result
+import com.example.stochia.domain.model.interfaces.Result
 import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.markov.MarkovResult
 import com.example.stochia.domain.model.montecarlo.MontecarloResult

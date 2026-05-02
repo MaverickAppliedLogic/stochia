@@ -1,10 +1,12 @@
 package com.example.stochia.domain.model.markov
 
 import com.chaquo.python.PyObject
-import com.example.stochia.domain.model.result.Result
+import com.example.stochia.domain.model.interfaces.Result
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+@Serializable
 class MarkovResult(
     val path: List<String>,
     val probs: Map<String, List<Double>>,

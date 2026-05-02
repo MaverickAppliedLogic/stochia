@@ -2,7 +2,7 @@ package com.example.stochia.ui.viewmodel
 
 import com.example.stochia.domain.model.distribution.DistributionParams
 import com.example.stochia.domain.model.markov.MarkovParams
-import com.example.stochia.domain.model.result.Result
+import com.example.stochia.domain.model.interfaces.Result
 import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 

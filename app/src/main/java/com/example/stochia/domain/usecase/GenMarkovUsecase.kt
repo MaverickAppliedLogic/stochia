@@ -21,5 +21,6 @@ class GenMarkovUsecase(
             .genMarkov(states,probs,data.init_state, data.steps)
             .toMarkovResult()
 
+
     }
 }

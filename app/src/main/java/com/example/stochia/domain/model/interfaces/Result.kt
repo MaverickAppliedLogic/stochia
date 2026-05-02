@@ -1,4 +1,5 @@
-package com.example.stochia.domain.model.result
+package com.example.stochia.domain.model.interfaces
+
 
 
 interface Result{
