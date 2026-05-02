@@ -1,7 +1,7 @@
 package com.example.stochia.domain.model.distribution
 
 import com.chaquo.python.PyObject
-import com.example.stochia.domain.model.result.Result
+import com.example.stochia.domain.model.interfaces.Result
 
 class DistributionResult(
     val frequencies: Map<String, String>,

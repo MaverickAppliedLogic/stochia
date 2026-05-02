@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("com.chaquo.python")
 }
 
@@ -96,4 +97,9 @@ dependencies {
     // Testing (instrumented tests)
     androidTestImplementation(libs.insert.koin.koin.test)
     androidTestImplementation(libs.koin.test.junit4)
+
+//Kstore
+    implementation(libs.kstore)
+    implementation(libs.kstore.file)
+    implementation(libs.kotlinx.serialization.json)
 }

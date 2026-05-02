@@ -1,6 +1,5 @@
 package com.example.stochia.ui.screen.result_form_components
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -33,11 +32,12 @@ import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Tertiary
 import com.example.stochia.ui.theme.TertiaryLight
 import com.example.stochia.ui.theme.Typography
+import com.example.stochia.ui.viewmodel.MainScreenEvent
 
 @Composable
 fun MarkovResultScreen(
     result: MarkovResult,
-    scrollState: ScrollState,
+    onEvent: (MainScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -45,7 +45,6 @@ fun MarkovResultScreen(
             .background(NeutralDarker)
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(scrollState)
     )
     {
         Card(
@@ -233,8 +232,13 @@ fun MarkovResultScreen(
 
                 Spacer(Modifier.height(16.dp))
             }
-
         }
+        Spacer(modifier.height(30.dp))
+        Button(onClick = {onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
+            Text("Guardar Estudio")
+        }
+        Spacer(modifier.height(30.dp))
+
     }
 }
 

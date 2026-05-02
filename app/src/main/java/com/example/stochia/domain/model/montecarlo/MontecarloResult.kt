@@ -1,7 +1,7 @@
 package com.example.stochia.domain.model.montecarlo
 
 import com.chaquo.python.PyObject
-import com.example.stochia.domain.model.result.Result
+import com.example.stochia.domain.model.interfaces.Result
 
 class MontecarloResult(
     val distribution: MontecarloType?,
