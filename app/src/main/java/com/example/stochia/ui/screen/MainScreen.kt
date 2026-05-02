@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
 import com.example.stochia.ui.theme.Neutral
@@ -115,7 +116,8 @@ fun MainScreen(
         ) {
             when (state.currentScreen) {
                 Screen.RESULT -> ResultScreen(
-                    result = state.result
+                    result = state.result,
+                    onEvent = { viewModel.onEvent(it) }
                 )
 
                 Screen.DISTRIBUTION -> DistributionForm(
@@ -129,7 +131,7 @@ fun MainScreen(
                 )
 
                 Screen.MARKOV -> MarkovForm(
-                    params = state.markovParams,
+                    markovParams = state.params as MarkovParams,
                     onEvent = { viewModel.onEvent(it) }
                 )
             }

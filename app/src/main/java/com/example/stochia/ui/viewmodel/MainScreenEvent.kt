@@ -19,6 +19,9 @@ sealed class MainScreenEvent{
 
     data class ChangeDistributionData(val data: List<Double>): MainScreenEvent()
     data object DistributionButtonClicked: MainScreenEvent()
+
+    data object SaveStudyButtonClicked: MainScreenEvent()
+    data class StudyCardClicked(val id: String): MainScreenEvent()
 }
 
 

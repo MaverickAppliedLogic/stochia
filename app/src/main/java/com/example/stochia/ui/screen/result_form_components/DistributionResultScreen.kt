@@ -1,16 +1,16 @@
 package com.example.stochia.ui.screen.result_form_components
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,13 +22,14 @@ import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.Typography
+import com.example.stochia.ui.viewmodel.MainScreenEvent
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 @Composable
 fun DistributionResultScreen(
     result: DistributionResult,
-    scrollState: ScrollState,
+    onEvent: (MainScreenEvent) -> Unit,
     modifier: Modifier
 ) {
     Column(
@@ -37,8 +38,8 @@ fun DistributionResultScreen(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .background(color = Neutral)
+            .fillMaxWidth()
             .fillMaxHeight(0.9f)
-            .verticalScroll(scrollState)
     )
     {
         Text(
@@ -47,17 +48,17 @@ fun DistributionResultScreen(
             textAlign = TextAlign.Center,
             color = PrimaryLightest
         )
-        Spacer(modifier = Modifier)
+        Spacer(modifier = Modifier.height(50.dp))
         SingleResultCard(
             title = "Media: ",
             stats = "%.2f".format(result.mean),
-            modifier = Modifier.height(80.dp)
+            modifier = Modifier.height(80.dp).fillMaxWidth(0.7f)
         )
         Spacer(modifier = Modifier.height(20.dp))
         SingleResultCard(
             title = "Desviación estándar: ",
             stats = "%.2f".format(result.stdDev),
-            modifier = Modifier.height(80.dp)
+            modifier = Modifier.height(80.dp).fillMaxWidth(0.7f)
         )
         Spacer(modifier = Modifier.height(40.dp))
         ComplexResultCard(
@@ -100,6 +101,11 @@ fun DistributionResultScreen(
                 .mapValues { "${it.value}%" },
             modifier = Modifier
         )
+        Spacer(modifier.height(30.dp))
+        Button(onClick = { onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
+            Text("Guardar Estudio")
+        }
+        Spacer(modifier.height(30.dp))
     }
     Spacer(modifier = Modifier)
 }

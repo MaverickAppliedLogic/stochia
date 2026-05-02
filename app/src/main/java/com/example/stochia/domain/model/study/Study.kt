@@ -1,12 +1,21 @@
 package com.example.stochia.domain.model.study
 
+import com.example.stochia.domain.model.dto.SerializableStudy
 import com.example.stochia.domain.model.interfaces.Params
 import com.example.stochia.domain.model.interfaces.Result
-import java.util.UUID
 
 data class Study(
-    val id: String = UUID.randomUUID().toString(),
-    val params: Params,
-    val result: Result
+    val id: String = System.currentTimeMillis().toString(),
+    val name: String = "",
+    val params: Params?= null,
+    val result: Result?= null
 )
+
+fun SerializableStudy.toDomain(): Study =
+    Study(
+        id = id,
+        name = name,
+        params = params?.toDomain(),
+        result = result?.toDomain()
+    )
 

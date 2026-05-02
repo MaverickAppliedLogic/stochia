@@ -18,7 +18,7 @@ class GenMarkovUsecase(
         val probs = data.probs.toDoubleArray()
 
         return repository
-            .genMarkov(states,probs,data.init_state, data.steps)
+            .genMarkov(states,probs,data.initState, data.steps)
             .toMarkovResult()
 
 

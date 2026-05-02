@@ -182,20 +182,20 @@ class LocalEngineTest : KoinTest {
             0.5, 0.3, 0.2
         )
 
-        val params = MarkovParams(
+        val markovParams = MarkovParams(
             states = states,
             probs = flatProbs,
-            init_state = 0,
+            initState = 0,
             steps = 10
         )
 
-        val result = genMarkov(params)
+        val result = genMarkov(markovParams)
 
         Log.d("test_gen_markov", "result: $result")
 
         assertNotNull(result.path)
         assertTrue(result.path.isNotEmpty())
         assertEquals("A", result.path.first())
-        assertEquals(params.steps + 1, result.path.size)
+        assertEquals(markovParams.steps + 1, result.path.size)
     }
 }

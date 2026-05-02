@@ -37,7 +37,7 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MarkovForm(
-    params: MarkovParams,
+    markovParams: MarkovParams,
     onEvent: (MainScreenEvent) -> Unit
 ) {
     Column(
@@ -70,7 +70,7 @@ fun MarkovForm(
             )
             Spacer(modifier = Modifier.weight(0.05f))
             CustomEditText(
-                value = when(params.init_state){
+                value = when(markovParams.initState){
                     0 -> "A"
                     1-> "B"
                     else -> "C"
@@ -96,14 +96,14 @@ fun MarkovForm(
             )
             Spacer(modifier = Modifier.weight(0.05f))
             TransitionMatrix(
-                states = params.states,
-                probs = params.probs,
+                states = markovParams.states,
+                probs = markovParams.probs,
                modifier = Modifier,
                onEvent = {onEvent(MainScreenEvent.ChangeMarkovProbs(it))}
             )
             Spacer(modifier = Modifier.weight(0.15f))
             Text(
-                "PASOS: ${params.steps}",
+                "PASOS: ${markovParams.steps}",
                 color = SecondaryLight,
                 textAlign = TextAlign.Start,
                 style = Typography.bodyLarge,
@@ -112,7 +112,7 @@ fun MarkovForm(
             Spacer(modifier = Modifier.weight(0.1f))
             CustomSlider(
                 alignment = Alignment.CenterStart,
-                value = params.steps.toFloat(),
+                value = markovParams.steps.toFloat(),
                 valueRange = 0f..50f,
                 steps = 50,
                 onValueChange = {
