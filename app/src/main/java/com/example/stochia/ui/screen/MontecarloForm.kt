@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
+import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.montecarlo_form_components.MontecarloFormFields
 import com.example.stochia.ui.theme.NeutralDarker
 import com.example.stochia.ui.theme.PrimaryLightest
@@ -22,7 +22,7 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MontecarloForm(
-    type: DistributionType,
+    params: MontecarloParams,
     modifier: Modifier = Modifier,
     onEvent: (MainScreenEvent) -> Unit
 ) {
@@ -41,9 +41,9 @@ fun MontecarloForm(
         )
         Spacer(modifier = Modifier.weight(0.05f))
         MontecarloFormFields(
-            type = type,
+            allParams = params,
             modifier = Modifier.weight(0.85f),
-            onClick = {onEvent(it)}
+            onEvent = {onEvent(it)}
         )
         Spacer(modifier = Modifier.weight(0.05f))
     }

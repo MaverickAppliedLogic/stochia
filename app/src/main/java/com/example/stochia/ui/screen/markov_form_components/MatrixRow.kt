@@ -35,6 +35,7 @@ fun MatrixRow(
         Spacer(modifier = Modifier.weight(0.025f))
         CustomEditText(
             value = value[0],
+            maxLines = 1,
             onValueChange = {
                 data[0] = it
                 onEvent(data.toList())
@@ -44,6 +45,7 @@ fun MatrixRow(
         Spacer(modifier = Modifier.weight(0.025f))
         CustomEditText(
             value = value[1],
+            maxLines = 1,
             onValueChange = {
                 data[1] = it
                 onEvent(data.toList())
@@ -53,6 +55,7 @@ fun MatrixRow(
         Spacer(modifier = Modifier.weight(0.025f))
         CustomEditText(
             value = value[2],
+            maxLines = 1,
             onValueChange = {
                 data[2] = it
                 onEvent(data.toList())

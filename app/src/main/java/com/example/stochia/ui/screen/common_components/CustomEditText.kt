@@ -27,6 +27,7 @@ import com.example.stochia.ui.theme.NeutralLight
 fun CustomEditText(
     modifier: Modifier = Modifier,
     value: String,
+    maxLines: Int = Int.MAX_VALUE,
     type: KeyboardType = KeyboardType.Number,
     onValueChange : (String) -> Unit
 ){
@@ -52,6 +53,7 @@ fun CustomEditText(
                 text = it
                 onValueChange(it)
             },
+            maxLines = maxLines ,
             keyboardOptions = KeyboardOptions(keyboardType = type),
             colors = TextFieldDefaults.colors(
                 disabledContainerColor = Color.Transparent,

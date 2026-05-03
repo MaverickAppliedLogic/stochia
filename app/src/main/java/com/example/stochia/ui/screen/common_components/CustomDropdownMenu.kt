@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MenuItemColors
@@ -67,7 +68,7 @@ fun CustomDropdownMenu(
             singleLine = true,
             readOnly = true,
             modifier = modifier
-                .menuAnchor()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true)
                 ,
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.Transparent,
@@ -97,8 +98,7 @@ fun CustomDropdownMenu(
                     onClick = {
                         expanded = !expanded
                         onClick(
-                            MainScreenEvent
-                                .ChangedDistributionType(DistributionType.valueOf(option))
+                            MainScreenEvent.ChangeMontecarloDistribution(DistributionType.valueOf(option))
                         )
                               },
                     colors = MenuItemColors(

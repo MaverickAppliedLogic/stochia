@@ -57,9 +57,11 @@ fun ResultScreen(
             {
                 itemsIndexed(studies){ _, study ->
                     val type=  when(study.result){
-                        is DistributionResult ->  "Distribución"
-                        is MontecarloResult ->  "Montecarlo"
-                        is MarkovResult -> "Markov"
+                        is DistributionResult -> {
+                         "Distribución - media: " + "%.2f".format(study.result.mean)
+                        }
+                        is MontecarloResult ->  "Montecarlo - Dist: ${study.result.distribution}"
+                        is MarkovResult -> "Markov - Pasos: ${study.result.path.size}"
                         else -> "Unknown"
                     }
                     val date = Instant.ofEpochMilli(study.id.toLong())

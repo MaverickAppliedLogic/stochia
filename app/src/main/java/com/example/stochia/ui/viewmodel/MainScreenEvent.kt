@@ -9,8 +9,12 @@ sealed class MainScreenEvent{
     data object SimulateMarkovButtonClicked: MainScreenEvent()
     data object SettingsButtonClicked: MainScreenEvent()
     data class ScreenButtonClicked(val screen: Screen): MainScreenEvent()
-    data class ChangedDistributionType(val type: DistributionType): MainScreenEvent()
     data class SimulateMontecarloButtonClicked(val data: MontecarloParams): MainScreenEvent()
+
+    data class ChangeMontecarloDistribution(val distribution: DistributionType) : MainScreenEvent()
+    data class ChangeMontecarloParams(val params: List<Double>) : MainScreenEvent()
+    data class ChangeMontecarloSize(val size: Int) : MainScreenEvent()
+
 
     data class ChangeMarkovStates(val states: List<String>): MainScreenEvent()
     data class ChangeMarkovProbs(val probs: List<Double>): MainScreenEvent()
@@ -22,6 +26,7 @@ sealed class MainScreenEvent{
 
     data object SaveStudyButtonClicked: MainScreenEvent()
     data class StudyCardClicked(val id: String): MainScreenEvent()
+    data object ClearSnackbar: MainScreenEvent()
 }
 
 
