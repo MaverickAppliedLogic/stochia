@@ -47,12 +47,14 @@ fun MarkovForm(
             .fillMaxSize()
             .background(NeutralDarker)
     ) {
+        Spacer(modifier = Modifier.weight(0.05f))
         Text(
             "Cadenas de Markov",
             style = Typography.headlineLarge,
             textAlign = TextAlign.Center,
             color = PrimaryLightest
         )
+        Spacer(modifier = Modifier.weight(0.05f))
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -76,7 +78,9 @@ fun MarkovForm(
                     else -> "C"
                 },
                 type = KeyboardType.Text,
-                modifier = Modifier.weight(0.2f).fillMaxWidth(0.6f)
+                modifier = Modifier
+                    .height(LocalDimens.current.editTextHeight)
+                    .fillMaxWidth(0.6f)
                 ) {
                 if (it.isNotBlank()) {
                     when (it) {
@@ -113,8 +117,8 @@ fun MarkovForm(
             CustomSlider(
                 alignment = Alignment.CenterStart,
                 value = markovParams.steps.toFloat(),
-                valueRange = 0f..50f,
-                steps = 50,
+                valueRange = 0f..10000f,
+                steps = 10000,
                 onValueChange = {
                     onEvent(MainScreenEvent.ChangeMarkovSteps(it.toInt()))
                 }
@@ -149,6 +153,7 @@ fun MarkovForm(
             }
             Spacer(modifier = Modifier.weight(0.15f))
         }
+        Spacer(modifier = Modifier.weight(0.05f))
 
     }
 }

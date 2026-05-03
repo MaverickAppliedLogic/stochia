@@ -56,23 +56,29 @@ fun DistributionResultScreen(
         Spacer(modifier = Modifier.height(50.dp))
         SingleResultCard(
             title = "Media: ",
-            stats = "%.2f".format(result.mean),
+            stats = BigDecimal(result.mean)
+                .setScale(2, RoundingMode.HALF_UP).toString(),
             modifier = Modifier.height(80.dp).fillMaxWidth(0.7f)
         )
         Spacer(modifier = Modifier.height(20.dp))
         SingleResultCard(
             title = "Desviación estándar: ",
-            stats = "%.2f".format(result.stdDev),
+            stats = BigDecimal(result.stdDev)
+                .setScale(2, RoundingMode.HALF_UP).toString(),
             modifier = Modifier.height(80.dp).fillMaxWidth(0.7f)
         )
         Spacer(modifier = Modifier.height(40.dp))
         ComplexResultCard(
             title = "Valores de rango",
             stats = mapOf(
-                result.min.toString() to "Valor mínimo",
-                result.max.toString() to "Valor máximo",
-                result.p5.toString() to "Percentil 5",
-                result.p95.toString() to "Percentil 95"
+                BigDecimal(result.min)
+                    .setScale(2, RoundingMode.HALF_UP).toString() to "Valor mínimo",
+                BigDecimal(result.max)
+                    .setScale(2, RoundingMode.HALF_UP).toString() to "Valor máximo",
+                BigDecimal(result.p5)
+                    .setScale(2, RoundingMode.HALF_UP).toString() to "Percentil 5",
+                BigDecimal(result.p95)
+                    .setScale(2, RoundingMode.HALF_UP).toString() to "Percentil 95"
             ).toList()
                 .sortedBy { it.first.toDouble() }
                 .toMap(),

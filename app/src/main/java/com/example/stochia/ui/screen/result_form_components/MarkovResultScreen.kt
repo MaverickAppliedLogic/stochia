@@ -68,7 +68,7 @@ fun MarkovResultScreen(
             {
                 Spacer(modifier.weight(0.05f))
                 Text(
-                    text = "Markov Summary",
+                    text = "Resumen Markov",
                     style = Typography.headlineLarge,
                     color = Color.White,
                     modifier = Modifier.weight(0.1f).fillMaxWidth(0.9f)
@@ -80,7 +80,7 @@ fun MarkovResultScreen(
                 )
                 {
                     SingleResultCard(
-                        title = "Start",
+                        title = "Inicio",
                         titleColor = SecondaryLight,
                         titleAlign = TextAlign.Center,
                         stats = result.path[0],
@@ -89,7 +89,7 @@ fun MarkovResultScreen(
                     )
                     Spacer(modifier.weight(0.05f))
                     SingleResultCard(
-                        title = "End",
+                        title = "Final",
                         titleColor = SecondaryLight,
                         titleAlign = TextAlign.Center,
                         stats = result.path.last(),
@@ -98,7 +98,7 @@ fun MarkovResultScreen(
                     )
                     Spacer(modifier.weight(0.05f))
                     SingleResultCard(
-                        title = "Steps",
+                        title = "Pasos",
                         titleColor = SecondaryLight,
                         stats = result.path.size.toString(),
                         statsColor = PrimaryLightest,

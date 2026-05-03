@@ -43,12 +43,14 @@ fun DistributionForm(
             .fillMaxSize()
             .background(NeutralDarker)
     ){
+        Spacer(modifier = Modifier.weight(0.1f))
         Text(
             "Distribución Probabilística",
             style = Typography.headlineLarge,
             textAlign = TextAlign.Center,
             color = PrimaryLightest
         )
+        Spacer(modifier = Modifier.weight(0.1f))
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,5 +112,7 @@ fun DistributionForm(
             }
             Spacer(modifier = Modifier.weight(0.1f))
         }
+        Spacer(modifier = Modifier.weight(0.1f))
+
     }
 }

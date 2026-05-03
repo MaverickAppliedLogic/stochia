@@ -41,7 +41,7 @@ fun GeometricalMontecarloResult(result: MontecarloResult, modifier: Modifier)
         {
             Spacer(modifier.weight(0.05f))
             Text(
-                text = "Montecarlo Stats",
+                text = "Estadísticas Montecarlo",
                 style = Typography.headlineLarge,
                 color = Color.White,
                 modifier = Modifier
@@ -49,7 +49,7 @@ fun GeometricalMontecarloResult(result: MontecarloResult, modifier: Modifier)
                     .fillMaxWidth(0.9f)
             )
             SingleResultCard(
-                title = "Distribution",
+                title = "Distribución",
                 titleColor = SecondaryLight,
                 stats = result.distribution?.name,
                 statsColor = TertiaryLight,
