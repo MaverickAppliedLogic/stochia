@@ -23,7 +23,6 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 @Composable
 fun MontecarloForm(
     params: MontecarloParams,
-    modifier: Modifier = Modifier,
     onEvent: (MainScreenEvent) -> Unit
 ) {
     Column(
@@ -42,7 +41,7 @@ fun MontecarloForm(
         Spacer(modifier = Modifier.weight(0.05f))
         MontecarloFormFields(
             allParams = params,
-            modifier = Modifier.weight(0.85f),
+            modifier = Modifier.weight(0.93f),
             onEvent = {onEvent(it)}
         )
         Spacer(modifier = Modifier.weight(0.05f))

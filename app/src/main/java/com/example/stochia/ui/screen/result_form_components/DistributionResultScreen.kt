@@ -10,7 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,8 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.distribution.DistributionResult
+import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
+import com.example.stochia.ui.theme.Primary
 import com.example.stochia.ui.theme.PrimaryLightest
+import com.example.stochia.ui.theme.SecondaryLight
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
 import java.math.BigDecimal
@@ -104,8 +108,32 @@ fun DistributionResultScreen(
         )
         if(isResultNew){
             Spacer(modifier.height(30.dp))
-            Button(onClick = { onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
-                Text("Guardar Estudio")
+            Card(
+                shape = RoundedCornerShape(5.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Primary,
+                    contentColor = SecondaryLight,
+                    disabledContainerColor = Primary,
+                    disabledContentColor = SecondaryLight
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.60f)
+                    .height(LocalDimens.current.commitButton),
+                onClick = {
+                    onEvent(MainScreenEvent.SaveStudyButtonClicked)
+                }
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    "GUARDAR ESTUDIO",
+                    textAlign = TextAlign.Center,
+                    style = Typography.bodyLarge,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.weight(1f))
+
             }
             Spacer(modifier.height(30.dp))
         }
