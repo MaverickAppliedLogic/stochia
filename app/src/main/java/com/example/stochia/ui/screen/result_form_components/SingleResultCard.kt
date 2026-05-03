@@ -30,6 +30,7 @@ fun SingleResultCard(
     stats: String? = null,
     statsColor: Color = Color.White,
     modifier: Modifier,
+    onClick:() -> Unit = {},
     content: @Composable () -> Unit = {}
 ) {
     Row(
@@ -48,6 +49,7 @@ fun SingleResultCard(
     )
     {
         Card(
+            onClick ={onClick()},
             colors = CardDefaults.cardColors(containerColor = NeutralLight),
             modifier = modifier.fillMaxWidth()
         ) {

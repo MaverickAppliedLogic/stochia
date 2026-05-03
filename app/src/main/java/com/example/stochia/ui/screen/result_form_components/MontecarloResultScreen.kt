@@ -25,6 +25,7 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 @Composable
 fun MontecarloResultScreen(
     result: MontecarloResult,
+    isResultNew: Boolean,
     onEvent: (MainScreenEvent) -> Unit,
     modifier: Modifier
 ) {
@@ -42,10 +43,12 @@ fun MontecarloResultScreen(
             MontecarloType.POISSON -> WithoutValuesMontecarloResult(result = result, modifier = modifier)
             else -> WithValuesMontecarloResult(result = result, modifier = modifier)
         }
-        Spacer(modifier.height(30.dp))
-        Button(onClick = {onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
-            Text("Guardar Estudio")
+        if(isResultNew){
+            Spacer(modifier.height(30.dp))
+            Button(onClick = {onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
+                Text("Guardar Estudio")
+            }
+            Spacer(modifier.height(30.dp))
         }
-        Spacer(modifier.height(30.dp))
     }
 }

@@ -44,13 +44,13 @@ class MainViewModel(
     }
 
     private fun analyzeDistribution(data: DistributionParams) {
-        _state.update { it.copy(result = getDistributionUsecase(data)) }
+        _state.update { it.copy(result = getDistributionUsecase(data), isNewResult = true) }
         Log.d("MainViewModel", "analyzeDistribution: ${_state.value.result}")
     }
 
     private fun genMontecarlo(data: MontecarloParams) {
         _state.update {
-            it.copy(result = genMontecarloUsecase(data))
+            it.copy(result = genMontecarloUsecase(data), isNewResult = true)
         }
         Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
 
@@ -58,7 +58,7 @@ class MainViewModel(
 
     private fun genMarkov(data: MarkovParams) {
         _state.update {
-            it.copy(result = genMarkovUsecase(data))
+            it.copy(result = genMarkovUsecase(data), isNewResult = true)
         }
         Log.d("MainViewModel", "genMarkov: ${_state.value.result}")
     }
@@ -72,6 +72,18 @@ class MainViewModel(
     private fun saveStudy(params: Params, result: Result) {
         viewModelScope.launch {
             saveStudyUsecase(params = params, result = result)
+            fetchStudies()
+        }
+    }
+
+    private fun getStudy(id: String) {
+        viewModelScope.launch {
+            val study = getStudyUsecase(id)
+            _state.update { it.copy(
+                result = study!!.result,
+                params = study.params,
+                isNewResult = false
+            )}
         }
     }
 
@@ -158,7 +170,7 @@ class MainViewModel(
             }
 
             is MainScreenEvent.SaveStudyButtonClicked -> {
-                Log.d("MainViewModel", "SaveStudyButtonClicked")
+                Log.d("MainViewModel", "SaveStudyButtonClicked ${state.value.params}")
                 viewModelScope.launch {
                     saveStudy(params = state.value.params!!, result = state.value.result!!)
                 }
@@ -166,7 +178,7 @@ class MainViewModel(
             }
 
             is MainScreenEvent.StudyCardClicked -> {
-
+                getStudy(event.id)
             }
 
         }

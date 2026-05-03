@@ -37,6 +37,7 @@ import com.example.stochia.ui.viewmodel.MainScreenEvent
 @Composable
 fun MarkovResultScreen(
     result: MarkovResult,
+    isResultNew: Boolean,
     onEvent: (MainScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -233,12 +234,13 @@ fun MarkovResultScreen(
                 Spacer(Modifier.height(16.dp))
             }
         }
-        Spacer(modifier.height(30.dp))
-        Button(onClick = {onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
-            Text("Guardar Estudio")
+        if(isResultNew) {
+            Spacer(modifier.height(30.dp))
+            Button(onClick = { onEvent(MainScreenEvent.SaveStudyButtonClicked) }) {
+                Text("Guardar Estudio")
+            }
+            Spacer(modifier.height(30.dp))
         }
-        Spacer(modifier.height(30.dp))
-
     }
 }
 
