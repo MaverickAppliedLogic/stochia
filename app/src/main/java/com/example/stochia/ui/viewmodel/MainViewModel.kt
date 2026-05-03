@@ -36,74 +36,6 @@ class MainViewModel(
         fetchStudies()
     }
 
-    private fun navigateTo(screen: Screen) {
-        _state.update {
-            val nextScreen = if (_state.value.currentScreen == screen) Screen.RESULT
-            else screen
-            it.copy(
-                currentScreen = nextScreen,
-                params = if (nextScreen == Screen.RESULT) it.params else null)
-        }
-    }
-
-    private fun analyzeDistribution(data: DistributionParams) {
-        _state.update { it.copy(result = getDistributionUsecase(data), isNewResult = true) }
-        Log.d("MainViewModel", "analyzeDistribution: ${_state.value.result}")
-    }
-
-    private fun genMontecarlo(data: MontecarloParams) {
-        if (!validateMontecarloParams(data).first) {
-            writeSnackbar(validateMontecarloParams(data).second ?: "Error")
-            return
-        }
-        else{
-            _state.update {
-                it.copy(result = genMontecarloUsecase(data), isNewResult = true)
-            }
-            Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
-        }
-    }
-
-    private fun writeSnackbar(message: String) {
-        _state.update { it.copy(paramsIsValidate = false to message) }
-    }
-
-    private fun clearSnackbar() {
-        _state.update { it.copy(paramsIsValidate = true to null) }
-    }
-
-    private fun genMarkov(data: MarkovParams) {
-        _state.update {
-            it.copy(result = genMarkovUsecase(data), isNewResult = true)
-        }
-        Log.d("MainViewModel", "genMarkov: ${_state.value.result}")
-    }
-
-    private fun fetchStudies() {
-        viewModelScope.launch {
-            _state.update { it.copy(studyList = listAllStudyUsecase()) }
-        }
-    }
-
-    private fun saveStudy(params: Params, result: Result) {
-        viewModelScope.launch {
-            saveStudyUsecase(params = params, result = result)
-            fetchStudies()
-        }
-    }
-
-    private fun getStudy(id: String) {
-        viewModelScope.launch {
-            val study = getStudyUsecase(id)
-            _state.update { it.copy(
-                result = study!!.result,
-                params = study.params,
-                isNewResult = false
-            )}
-        }
-    }
-
-
     fun onEvent(event: MainScreenEvent) {
         Log.d("MainViewModel", "onEvent: $event")
         when (event) {
@@ -122,12 +54,14 @@ class MainViewModel(
 
             is MainScreenEvent.SimulateMarkovButtonClicked -> {
                 Log.d("MainViewModel", "SimulateMarkovButtonClicked")
-                genMarkov(_state.value.params as MarkovParams)
+                genMarkov(_state.value.params as? MarkovParams?: MarkovParams())
             }
 
             is MainScreenEvent.DistributionButtonClicked -> {
                 Log.d("MainViewModel", "DistributionButtonClicked ${_state.value.params}")
-                analyzeDistribution(_state.value.params as DistributionParams)
+                analyzeDistribution(
+                    _state.value.params as? DistributionParams?: DistributionParams()
+                )
             }
 
             is MainScreenEvent.ChangeMontecarloDistribution -> {
@@ -243,6 +177,8 @@ class MainViewModel(
         }
     }
 
+
+    //SCREEN METHODS
     enum class Screen {
         RESULT,
         DISTRIBUTION,
@@ -250,6 +186,95 @@ class MainViewModel(
         MARKOV
     }
 
+    private fun navigateTo(screen: Screen) {
+        _state.update {
+            val nextScreen = if (_state.value.currentScreen == screen) Screen.RESULT
+            else screen
+            it.copy(
+                currentScreen = nextScreen,
+                params = if (nextScreen == Screen.RESULT) it.params else null
+            )
+        }
+    }
+
+    private fun writeSnackbar(message: String) {
+        _state.update { it.copy(paramsIsValidate = false to message) }
+    }
+
+    private fun clearSnackbar() {
+        _state.update { it.copy(paramsIsValidate = true to null) }
+    }
+
+
+    //CALCULATION METHODS
+    private fun analyzeDistribution(data: DistributionParams) {
+        if (!validateDistributionParams(data).first) {
+            writeSnackbar(validateDistributionParams(data).second ?: "Error")
+            return
+        }
+        else{
+            _state.update { it.copy(result = getDistributionUsecase(data), isNewResult = true) }
+            Log.d("MainViewModel", "analyzeDistribution: ${_state.value.result}")
+        }
+
+    }
+
+    private fun genMontecarlo(data: MontecarloParams) {
+        if (!validateMontecarloParams(data).first) {
+            writeSnackbar(validateMontecarloParams(data).second ?: "Error")
+            return
+        } else {
+            _state.update {
+                it.copy(result = genMontecarloUsecase(data), isNewResult = true)
+            }
+            Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
+        }
+    }
+
+    private fun genMarkov(data: MarkovParams) {
+        if (!validateMarkovParams(data).first) {
+            writeSnackbar(validateMarkovParams(data).second ?: "Error")
+            return
+        } else {
+            _state.update {
+                it.copy(result = genMarkovUsecase(data), isNewResult = true)
+            }
+            Log.d("MainViewModel", "genMarkov: ${_state.value.result}")
+        }
+    }
+
+
+
+    // STUDY METHODS
+    private fun fetchStudies() {
+        viewModelScope.launch {
+            _state.update { it.copy(studyList = listAllStudyUsecase()) }
+        }
+    }
+
+    private fun saveStudy(params: Params, result: Result) {
+        viewModelScope.launch {
+            saveStudyUsecase(params = params, result = result)
+            fetchStudies()
+        }
+    }
+
+    private fun getStudy(id: String) {
+        viewModelScope.launch {
+            val study = getStudyUsecase(id)
+            _state.update {
+                it.copy(
+                    result = study!!.result,
+                    params = study.params,
+                    isNewResult = false
+                )
+            }
+        }
+    }
+
+
+
+    //VALIDATION METHODS
     fun validateMontecarloParams(params: MontecarloParams): Pair<Boolean, String?> {
 
         val distributionString = params.distribution
@@ -397,5 +422,73 @@ class MainViewModel(
 
         }
     }
+
+    fun validateMarkovParams(params: MarkovParams): Pair<Boolean, String?> {
+
+        val states = params.states
+        val probabilities = params.probs
+        val initialState = params.initState
+        val steps = params.steps
+        val numberOfStates = states.size
+
+
+        // 2. Validar estado inicial
+        if (initialState !in 0 until numberOfStates) {
+            return false to "El estado inicial debe estar entre 0 y ${numberOfStates - 1}"
+        }
+
+        // 3. Validar pasos
+        if (steps < 1) {
+            return false to "La cantidad de pasos debe ser mayor o igual a 1"
+        }
+
+        // 4. Validar filas de la matriz
+        for (row in 0 until numberOfStates) {
+            val rowStart = row * numberOfStates
+            val rowValues = probabilities.subList(rowStart, rowStart + numberOfStates)
+
+            // Ningún valor negativo
+            if (rowValues.any { it < 0 }) {
+                return false to "Las probabilidades no pueden ser negativas (fila ${row + 1})"
+            }
+
+            // Ningún valor mayor que 1
+            if (rowValues.any { it > 1 }) {
+                return false to "Las probabilidades no pueden ser mayores que 1 (fila ${row + 1})"
+            }
+
+            // La fila debe sumar 1
+            val sum = rowValues.sum()
+            if (kotlin.math.abs(sum - 1.0) > 1e-6) {
+                return false to "La fila ${row + 1} debe sumar 1 (actual: ${"%.2f".format(sum)})"
+            }
+        }
+
+        return true to null
+    }
+
+    fun validateDistributionParams(params: DistributionParams): Pair<Boolean, String?> {
+
+        val data = params.data
+
+        // 1. No puede estar vacío
+        if (data.isEmpty()) {
+            return false to "Debes introducir al menos un valor para calcular la distribución"
+        }
+
+        // 2. No puede tener NaN o Infinity
+        if (data.any { it.isNaN() || it.isInfinite() }) {
+            return false to "Los datos contienen valores inválidos (NaN o infinito)"
+        }
+
+        // 3. Debe tener al menos 2 valores
+        if (data.size < 2) {
+            return false to "Debes introducir al menos dos valores para calcular la distribución"
+        }
+
+        return true to null
+    }
+
+
 
 }

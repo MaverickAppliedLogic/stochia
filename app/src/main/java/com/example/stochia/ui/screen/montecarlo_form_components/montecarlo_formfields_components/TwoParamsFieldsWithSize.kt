@@ -20,7 +20,6 @@ fun TwoParamsFieldsWithSize(
     onSizeChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Text(
         "PARAMETRO 1",
         color = SecondaryLight,
