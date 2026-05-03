@@ -15,7 +15,7 @@ sealed class SerializableParams {
 @Serializable
 class SerializableMontecarloParams(
     val distribution: String,
-    val params: List<Double?>,
+    val params: List<Double>,
     val size: Int
 ): SerializableParams() {
     override fun toDomain() = MontecarloParams(distribution, params, size)

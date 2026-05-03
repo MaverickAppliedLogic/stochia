@@ -1,9 +1,10 @@
 package com.example.stochia.domain.model.montecarlo
 
 import com.example.stochia.domain.model.interfaces.Params
+import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 
-class MontecarloParams(
-    val distribution: String,
-    val params: List<Double?>,
-    val size: Int
+data class MontecarloParams(
+    val distribution: String = DistributionType.NORMAL.name,
+    val params: List<Double> = listOf(0.0,0.0,0.0),
+    val size: Int = 0
 ): Params

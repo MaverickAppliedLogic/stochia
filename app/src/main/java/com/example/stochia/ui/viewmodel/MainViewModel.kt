@@ -39,7 +39,9 @@ class MainViewModel(
         _state.update {
             val nextScreen = if (_state.value.currentScreen == screen) Screen.RESULT
             else screen
-            it.copy(currentScreen = nextScreen)
+            it.copy(
+                currentScreen = nextScreen,
+                params = if (nextScreen == Screen.RESULT) it.params else null)
         }
     }
 
@@ -99,10 +101,6 @@ class MainViewModel(
                 navigateTo(event.screen)
             }
 
-            is MainScreenEvent.ChangedDistributionType -> {
-                _state.update { it.copy(distributionTypeSelected = event.type) }
-            }
-
             is MainScreenEvent.SimulateMontecarloButtonClicked -> {
                 Log.d("MainViewModel", "SimulateMontecarloButtonClicked")
                 genMontecarlo(event.data)
@@ -118,7 +116,47 @@ class MainViewModel(
                 analyzeDistribution(_state.value.params as DistributionParams)
             }
 
+            is MainScreenEvent.ChangeMontecarloDistribution -> {
+                Log.d("MainViewModel", "ChangeMontecarloDistribution: ${event.distribution}")
+                val oldParams = _state.value.params as MontecarloParams?
+                _state.update {
+                    it.copy(
+                        params = oldParams?.copy(distribution = event.distribution.name)
+                            ?: MontecarloParams(
+                                distribution = event.distribution.name,
+                            )
+                    )
+                }
+            }
+
+            is MainScreenEvent.ChangeMontecarloParams -> {
+                Log.d("MainViewModel", "ChangeMontecarloParams: ${event.params}")
+                val oldParams = _state.value.params as MontecarloParams?
+                _state.update {
+                    it.copy(
+                        params = oldParams?.copy(params = event.params)
+                            ?: MontecarloParams(
+                                params = event.params
+                            )
+                    )
+                }
+            }
+
+            is MainScreenEvent.ChangeMontecarloSize -> {
+                Log.d("MainViewModel", "ChangeMontecarloSize: ${event.size}")
+                val oldParams = _state.value.params as MontecarloParams?
+                _state.update {
+                    it.copy(
+                        params = oldParams?.copy(size = event.size)
+                            ?: MontecarloParams(
+                                size = event.size
+                            )
+                    )
+                }
+            }
+
             is MainScreenEvent.ChangeMarkovStates -> {
+                Log.d("MainViewModel", "ChangeMarkovStates: ${event.states}")
                 val oldParams = _state.value.params as MarkovParams?
                 _state.update {
                     it.copy(
@@ -129,6 +167,7 @@ class MainViewModel(
             }
 
             is MainScreenEvent.ChangeMarkovProbs -> {
+                Log.d("MainViewModel", "ChangeMarkovProbs: ${event.probs}")
                 val oldParams = _state.value.params as MarkovParams?
                 _state.update {
                     it.copy(
@@ -139,6 +178,7 @@ class MainViewModel(
             }
 
             is MainScreenEvent.ChangeMarkovInitState -> {
+                Log.d("MainViewModel", "ChangeMarkovInitState: ${event.state}")
                 val oldParams = state.value.params as MarkovParams?
                 _state.update {
                     it.copy(
@@ -149,6 +189,7 @@ class MainViewModel(
             }
 
             is MainScreenEvent.ChangeMarkovSteps -> {
+                Log.d("MainViewModel", "ChangeMarkovSteps: ${event.steps}")
                 val oldParams = state.value.params as MarkovParams?
                 _state.update {
                     it.copy(

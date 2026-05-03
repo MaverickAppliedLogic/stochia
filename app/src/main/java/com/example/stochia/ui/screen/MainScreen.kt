@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.stochia.domain.model.markov.MarkovParams
+import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
 import com.example.stochia.ui.theme.Neutral
@@ -129,7 +130,7 @@ fun MainScreen(
                     )
 
                     Screen.MONTECARLO -> MontecarloForm(
-                        type = state.distributionTypeSelected,
+                        params = state.params as? MontecarloParams?: MontecarloParams(),
                         modifier = Modifier.padding(padding),
                         onEvent = { viewModel.onEvent(it) }
                     )
