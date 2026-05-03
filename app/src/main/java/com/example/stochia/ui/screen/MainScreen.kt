@@ -1,5 +1,7 @@
 package com.example.stochia.ui.screen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
@@ -33,6 +34,7 @@ import com.example.stochia.ui.viewmodel.MainViewModel
 import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 import org.koin.androidx.compose.koinViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
@@ -114,34 +116,32 @@ fun MainScreen(
                 .background(color = Neutral)
                 .padding(padding)
         ) {
-            when (state.currentScreen) {
-                Screen.RESULT -> ResultScreen(
-                    result = state.result,
-                    onEvent = { viewModel.onEvent(it) }
-                )
+                when (state.currentScreen) {
+                    Screen.RESULT -> ResultScreen(
+                        result = state.result,
+                        studies = state.studyList,
+                        isResultNew = state.isNewResult,
+                        onEvent = { viewModel.onEvent(it) }
+                    )
 
-                Screen.DISTRIBUTION -> DistributionForm(
-                    onEvent = { viewModel.onEvent(it) }
-                )
+                    Screen.DISTRIBUTION -> DistributionForm(
+                        onEvent = { viewModel.onEvent(it) }
+                    )
 
-                Screen.MONTECARLO -> MontecarloForm(
-                    type = state.distributionTypeSelected,
-                    modifier = Modifier.padding(padding),
-                    onEvent = { viewModel.onEvent(it) }
-                )
+                    Screen.MONTECARLO -> MontecarloForm(
+                        type = state.distributionTypeSelected,
+                        modifier = Modifier.padding(padding),
+                        onEvent = { viewModel.onEvent(it) }
+                    )
 
-                Screen.MARKOV -> MarkovForm(
-                    markovParams = state.params as MarkovParams,
-                    onEvent = { viewModel.onEvent(it) }
-                )
-            }
+                    Screen.MARKOV -> MarkovForm(
+                        markovParams = state.params as? MarkovParams?: MarkovParams(),
+                        onEvent = { viewModel.onEvent(it) }
+                    )
+                }
+
         }
     }
 }
 
 
-@Preview
-@Composable
-fun MainScreenPreview() {
-    MainScreen()
-}

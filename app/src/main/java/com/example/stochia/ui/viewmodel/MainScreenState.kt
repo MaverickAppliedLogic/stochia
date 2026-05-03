@@ -12,6 +12,7 @@ data class MainScreenState(
     val currentScreen: Screen = Screen.RESULT,
     val params: Params? = null,
     val result: Result? = null,
+    val isNewResult: Boolean = true,
     val distributionTypeSelected: DistributionType = DistributionType.NORMAL,
     val settingsVisible: Boolean = false,
 )

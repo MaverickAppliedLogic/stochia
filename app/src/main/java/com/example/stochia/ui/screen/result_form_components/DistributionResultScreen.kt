@@ -29,6 +29,7 @@ import java.math.RoundingMode
 @Composable
 fun DistributionResultScreen(
     result: DistributionResult,
+    isResultNew: Boolean,
     onEvent: (MainScreenEvent) -> Unit,
     modifier: Modifier
 ) {
@@ -101,11 +102,13 @@ fun DistributionResultScreen(
                 .mapValues { "${it.value}%" },
             modifier = Modifier
         )
-        Spacer(modifier.height(30.dp))
-        Button(onClick = { onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
-            Text("Guardar Estudio")
+        if(isResultNew){
+            Spacer(modifier.height(30.dp))
+            Button(onClick = { onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
+                Text("Guardar Estudio")
+            }
+            Spacer(modifier.height(30.dp))
         }
-        Spacer(modifier.height(30.dp))
     }
     Spacer(modifier = Modifier)
 }
