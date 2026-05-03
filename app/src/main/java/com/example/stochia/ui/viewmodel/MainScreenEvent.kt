@@ -26,6 +26,7 @@ sealed class MainScreenEvent{
 
     data object SaveStudyButtonClicked: MainScreenEvent()
     data class StudyCardClicked(val id: String): MainScreenEvent()
+    data object ClearSnackbar: MainScreenEvent()
 }
 
 

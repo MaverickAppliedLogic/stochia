@@ -14,6 +14,7 @@ import com.example.stochia.domain.usecase.GetDistributionUsecase
 import com.example.stochia.domain.usecase.GetStudyUsecase
 import com.example.stochia.domain.usecase.ListAllStudyUsecase
 import com.example.stochia.domain.usecase.SaveStudyUsecase
+import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -51,11 +52,24 @@ class MainViewModel(
     }
 
     private fun genMontecarlo(data: MontecarloParams) {
-        _state.update {
-            it.copy(result = genMontecarloUsecase(data), isNewResult = true)
+        if (!validateMontecarloParams(data).first) {
+            writeSnackbar(validateMontecarloParams(data).second ?: "Error")
+            return
         }
-        Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
+        else{
+            _state.update {
+                it.copy(result = genMontecarloUsecase(data), isNewResult = true)
+            }
+            Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
+        }
+    }
 
+    private fun writeSnackbar(message: String) {
+        _state.update { it.copy(paramsIsValidate = false to message) }
+    }
+
+    private fun clearSnackbar() {
+        _state.update { it.copy(paramsIsValidate = true to null) }
     }
 
     private fun genMarkov(data: MarkovParams) {
@@ -222,6 +236,10 @@ class MainViewModel(
                 getStudy(event.id)
             }
 
+            is MainScreenEvent.ClearSnackbar -> {
+                clearSnackbar()
+            }
+
         }
     }
 
@@ -231,4 +249,153 @@ class MainViewModel(
         MONTECARLO,
         MARKOV
     }
+
+    fun validateMontecarloParams(params: MontecarloParams): Pair<Boolean, String?> {
+
+        val distributionString = params.distribution
+        val parameters = params.params
+        val size = params.size
+
+        // Validación general
+        if (size <= 0) {
+            return false to "El tamaño de la simulación debe ser mayor que 0"
+        }
+
+
+        // Validaciones específicas por distribución
+        return when (DistributionType.valueOf(distributionString)) {
+
+            DistributionType.NORMAL -> {
+                val mean = parameters.getOrNull(0)
+                val stdDev = parameters.getOrNull(1)
+
+                when {
+                    mean == null || stdDev == null ->
+                        false to "Faltan parámetros para la distribución Normal"
+
+                    stdDev <= 0 ->
+                        false to "La desviación estándar debe ser mayor que 0"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.UNIFORM -> {
+                val low = parameters.getOrNull(0)
+                val high = parameters.getOrNull(1)
+
+                when {
+                    low == null || high == null ->
+                        false to "Faltan parámetros para la distribución Uniforme"
+
+                    low >= high ->
+                        false to "El parámetro 'low' debe ser menor que 'high'"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.BETA -> {
+                val alpha = parameters.getOrNull(0)
+                val beta = parameters.getOrNull(1)
+
+                when {
+                    alpha == null || beta == null ->
+                        false to "Faltan parámetros para la distribución Beta"
+
+                    alpha <= 0 ->
+                        false to "El parámetro α debe ser mayor que 0"
+
+                    beta <= 0 ->
+                        false to "El parámetro β debe ser mayor que 0"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.BINOMIAL -> {
+                val n = parameters.getOrNull(0)
+                val probability = parameters.getOrNull(1)
+
+                when {
+                    n == null || probability == null ->
+                        false to "Faltan parámetros para la distribución Binomial"
+
+                    n < 1 ->
+                        false to "El número de ensayos n debe ser mayor o igual a 1"
+
+                    probability < 0 || probability > 1 ->
+                        false to "La probabilidad p debe estar entre 0 y 1"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.EXPONENTIAL -> {
+                val scale = parameters.getOrNull(0)
+
+                when {
+                    scale == null ->
+                        false to "Falta el parámetro para la distribución Exponencial"
+
+                    scale <= 0 ->
+                        false to "El parámetro scale debe ser mayor que 0"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.POISSON -> {
+                val lambda = parameters.getOrNull(0)
+
+                when {
+                    lambda == null ->
+                        false to "Falta el parámetro para la distribución Poisson"
+
+                    lambda <= 0 ->
+                        false to "El parámetro λ debe ser mayor que 0"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.GEOMETRICAL -> {
+                val probability = parameters.getOrNull(0)
+
+                when {
+                    probability == null ->
+                        false to "Falta el parámetro para la distribución Geométrica"
+
+                    probability <= 0 || probability > 1 ->
+                        false to "La probabilidad p debe estar entre 0 y 1"
+
+                    else -> true to null
+                }
+            }
+
+            DistributionType.MULTINOMIAL -> {
+                val n = parameters.getOrNull(0)
+                val p1 = parameters.getOrNull(1)
+                val p2 = parameters.getOrNull(2)
+
+                when {
+                    n == null || p1 == null || p2 == null ->
+                        false to "Faltan parámetros para la distribución Multinomial"
+
+                    n < 1 ->
+                        false to "El número de ensayos n debe ser mayor o igual a 1"
+
+                    p1 < 0 || p2 < 0 ->
+                        false to "Las probabilidades deben ser mayores o iguales a 0"
+
+                    (p1 + p2) > 1 ->
+                        false to "La suma p1 + p2 no puede ser mayor que 1"
+
+                    else -> true to null
+                }
+            }
+
+        }
+    }
+
 }

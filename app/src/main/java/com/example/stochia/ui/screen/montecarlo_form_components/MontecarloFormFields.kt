@@ -17,7 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.common_components.CustomDropdownMenu
-import com.example.stochia.ui.screen.common_components.CustomEditText
+import com.example.stochia.ui.screen.montecarlo_form_components.montecarlo_formfields_components.OneParamFields
+import com.example.stochia.ui.screen.montecarlo_form_components.montecarlo_formfields_components.OneParamFieldsWithSize
+import com.example.stochia.ui.screen.montecarlo_form_components.montecarlo_formfields_components.ThreeParamsFieldsWithSize
+import com.example.stochia.ui.screen.montecarlo_form_components.montecarlo_formfields_components.TwoParamsFieldsWithSize
 import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.Primary
@@ -45,6 +48,7 @@ fun MontecarloFormFields(
     val distribution = allParams.distribution
     val params = allParams.params
     val size = allParams.size
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -131,15 +135,15 @@ fun MontecarloFormFields(
                 .fillMaxWidth(0.65f)
                 .height(LocalDimens.current.commitButton),
             onClick = {
-                onEvent(
-                    MainScreenEvent.SimulateMontecarloButtonClicked(
-                        MontecarloParams(
-                            distribution = distribution,
-                            params = params,
-                            size = size
+                    onEvent(
+                        MainScreenEvent.SimulateMontecarloButtonClicked(
+                            MontecarloParams(
+                                distribution = distribution,
+                                params = params,
+                                size = size
+                            )
                         )
                     )
-                )
             }
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -159,223 +163,10 @@ fun MontecarloFormFields(
 }
 
 
-@Composable
-fun ThreeParamsFieldsWithSize(
-    params: MutableList<Double>,
-    size: Int,
-    onParamsChange: (List<Double>) -> Unit,
-    onSizeChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    //TODO Binomial debe ser P1 Int, P2 0 < P2 < 1
 
-    Text(
-        "PARAMETRO 1",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[0].toString(),
-        onValueChange = {
-            params[0] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params.toList())
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-    Spacer(modifier = modifier)
-    Text(
-        "PARAMETRO 2",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[1].toString(),
-        onValueChange = {
-            params[1] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params)
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-    Spacer(modifier = modifier)
-    Text(
-        "PARAMETRO 2",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[2].toString(),
-        onValueChange = {
-            params[2] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params)
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-    Spacer(modifier = modifier)
-    Text(
-        "NUMERO DE INTERACCIONES (N)",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
 
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = size.toString(),
-        onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-}
 
-@Composable
-fun TwoParamsFieldsWithSize(
-    params: MutableList<Double>,
-    size: Int,
-    onParamsChange: (List<Double>) -> Unit,
-    onSizeChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    //TODO Binomial debe ser P1 Int, P2 0 < P2 < 1
 
-    Text(
-        "PARAMETRO 1",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[0].toString(),
-        onValueChange = {
-            params[0] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params.toList())
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-    Spacer(modifier = modifier)
-    Text(
-        "PARAMETRO 2",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[1].toString(),
-        onValueChange = {
-            params[1] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params)
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-    Spacer(modifier = modifier)
-    Text(
-        "NUMERO DE INTERACCIONES (N)",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
 
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = size.toString(),
-        onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-}
 
-@Composable
-fun OneParamFieldsWithSize(
-    params: MutableList<Double>,
-    size: Int,
-    onParamsChange: (List<Double>) -> Unit,
-    onSizeChange: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        "PARAMETRO 1",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[0].toString(),
-        onValueChange = {
-            params[0] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params.toList())
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-    Spacer(modifier = modifier)
-    Text(
-        "NUMERO DE INTERACCIONES (N)",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
 
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = size.toString(),
-        onValueChange = {
-            onSizeChange(it.toIntOrNull() ?: 0)
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-    Spacer(modifier = modifier)
-}
-
-@Composable
-fun OneParamFields(
-    params: MutableList<Double>,
-    onParamsChange: (List<Double>) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        "PARAMETRO 1",
-        color = SecondaryLight,
-        textAlign = TextAlign.Start,
-        style = Typography.bodyLarge,
-        modifier = Modifier
-            .fillMaxWidth(0.65f)
-    )
-    Spacer(modifier = modifier)
-    CustomEditText(
-        value = params[0].toString(),
-        onValueChange = {
-            params[0] = it.toDoubleOrNull() ?: 0.0
-            onParamsChange(params.toList())
-        },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
-    )
-}

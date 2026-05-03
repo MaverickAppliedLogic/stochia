@@ -11,6 +11,7 @@ data class MainScreenState(
     val currentScreen: Screen = Screen.RESULT,
     val params: Params? = null,
     val result: Result? = null,
+    val paramsIsValidate: Pair<Boolean, String?> = true to null,
     val isNewResult: Boolean = true,
     val settingsVisible: Boolean = false,
 )
