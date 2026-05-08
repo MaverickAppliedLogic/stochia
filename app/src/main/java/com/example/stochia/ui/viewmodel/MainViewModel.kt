@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stochia.domain.model.distribution.DistributionParams
+import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.interfaces.Params
 import com.example.stochia.domain.model.interfaces.Result
 import com.example.stochia.domain.model.markov.MarkovParams
@@ -174,6 +175,14 @@ class MainViewModel(
                 clearSnackbar()
             }
 
+            is MainScreenEvent.ReuseStudyParamsClicked -> {
+                reuseStudyParams(event.id)
+            }
+
+            is MainScreenEvent.UseDistributionResultAsMontecarlo -> {
+                useDistributionResultAsMontecarlo(event.id)
+            }
+
         }
     }
 
@@ -269,6 +278,33 @@ class MainViewModel(
                     isNewResult = false
                 )
             }
+        }
+    }
+
+    private fun reuseStudyParams(id: String) {
+        viewModelScope.launch {
+            val study = getStudyUsecase(id) ?: return@launch
+            val params = study.params ?: return@launch
+            val targetScreen = when (params) {
+                is DistributionParams -> Screen.DISTRIBUTION
+                is MontecarloParams -> Screen.MONTECARLO
+                is MarkovParams -> Screen.MARKOV
+                else -> return@launch
+            }
+            _state.update { it.copy(currentScreen = targetScreen, params = params) }
+        }
+    }
+
+    private fun useDistributionResultAsMontecarlo(id: String) {
+        viewModelScope.launch {
+            val study = getStudyUsecase(id) ?: return@launch
+            val result = study.result as? DistributionResult ?: return@launch
+            val montecarloParams = MontecarloParams(
+                distribution = DistributionType.NORMAL.name,
+                params = listOf(result.mean, result.stdDev),
+                size = 1000
+            )
+            _state.update { it.copy(currentScreen = Screen.MONTECARLO, params = montecarloParams) }
         }
     }
 
