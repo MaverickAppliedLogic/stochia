@@ -3,6 +3,8 @@ package com.example.stochia.ui.screen.result_form_components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,7 +53,7 @@ fun SingleResultCard(
         Card(
             onClick ={onClick()},
             colors = CardDefaults.cardColors(containerColor = NeutralLight),
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxSize()
         ) {
             if (title != null){
                 Text(
@@ -61,7 +63,6 @@ fun SingleResultCard(
                     maxLines = 2,
                     color = titleColor,
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxWidth()
                         .padding(top = 10.dp)
                 )
@@ -72,11 +73,10 @@ fun SingleResultCard(
                     style = Typography.headlineLarge,
                     textAlign = TextAlign.Center,
                     color = statsColor,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
             content()
         }
     }
