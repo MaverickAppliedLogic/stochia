@@ -1,5 +1,6 @@
 package com.example.stochia.ui.screen
 
+import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -8,11 +9,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -31,11 +33,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import com.example.stochia.R
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
+import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
@@ -53,6 +57,9 @@ fun MainScreen(
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val dimens = LocalDimens.current
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val barHeight = if (isLandscape) dimens.navBarHeightLandscape else dimens.navBarHeight
 
     LaunchedEffect(state.paramsIsValidate){
         if (!state.paramsIsValidate.first){
@@ -99,36 +106,39 @@ fun MainScreen(
         bottomBar = {
             BottomAppBar(
                 containerColor = Neutral,
-                modifier = Modifier.fillMaxHeight(0.11f)
+                modifier = Modifier.height(barHeight)
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .background(color = Neutral)
                         .fillMaxSize()
                 ) {
-                    Spacer(modifier = Modifier.weight(0.50f))
-                    BottomBarButton(
-                        currentScreen = state.currentScreen,
-                        type = Screen.DISTRIBUTION,
-                        onClick = { viewModel.onEvent(it) }
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    BottomBarButton(
-                        currentScreen = state.currentScreen,
-                        iconDrawable = R.drawable.dados,
-                        type = Screen.MONTECARLO,
-                        onClick = { viewModel.onEvent(it) }
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    BottomBarButton(
-                        currentScreen = state.currentScreen,
-                        iconDrawable = R.drawable.nodos,
-                        type = Screen.MARKOV,
-                        onClick = { viewModel.onEvent(it) }
-                    )
-                    Spacer(modifier = Modifier.weight(0.50f))
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .widthIn(max = dimens.navButtonsMaxWidth)
+                            .fillMaxWidth()
+                    ) {
+                        BottomBarButton(
+                            currentScreen = state.currentScreen,
+                            type = Screen.DISTRIBUTION,
+                            onClick = { viewModel.onEvent(it) }
+                        )
+                        BottomBarButton(
+                            currentScreen = state.currentScreen,
+                            iconDrawable = R.drawable.dados,
+                            type = Screen.MONTECARLO,
+                            onClick = { viewModel.onEvent(it) }
+                        )
+                        BottomBarButton(
+                            currentScreen = state.currentScreen,
+                            iconDrawable = R.drawable.nodos,
+                            type = Screen.MARKOV,
+                            onClick = { viewModel.onEvent(it) }
+                        )
+                    }
                 }
             }
         },
