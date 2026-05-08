@@ -1,15 +1,15 @@
 package com.example.stochia.ui.screen
 
-
-
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.ui.screen.common_components.CustomEditText
 import com.example.stochia.ui.screen.markov_form_components.CustomSlider.CustomSlider
@@ -40,48 +39,50 @@ fun MarkovForm(
     markovParams: MarkovParams,
     onEvent: (MainScreenEvent) -> Unit
 ) {
+    val dimens = LocalDimens.current
+    val scrollState = rememberScrollState()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
             .background(NeutralDarker)
+            .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.weight(0.05f))
+        Spacer(modifier = Modifier.height(dimens.spacerLarge))
         Text(
             "Cadenas de Markov",
             style = Typography.headlineLarge,
             textAlign = TextAlign.Center,
             color = PrimaryLightest
         )
-        Spacer(modifier = Modifier.weight(0.05f))
+        Spacer(modifier = Modifier.height(dimens.spacerMedium))
         Column(
-            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(dimens.cornerRadiusMedium))
                 .background(color = Neutral)
-                .fillMaxSize(0.9f)
+                .fillMaxWidth(0.9f)
+                .padding(vertical = dimens.spacerMedium, horizontal = dimens.cardInnerPadding)
         ) {
-            Spacer(modifier = Modifier.weight(0.15f))
             Text(
                 "ESTADO INICIAL",
                 color = SecondaryLight,
                 textAlign = TextAlign.Start,
-                style = Typography.bodyLarge,
+                style = Typography.bodyLarge
             )
-            Spacer(modifier = Modifier.weight(0.05f))
+            Spacer(modifier = Modifier.height(dimens.spacerXSmall))
             CustomEditText(
-                value = when(markovParams.initState){
+                value = when (markovParams.initState) {
                     0 -> "A"
-                    1-> "B"
+                    1 -> "B"
                     else -> "C"
                 },
                 type = KeyboardType.Text,
                 modifier = Modifier
-                    .height(LocalDimens.current.editTextHeight)
+                    .height(dimens.editTextHeight)
                     .fillMaxWidth(0.6f)
-                ) {
+            ) {
                 if (it.isNotBlank()) {
                     when (it) {
                         "A" -> onEvent(MainScreenEvent.ChangeMarkovInitState(0))
@@ -90,42 +91,38 @@ fun MarkovForm(
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(0.15f))
+            Spacer(modifier = Modifier.height(dimens.spacerMedium))
             Text(
                 "MATRIZ DE TRANSICIÓN",
                 color = SecondaryLight,
                 textAlign = TextAlign.Start,
-                style = Typography.bodyLarge,
-                modifier = Modifier
+                style = Typography.bodyLarge
             )
-            Spacer(modifier = Modifier.weight(0.05f))
+            Spacer(modifier = Modifier.height(dimens.spacerXSmall))
             TransitionMatrix(
                 states = markovParams.states,
                 probs = markovParams.probs,
-               modifier = Modifier,
-               onEvent = {onEvent(MainScreenEvent.ChangeMarkovProbs(it))}
+                modifier = Modifier,
+                onEvent = { onEvent(MainScreenEvent.ChangeMarkovProbs(it)) }
             )
-            Spacer(modifier = Modifier.weight(0.15f))
+            Spacer(modifier = Modifier.height(dimens.spacerMedium))
             Text(
                 "PASOS: ${markovParams.steps}",
                 color = SecondaryLight,
                 textAlign = TextAlign.Start,
-                style = Typography.bodyLarge,
-                modifier = Modifier
+                style = Typography.bodyLarge
             )
-            Spacer(modifier = Modifier.weight(0.1f))
+            Spacer(modifier = Modifier.height(dimens.spacerSmall))
             CustomSlider(
                 alignment = Alignment.CenterStart,
                 value = markovParams.steps.toFloat(),
                 valueRange = 0f..10000f,
                 steps = 10000,
-                onValueChange = {
-                    onEvent(MainScreenEvent.ChangeMarkovSteps(it.toInt()))
-                }
+                onValueChange = { onEvent(MainScreenEvent.ChangeMarkovSteps(it.toInt())) }
             )
-            Spacer(modifier = Modifier.weight(0.2f))
+            Spacer(modifier = Modifier.height(dimens.spacerLarge))
             Card(
-                shape = RoundedCornerShape(5.dp),
+                shape = RoundedCornerShape(dimens.cornerRadiusSmall),
                 colors = CardDefaults.cardColors(
                     containerColor = Primary,
                     contentColor = SecondaryLight,
@@ -134,10 +131,8 @@ fun MarkovForm(
                 ),
                 modifier = Modifier
                     .fillMaxWidth(0.60f)
-                    .height(LocalDimens.current.commitButton),
-                onClick = {
-                    onEvent(MainScreenEvent.SimulateMarkovButtonClicked)
-                }
+                    .height(dimens.commitButton),
+                onClick = { onEvent(MainScreenEvent.SimulateMarkovButtonClicked) }
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
@@ -146,14 +141,12 @@ fun MarkovForm(
                     style = Typography.bodyLarge,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.weight(1f))
-
             }
-            Spacer(modifier = Modifier.weight(0.15f))
+            Spacer(modifier = Modifier.height(dimens.spacerMedium))
         }
-        Spacer(modifier = Modifier.weight(0.05f))
-
+        Spacer(modifier = Modifier.height(dimens.spacerLarge))
     }
 }
