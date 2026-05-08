@@ -1,6 +1,7 @@
 package com.example.stochia.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -19,8 +20,7 @@ val spaceGroteskFonts = FontFamily(
     Font(R.font.space_grotesk_semibold)
 )
 
-
-// Set of Material typography styles to start with
+// Tipografía estática usada como valor por defecto en LocalDimens
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = interFonts,
@@ -47,3 +47,34 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
 )
+
+@Composable
+fun responsiveTypography(): Typography {
+    val dimens = LocalDimens.current
+    return Typography(
+        bodyLarge = TextStyle(
+            fontFamily = interFonts,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            fontSize = dimens.fontSizeBodyLarge,
+            lineHeight = dimens.lineHeightBodyLarge,
+            letterSpacing = 0.5.sp
+        ),
+        headlineLarge = TextStyle(
+            fontFamily = spaceGroteskFonts,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            fontSize = dimens.fontSizeHeadlineLarge,
+            lineHeight = dimens.lineHeightHeadlineLarge,
+            letterSpacing = 3.sp
+        ),
+        labelSmall = TextStyle(
+            fontFamily = interFonts,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White,
+            fontSize = dimens.fontSizeLabelSmall,
+            lineHeight = dimens.lineHeightLabelSmall,
+            letterSpacing = 0.5.sp
+        )
+    )
+}
