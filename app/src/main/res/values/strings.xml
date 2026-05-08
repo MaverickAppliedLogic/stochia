@@ -1,3 +1,116 @@
 <resources>
     <string name="app_name">Stochia</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- COMMON — reutilizados en múltiples screens           -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="common_button_save_study">GUARDAR ESTUDIO</string>
+    <string name="common_button_simulate">SIMULAR</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- MAIN SCREEN                                          -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="main_screen_topbar_title">STOCHIA</string>
+    <!-- contentDescription genérico para iconos de navegación (BottomBarButton / SettingsButton) -->
+    <string name="main_screen_nav_button_icon_desc">Markov</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- RESULT SCREEN — tarjetas de estudios previos        -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="result_screen_study_card_distribution_type">Distribución - media: %s</string>
+    <string name="result_screen_study_card_montecarlo_type">Montecarlo - Dist: %s</string>
+    <string name="result_screen_study_card_markov_type">Markov - Pasos: %d</string>
+    <string name="result_screen_study_card_unknown_type">Unknown</string>
+    <string name="result_screen_study_card_icon_repeat_desc">Repetir con los mismos parámetros</string>
+    <string name="result_screen_study_card_icon_run_montecarlo_desc">Ejecutar Montecarlo con estos datos</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- DISTRIBUTION FORM                                    -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="distribution_form_title">Distribución Probabilística</string>
+    <string name="distribution_form_label_data_sequence">SECUENCIA DE DATOS INDEPENDIENTES</string>
+    <string name="distribution_form_button_analyze">ANALIZAR</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- DISTRIBUTION RESULT SCREEN                          -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="distribution_result_title">Distribución de probabilidades</string>
+    <string name="distribution_result_label_mean">Media: </string>
+    <string name="distribution_result_label_std_dev">Desviación estándar: </string>
+    <string name="distribution_result_section_range_values">Valores de rango</string>
+    <string name="distribution_result_label_min_value">Valor mínimo</string>
+    <string name="distribution_result_label_max_value">Valor máximo</string>
+    <string name="distribution_result_label_percentile5">Percentil 5</string>
+    <string name="distribution_result_label_percentile95">Percentil 95</string>
+    <string name="distribution_result_section_value_frequency">Frecuencia de valores</string>
+    <string name="distribution_result_label_frequency_count">%s veces</string>
+    <string name="distribution_result_section_value_probability">Probabilidad de valores</string>
+    <string name="distribution_result_label_probability_percent">%s%%</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- MARKOV FORM                                          -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="markov_form_title">Cadenas de Markov</string>
+    <string name="markov_form_label_initial_state">ESTADO INICIAL</string>
+    <string name="markov_form_label_transition_matrix">MATRIZ DE TRANSICIÓN</string>
+    <string name="markov_form_label_steps">PASOS: %d</string>
+    <!-- Cabeceras de la matriz de transición -->
+    <string name="markov_form_matrix_header_a">A</string>
+    <string name="markov_form_matrix_header_b">B</string>
+    <string name="markov_form_matrix_header_c">C</string>
+    <!-- Etiqueta de fila: "Desde A", "Desde B", "Desde C" -->
+    <string name="markov_form_matrix_row_from">Desde %s</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- MARKOV RESULT SCREEN                                 -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="markov_result_title">Resumen Markov</string>
+    <string name="markov_result_label_start">Inicio</string>
+    <string name="markov_result_label_end">Final</string>
+    <string name="markov_result_label_steps">Pasos</string>
+    <string name="markov_result_label_convergence">Convergencia</string>
+    <string name="markov_result_label_convergence_values">A: %1$s / B: %2$s / C: %3$s</string>
+    <string name="markov_result_section_path">Markov Path</string>
+    <string name="markov_result_label_step_zero">Step 0:</string>
+    <string name="markov_result_label_step">Step %d</string>
+    <string name="markov_result_label_step_probability">P= %s%%</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- MONTECARLO FORM                                      -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="montecarlo_form_title">Simulaciones Monte Carlo</string>
+    <string name="montecarlo_form_label_distribution_type">TIPO DE DISTRIBUCION</string>
+    <string name="montecarlo_form_label_param1">PARAMETRO 1</string>
+    <string name="montecarlo_form_label_param2">PARAMETRO 2</string>
+    <string name="montecarlo_form_label_interactions">NUMERO DE INTERACCIONES (N)</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- MONTECARLO RESULT SCREEN — compartidos              -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="montecarlo_result_section_stats">Estadísticas Montecarlo</string>
+    <string name="montecarlo_result_label_distribution">Distribución</string>
+    <string name="montecarlo_result_label_mean">Media</string>
+    <string name="montecarlo_result_label_std_dev">Standard Dev</string>
+    <string name="montecarlo_result_label_simulations">Simulations</string>
+    <string name="montecarlo_result_section_percentiles">Percentiles (5%% - 95%%)</string>
+    <string name="montecarlo_result_label_p5">P5</string>
+    <string name="montecarlo_result_label_p50">P50</string>
+    <string name="montecarlo_result_label_p95">P95</string>
+    <string name="montecarlo_result_label_simulation_index">Sim %d:</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- GEOMETRICAL MONTECARLO RESULT                        -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="geometrical_montecarlo_result_label_attempts">Intentos hasta éxito</string>
+
+    <!-- ════════════════════════════════════════════════════ -->
+    <!-- MULTINOMIAL MONTECARLO RESULT                        -->
+    <!-- ════════════════════════════════════════════════════ -->
+    <string name="multinomial_montecarlo_result_label_mean_param1">Media primer parámetro</string>
+    <string name="multinomial_montecarlo_result_label_mean_param2">Media segundo parámetro</string>
+    <string name="multinomial_montecarlo_result_label_mean_param3">Media tercer parámetro</string>
+    <string name="multinomial_montecarlo_result_section_params">Parametros</string>
+    <string name="multinomial_montecarlo_result_label_param">Parametro %d</string>
+    <string name="multinomial_montecarlo_result_label_std_dev">Std Desviación</string>
+
 </resources>
