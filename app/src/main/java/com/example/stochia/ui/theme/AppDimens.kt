@@ -1,14 +1,30 @@
 package com.example.stochia.ui.theme
 
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 val LocalDimens = staticCompositionLocalOf { AppDimens() }
 
 data class AppDimens(
+
+    // ════════════════════════════════════════════════════
+    // TIPOGRAFÍA — tamaños de fuente
+    // ════════════════════════════════════════════════════
+    val fontSizeHeadlineLarge: TextUnit = 20.sp,
+    val fontSizeBodyLarge: TextUnit = 16.sp,
+    val fontSizeLabelSmall: TextUnit = 11.sp,
+
+    // ════════════════════════════════════════════════════
+    // TIPOGRAFÍA — alturas de línea
+    // ════════════════════════════════════════════════════
+    val lineHeightHeadlineLarge: TextUnit = 28.sp,
+    val lineHeightBodyLarge: TextUnit = 20.sp,
+    val lineHeightLabelSmall: TextUnit = 16.sp,
 
     // ════════════════════════════════════════════════════
     // GLOBAL — esquinas y elevación
@@ -51,8 +67,13 @@ data class AppDimens(
     // ════════════════════════════════════════════════════
     // NAVIGATION — BottomBarButton y SettingsButton
     // ════════════════════════════════════════════════════
+    val navBarHeight: Dp = 80.dp,
+    val navBarHeightLandscape: Dp = 56.dp,
     val navButtonHeight: Dp = 80.dp,
     val navButtonWidth: Dp = 100.dp,
+    val navButtonHeightLandscape: Dp = 48.dp,
+    val navButtonWidthLandscape: Dp = 80.dp,
+    val navButtonsMaxWidth: Dp = 480.dp,
     val navButtonIconBlur: Dp = 4.dp,
     val navButtonShadowTarget: Dp = 7.dp,
     val settingsButtonIconBlur: Dp = 3.dp,
@@ -125,6 +146,13 @@ fun responsiveDimens(): AppDimens {
 
         // ── Pantallas pequeñas / dispositivos compactos ──
         widthPx < 360 -> AppDimens(
+            // Tipografía
+            fontSizeHeadlineLarge = 17.sp,
+            fontSizeBodyLarge = 14.sp,
+            fontSizeLabelSmall = 10.sp,
+            lineHeightHeadlineLarge = 24.sp,
+            lineHeightBodyLarge = 18.sp,
+            lineHeightLabelSmall = 14.sp,
             // Global
             cornerRadiusSmall = 5.dp,
             cornerRadiusMedium = 10.dp,
@@ -146,8 +174,13 @@ fun responsiveDimens(): AppDimens {
             commitButton = 40.dp,
             editTextHeight = 40.dp,
             // Navigation
+            navBarHeight = 70.dp,
+            navBarHeightLandscape = 48.dp,
             navButtonHeight = 65.dp,
             navButtonWidth = 80.dp,
+            navButtonHeightLandscape = 40.dp,
+            navButtonWidthLandscape = 65.dp,
+            navButtonsMaxWidth = 360.dp,
             navButtonIconBlur = 4.dp,
             navButtonShadowTarget = 7.dp,
             settingsButtonIconBlur = 3.dp,
@@ -186,6 +219,13 @@ fun responsiveDimens(): AppDimens {
 
         // ── Teléfonos estándar ───────────────────────────
         widthPx < 600 -> AppDimens(
+            // Tipografía
+            fontSizeHeadlineLarge = 20.sp,
+            fontSizeBodyLarge = 16.sp,
+            fontSizeLabelSmall = 11.sp,
+            lineHeightHeadlineLarge = 28.sp,
+            lineHeightBodyLarge = 20.sp,
+            lineHeightLabelSmall = 16.sp,
             // Global
             cornerRadiusSmall = 5.dp,
             cornerRadiusMedium = 10.dp,
@@ -207,8 +247,13 @@ fun responsiveDimens(): AppDimens {
             commitButton = 50.dp,
             editTextHeight = 50.dp,
             // Navigation
+            navBarHeight = 80.dp,
+            navBarHeightLandscape = 56.dp,
             navButtonHeight = 80.dp,
             navButtonWidth = 100.dp,
+            navButtonHeightLandscape = 48.dp,
+            navButtonWidthLandscape = 80.dp,
+            navButtonsMaxWidth = 480.dp,
             navButtonIconBlur = 4.dp,
             navButtonShadowTarget = 7.dp,
             settingsButtonIconBlur = 3.dp,
@@ -247,6 +292,13 @@ fun responsiveDimens(): AppDimens {
 
         // ── Tablets y pantallas grandes ──────────────────
         else -> AppDimens(
+            // Tipografía
+            fontSizeHeadlineLarge = 24.sp,
+            fontSizeBodyLarge = 18.sp,
+            fontSizeLabelSmall = 13.sp,
+            lineHeightHeadlineLarge = 32.sp,
+            lineHeightBodyLarge = 24.sp,
+            lineHeightLabelSmall = 18.sp,
             // Global
             cornerRadiusSmall = 5.dp,
             cornerRadiusMedium = 10.dp,
@@ -268,8 +320,13 @@ fun responsiveDimens(): AppDimens {
             commitButton = 60.dp,
             editTextHeight = 70.dp,
             // Navigation
+            navBarHeight = 96.dp,
+            navBarHeightLandscape = 64.dp,
             navButtonHeight = 100.dp,
             navButtonWidth = 130.dp,
+            navButtonHeightLandscape = 56.dp,
+            navButtonWidthLandscape = 100.dp,
+            navButtonsMaxWidth = 600.dp,
             navButtonIconBlur = 4.dp,
             navButtonShadowTarget = 7.dp,
             settingsButtonIconBlur = 3.dp,

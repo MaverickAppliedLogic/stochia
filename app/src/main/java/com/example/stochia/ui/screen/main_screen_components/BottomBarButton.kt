@@ -1,5 +1,6 @@
 package com.example.stochia.ui.screen.main_screen_components
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,16 +24,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.innerShadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.stochia.R
+import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.NeutralDarkest
 import com.example.stochia.ui.theme.PrimaryLight
 import com.example.stochia.ui.theme.Secondary
-import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
 import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 
@@ -43,38 +45,37 @@ fun BottomBarButton(
     type: Screen,
     onClick: (MainScreenEvent) -> Unit
 ) {
+    val dimens = LocalDimens.current
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    val buttonHeight = if (isLandscape) dimens.navButtonHeightLandscape else dimens.navButtonHeight
+    val buttonWidth  = if (isLandscape) dimens.navButtonWidthLandscape  else dimens.navButtonWidth
+
     val selected = currentScreen == type
-    val sizeAnim = remember { Animatable(0.dp, Dp.VectorConverter) }
+    val sizeAnim  = remember { Animatable(0.dp, Dp.VectorConverter) }
     val floatAnim = remember { Animatable(0.4f) }
 
     LaunchedEffect(selected) {
-        floatAnim.animateTo(
-            targetValue = if (selected) 0.5f else 0.6f
-        )
-        sizeAnim.animateTo(
-            targetValue = if (selected) 7.dp else 0.dp
-        )
+        floatAnim.animateTo(targetValue = if (selected) 0.5f else 0.6f)
+        sizeAnim.animateTo(targetValue = if (selected) dimens.navButtonShadowTarget else 0.dp)
     }
 
-    val animatedSize = sizeAnim.value
+    val animatedSize  = sizeAnim.value
     val animatedFloat = floatAnim.value
-    val tint =
-        if (selected) PrimaryLight
-        else Secondary
+    val tint = if (selected) PrimaryLight else Secondary
 
     IconButton(
         onClick = { onClick(MainScreenEvent.ScreenButtonClicked(type)) },
-        colors = IconButtonDefaults
-            .iconButtonColors(containerColor = Color.Transparent),
+        colors = IconButtonDefaults.iconButtonColors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
         modifier = Modifier
-            .height(80.dp)
-            .width(100.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .height(buttonHeight)
+            .width(buttonWidth)
+            .clip(RoundedCornerShape(dimens.cornerRadiusMedium))
             .innerShadow(
-                shape = RoundedCornerShape(9.dp),
+                shape = RoundedCornerShape(dimens.cornerRadiusMedium),
                 shadow = Shadow(
                     radius = animatedSize,
-                    spread = maxOf(0.0, animatedSize.value.toInt() -3.5).dp,
+                    spread = maxOf(0.0, animatedSize.value.toInt() - 3.5).dp,
                     color = NeutralDarkest
                 ),
             )
@@ -86,32 +87,31 @@ fun BottomBarButton(
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize(animatedFloat)) {
+                modifier = Modifier.fillMaxSize(animatedFloat)
+            ) {
                 Icon(
                     painter = painterResource(iconDrawable),
-                    contentDescription = "Markov",
+                    contentDescription = type.name,
                     tint = tint,
                     modifier = Modifier.fillMaxSize(0.7f)
                 )
                 Icon(
                     painter = painterResource(iconDrawable),
-                    contentDescription = "Markov",
+                    contentDescription = null,
                     tint = tint,
                     modifier = Modifier
                         .alpha(animatedSize.value)
                         .fillMaxSize(0.7f)
-                        .blur(4.dp)
+                        .blur(dimens.navButtonIconBlur)
                 )
-
             }
-            Text(
-                text = type.name.first() + type.name.substring(1).lowercase(),
-                color = tint,
-                style = Typography.labelSmall
-            )
+            if (!isLandscape) {
+                Text(
+                    text = type.name.first() + type.name.substring(1).lowercase(),
+                    color = tint,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
         }
-
     }
-
-
 }
