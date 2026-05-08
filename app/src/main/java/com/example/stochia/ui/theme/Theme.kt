@@ -45,7 +45,7 @@ fun StochiaTheme(
     CompositionLocalProvider(LocalDimens provides dimens) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = Typography,
+            typography = responsiveTypography(),
             content = content
         )
     }
