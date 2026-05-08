@@ -33,6 +33,6 @@ fun OneParamFields(
             params[0] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params.toList())
         },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+        modifier = Modifier.height(LocalDimens.current.editTextHeight).fillMaxWidth(0.8f)
     )
 }

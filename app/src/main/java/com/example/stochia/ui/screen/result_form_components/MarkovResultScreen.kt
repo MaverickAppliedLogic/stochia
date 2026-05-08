@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -24,8 +24,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.markov.MarkovResult
+import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralDarker
+import com.example.stochia.ui.theme.Primary
 import com.example.stochia.ui.theme.PrimaryLight
 import com.example.stochia.ui.theme.PrimaryLightest
 import com.example.stochia.ui.theme.SecondaryLight
@@ -42,6 +44,7 @@ fun MarkovResultScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .background(NeutralDarker)
             .fillMaxSize()
@@ -65,7 +68,7 @@ fun MarkovResultScreen(
             {
                 Spacer(modifier.weight(0.05f))
                 Text(
-                    text = "Markov Summary",
+                    text = "Resumen Markov",
                     style = Typography.headlineLarge,
                     color = Color.White,
                     modifier = Modifier.weight(0.1f).fillMaxWidth(0.9f)
@@ -77,7 +80,7 @@ fun MarkovResultScreen(
                 )
                 {
                     SingleResultCard(
-                        title = "Start",
+                        title = "Inicio",
                         titleColor = SecondaryLight,
                         titleAlign = TextAlign.Center,
                         stats = result.path[0],
@@ -86,7 +89,7 @@ fun MarkovResultScreen(
                     )
                     Spacer(modifier.weight(0.05f))
                     SingleResultCard(
-                        title = "End",
+                        title = "Final",
                         titleColor = SecondaryLight,
                         titleAlign = TextAlign.Center,
                         stats = result.path.last(),
@@ -95,7 +98,7 @@ fun MarkovResultScreen(
                     )
                     Spacer(modifier.weight(0.05f))
                     SingleResultCard(
-                        title = "Steps",
+                        title = "Pasos",
                         titleColor = SecondaryLight,
                         stats = result.path.size.toString(),
                         statsColor = PrimaryLightest,
@@ -236,8 +239,32 @@ fun MarkovResultScreen(
         }
         if(isResultNew) {
             Spacer(modifier.height(30.dp))
-            Button(onClick = { onEvent(MainScreenEvent.SaveStudyButtonClicked) }) {
-                Text("Guardar Estudio")
+            Card(
+                shape = RoundedCornerShape(5.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Primary,
+                    contentColor = SecondaryLight,
+                    disabledContainerColor = Primary,
+                    disabledContentColor = SecondaryLight
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.60f)
+                    .height(LocalDimens.current.commitButton),
+                onClick = {
+                    onEvent(MainScreenEvent.SaveStudyButtonClicked)
+                }
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    "GUARDAR ESTUDIO",
+                    textAlign = TextAlign.Center,
+                    style = Typography.bodyLarge,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.weight(1f))
+
             }
             Spacer(modifier.height(30.dp))
         }

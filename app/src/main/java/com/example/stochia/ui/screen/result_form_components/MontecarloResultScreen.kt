@@ -4,13 +4,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.montecarlo.MontecarloResult
 import com.example.stochia.domain.model.montecarlo.MontecarloType
@@ -18,7 +23,11 @@ import com.example.stochia.ui.screen.result_form_components.montecarlo_result_co
 import com.example.stochia.ui.screen.result_form_components.montecarlo_result_components.MultinomialMontecarloResult
 import com.example.stochia.ui.screen.result_form_components.montecarlo_result_components.WithValuesMontecarloResult
 import com.example.stochia.ui.screen.result_form_components.montecarlo_result_components.WithoutValuesMontecarloResult
+import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.NeutralDarker
+import com.example.stochia.ui.theme.Primary
+import com.example.stochia.ui.theme.SecondaryLight
+import com.example.stochia.ui.theme.Typography
 import com.example.stochia.ui.viewmodel.MainScreenEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +39,7 @@ fun MontecarloResultScreen(
     modifier: Modifier
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .background(NeutralDarker)
             .fillMaxSize()
@@ -45,8 +55,32 @@ fun MontecarloResultScreen(
         }
         if(isResultNew){
             Spacer(modifier.height(30.dp))
-            Button(onClick = {onEvent(MainScreenEvent.SaveStudyButtonClicked)}) {
-                Text("Guardar Estudio")
+            Card(
+                shape = RoundedCornerShape(5.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Primary,
+                    contentColor = SecondaryLight,
+                    disabledContainerColor = Primary,
+                    disabledContentColor = SecondaryLight
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.60f)
+                    .height(LocalDimens.current.commitButton),
+                onClick = {
+                    onEvent(MainScreenEvent.SaveStudyButtonClicked)
+                }
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    "GUARDAR ESTUDIO",
+                    textAlign = TextAlign.Center,
+                    style = Typography.bodyLarge,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.weight(1f))
+
             }
             Spacer(modifier.height(30.dp))
         }

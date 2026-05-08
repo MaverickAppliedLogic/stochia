@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -26,8 +24,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.innerShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.stochia.R
 import com.example.stochia.ui.theme.NeutralDarkest
 import com.example.stochia.ui.theme.PrimaryLight
 import com.example.stochia.ui.theme.Secondary
@@ -39,6 +39,7 @@ import com.example.stochia.ui.viewmodel.MainViewModel.Screen
 @Composable
 fun BottomBarButton(
     currentScreen: Screen,
+    iconDrawable: Int = R.drawable.histograma,
     type: Screen,
     onClick: (MainScreenEvent) -> Unit
 ) {
@@ -83,20 +84,22 @@ fun BottomBarButton(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            Box(modifier = Modifier.fillMaxSize(animatedFloat)) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize(animatedFloat)) {
                 Icon(
-                    Icons.Default.AccountBox,
+                    painter = painterResource(iconDrawable),
                     contentDescription = "Markov",
                     tint = tint,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(0.7f)
                 )
                 Icon(
-                    Icons.Default.AccountBox,
+                    painter = painterResource(iconDrawable),
                     contentDescription = "Markov",
                     tint = tint,
                     modifier = Modifier
                         .alpha(animatedSize.value)
-                        .fillMaxSize()
+                        .fillMaxSize(0.7f)
                         .blur(4.dp)
                 )
 

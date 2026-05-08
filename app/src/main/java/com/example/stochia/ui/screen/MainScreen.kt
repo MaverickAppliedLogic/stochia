@@ -31,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.stochia.R
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
@@ -116,12 +117,14 @@ fun MainScreen(
                     Spacer(modifier = Modifier.weight(1f))
                     BottomBarButton(
                         currentScreen = state.currentScreen,
+                        iconDrawable = R.drawable.dados,
                         type = Screen.MONTECARLO,
                         onClick = { viewModel.onEvent(it) }
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     BottomBarButton(
                         currentScreen = state.currentScreen,
+                        iconDrawable = R.drawable.nodos,
                         type = Screen.MARKOV,
                         onClick = { viewModel.onEvent(it) }
                     )
@@ -162,7 +165,6 @@ fun MainScreen(
 
                     Screen.MONTECARLO -> MontecarloForm(
                         params = state.params as? MontecarloParams?: MontecarloParams(),
-                        modifier = Modifier.padding(padding),
                         onEvent = { viewModel.onEvent(it) }
                     )
 

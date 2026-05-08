@@ -36,7 +36,7 @@ fun ThreeParamsFieldsWithSize(
             params[0] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params.toList())
         },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+        modifier = Modifier.height(LocalDimens.current.editTextHeight).fillMaxWidth(0.8f)
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -55,7 +55,7 @@ fun ThreeParamsFieldsWithSize(
             params[1] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params)
         },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+        modifier = Modifier.height(LocalDimens.current.editTextHeight).fillMaxWidth(0.8f)
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -74,7 +74,7 @@ fun ThreeParamsFieldsWithSize(
             params[2] = it.toDoubleOrNull() ?: 0.0
             onParamsChange(params)
         },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+        modifier = Modifier.height(LocalDimens.current.editTextHeight).fillMaxWidth(0.8f)
     )
     Spacer(modifier = modifier)
     Spacer(modifier = modifier)
@@ -91,6 +91,6 @@ fun ThreeParamsFieldsWithSize(
     CustomEditText(
         value = size.toString(),
         onValueChange = { onSizeChange(it.toIntOrNull() ?: 0) },
-        modifier = Modifier.height(LocalDimens.current.editTextHeight)
+        modifier = Modifier.height(LocalDimens.current.editTextHeight).fillMaxWidth(0.8f)
     )
 }
