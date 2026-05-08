@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -14,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.common_components.CustomDropdownMenu
 import com.example.stochia.ui.screen.montecarlo_form_components.montecarlo_formfields_components.OneParamFields
@@ -48,17 +48,17 @@ fun MontecarloFormFields(
     val distribution = allParams.distribution
     val params = allParams.params
     val size = allParams.size
-
+    val dimens = LocalDimens.current
+    val spacerModifier = Modifier.height(dimens.spacerXSmall)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(dimens.cornerRadiusMedium))
             .background(color = Neutral)
             .fillMaxWidth(0.9f)
+            .padding(vertical = dimens.spacerMedium)
     ) {
-        Spacer(modifier = Modifier.weight(0.5f))
-
         Text(
             "TIPO DE DISTRIBUCION",
             color = SecondaryLight,
@@ -66,18 +66,13 @@ fun MontecarloFormFields(
             style = Typography.bodyLarge,
             modifier = Modifier.fillMaxWidth(0.65f)
         )
-
-        Spacer(modifier = Modifier.weight(0.05f))
-
+        Spacer(modifier = Modifier.height(dimens.spacerXSmall))
         CustomDropdownMenu(
             selected = distribution,
             options = DistributionType.entries.map { it.name },
-            onClick = {
-                onEvent(it)
-            }
+            onClick = { onEvent(it) }
         )
-
-        Spacer(modifier = Modifier.weight(0.5f))
+        Spacer(modifier = Modifier.height(dimens.spacerMedium))
 
         when (DistributionType.valueOf(distribution)) {
             DistributionType.NORMAL,
@@ -89,7 +84,7 @@ fun MontecarloFormFields(
                     size = size,
                     onParamsChange = { onEvent(MainScreenEvent.ChangeMontecarloParams(it)) },
                     onSizeChange = { onEvent(MainScreenEvent.ChangeMontecarloSize(it)) },
-                    modifier = Modifier.weight(0.2f)
+                    modifier = spacerModifier
                 )
             }
 
@@ -100,7 +95,7 @@ fun MontecarloFormFields(
                     size = size,
                     onParamsChange = { onEvent(MainScreenEvent.ChangeMontecarloParams(it)) },
                     onSizeChange = { onEvent(MainScreenEvent.ChangeMontecarloSize(it)) },
-                    modifier = Modifier.weight(0.2f)
+                    modifier = spacerModifier
                 )
             }
 
@@ -108,7 +103,7 @@ fun MontecarloFormFields(
                 OneParamFields(
                     params = params.toMutableList(),
                     onParamsChange = { onEvent(MainScreenEvent.ChangeMontecarloParams(it)) },
-                    modifier = Modifier.weight(0.2f)
+                    modifier = spacerModifier
                 )
             }
 
@@ -118,32 +113,31 @@ fun MontecarloFormFields(
                     size = size,
                     onParamsChange = { onEvent(MainScreenEvent.ChangeMontecarloParams(it)) },
                     onSizeChange = { onEvent(MainScreenEvent.ChangeMontecarloSize(it)) },
-                    modifier = Modifier.weight(0.2f)
+                    modifier = spacerModifier
                 )
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
+        Spacer(modifier = Modifier.height(dimens.spacerLarge))
         Card(
-            shape = RoundedCornerShape(5.dp),
+            shape = RoundedCornerShape(dimens.cornerRadiusSmall),
             colors = CardDefaults.cardColors(
                 containerColor = Primary,
                 contentColor = SecondaryLight
             ),
             modifier = Modifier
                 .fillMaxWidth(0.65f)
-                .height(LocalDimens.current.commitButton),
+                .height(dimens.commitButton),
             onClick = {
-                    onEvent(
-                        MainScreenEvent.SimulateMontecarloButtonClicked(
-                            MontecarloParams(
-                                distribution = distribution,
-                                params = params,
-                                size = size
-                            )
+                onEvent(
+                    MainScreenEvent.SimulateMontecarloButtonClicked(
+                        MontecarloParams(
+                            distribution = distribution,
+                            params = params,
+                            size = size
                         )
                     )
+                )
             }
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -153,20 +147,10 @@ fun MontecarloFormFields(
                 style = Typography.bodyLarge,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             )
             Spacer(modifier = Modifier.weight(1f))
         }
-
-        Spacer(modifier = Modifier.weight(0.3f))
+        Spacer(modifier = Modifier.height(dimens.spacerSmall))
     }
 }
-
-
-
-
-
-
-
-
-
