@@ -1,8 +1,8 @@
-package com.example.stochia.core.services.calculation_system.`interface`
+package com.example.stochia.data.calculation_system.`interface`
 
 import com.chaquo.python.PyObject
 
-interface EngineService {
+interface EngineServiceRepository {
 
     fun genMontecarlo(distribution: String, params: DoubleArray, size: Int): PyObject
 

@@ -1,13 +1,13 @@
-package com.example.stochia.data
+package com.example.stochia.data.kstore
 
 import android.content.Context
 import com.example.stochia.domain.model.dto.SerializableStudy
 import com.example.stochia.domain.model.dto.toSerializable
-import okio.Path.Companion.toPath
 import com.example.stochia.domain.model.study.Study
 import com.example.stochia.domain.model.study.toDomain
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
+import okio.Path.Companion.toPath
 import java.io.File
 
 class KstoreRepository(

@@ -49,7 +49,7 @@ android {
 chaquopy{
     sourceSets {
         getByName("main") {
-            srcDir("/src/main/java/com/example/stochia/core/services/calculation_system/local/python")
+            srcDir("src/main/java/com/example/stochia/data/calculation_system/local_repository/python")
         }
     }
     defaultConfig{

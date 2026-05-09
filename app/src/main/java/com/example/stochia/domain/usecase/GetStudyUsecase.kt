@@ -1,6 +1,6 @@
 package com.example.stochia.domain.usecase
 
-import com.example.stochia.data.KstoreRepository
+import com.example.stochia.data.kstore.KstoreRepository
 import com.example.stochia.domain.model.study.Study
 
 class GetStudyUsecase(
