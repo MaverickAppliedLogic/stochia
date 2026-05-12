@@ -2,7 +2,12 @@ package com.example.stochia.domain.model.montecarlo
 
 import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.interfaces.Result
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonPrimitive
 
 class MontecarloResult(
     val distribution: MontecarloType?,
@@ -27,17 +32,44 @@ class MontecarloResult(
     }
 }
 
-fun PyObject.toMontecarloResult(): MontecarloResult{
-    val mapPy = asMap().mapKeys { it.key.toString() }
-     return when (mapPy["distribution"]!!.toString()) {
-        "multinomial" -> MontecarloResultFactory.fromMultinomial(mapPy)
-        "geometrical" -> MontecarloResultFactory.fromGeometrical(mapPy)
-        "binomial" -> MontecarloResultFactory.withoutValues(mapPy)
-        "poisson" -> MontecarloResultFactory.withoutValues(mapPy)
-        else -> MontecarloResultFactory.withValues(mapPy)
+private fun PyObject.toGenericMap(): Map<String, Any?> =
+    asMap().mapKeys { it.key.toString() }.mapValues { (_, v) ->
+        val pyVal = v as PyObject
+        runCatching { pyVal.asList().map { (it as PyObject).toDouble() } }.getOrNull()
+            ?: runCatching { pyVal.toDouble() }.getOrNull()
+            ?: runCatching { pyVal.toInt() }.getOrNull()
+            ?: pyVal.toString()
+    }
+
+private fun JsonObject.toGenericMap(): Map<String, Any?> =
+    entries.associate { (k, v) ->
+        k to when {
+            v is JsonArray     -> v.map { it.jsonPrimitive.double }
+            v is JsonPrimitive -> runCatching { v.int }.getOrNull()
+                ?: runCatching { v.double }.getOrNull()
+                ?: v.content
+            else               -> null
+        }
+    }
+
+fun PyObject.toMontecarloResult(): MontecarloResult {
+    val map = toGenericMap()
+    return when (map["distribution"]!!.toString()) {
+        "multinomial" -> MontecarloResultFactory.fromMultinomial(map)
+        "geometrical" -> MontecarloResultFactory.fromGeometrical(map)
+        "binomial"    -> MontecarloResultFactory.withoutValues(map)
+        "poisson"     -> MontecarloResultFactory.withoutValues(map)
+        else          -> MontecarloResultFactory.withValues(map)
     }
 }
 
-fun JsonObject.toMontecarloResult(){
-TODO()
+fun JsonObject.toMontecarloResult(): MontecarloResult {
+    val map = toGenericMap()
+    return when (map["distribution"]!!.toString()) {
+        "multinomial" -> MontecarloResultFactory.fromMultinomial(map)
+        "geometrical" -> MontecarloResultFactory.fromGeometrical(map)
+        "binomial"    -> MontecarloResultFactory.withoutValues(map)
+        "poisson"     -> MontecarloResultFactory.withoutValues(map)
+        else          -> MontecarloResultFactory.withValues(map)
+    }
 }
