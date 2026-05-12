@@ -46,6 +46,7 @@ android {
         compose = true
     }
 }
+
 chaquopy{
     sourceSets {
         getByName("main") {
@@ -102,4 +103,8 @@ dependencies {
     implementation(libs.kstore)
     implementation(libs.kstore.file)
     implementation(libs.kotlinx.serialization.json)
+
+//Ktor
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
 }
