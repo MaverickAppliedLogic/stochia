@@ -39,4 +39,8 @@ class LocalEngineServiceRepositoryImpl : EngineServiceRepository {
                 .callAttr("get_distribution", params)
                 .toDistributionResult()
         }
+
+    override suspend fun IsReacheable(): Boolean {
+        return true
+    }
 }
