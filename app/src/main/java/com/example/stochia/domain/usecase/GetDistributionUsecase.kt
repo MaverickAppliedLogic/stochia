@@ -7,5 +7,5 @@ import com.example.stochia.domain.model.distribution.DistributionResult
 class GetDistributionUsecase(
     private val service: CalculationSystemService
 ) {
-    operator fun invoke(data: DistributionParams): DistributionResult = service.getDistribution(data)
+    suspend operator fun invoke(data: DistributionParams): DistributionResult = service.getDistribution(data)
 }

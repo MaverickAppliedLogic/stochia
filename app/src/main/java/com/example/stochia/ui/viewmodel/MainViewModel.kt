@@ -221,22 +221,22 @@ class MainViewModel(
             writeSnackbar(validateDistributionParams(data).second ?: "Error")
             return
         }
-        else{
-            _state.update { it.copy(result = getDistributionUsecase(data), isNewResult = true) }
-            Log.d("MainViewModel", "analyzeDistribution: ${_state.value.result}")
+        viewModelScope.launch {
+            val result = getDistributionUsecase(data)
+            _state.update { it.copy(result = result, isNewResult = true) }
+            Log.d("MainViewModel", "analyzeDistribution: $result")
         }
-
     }
 
     private fun genMontecarlo(data: MontecarloParams) {
         if (!validateMontecarloParams(data).first) {
             writeSnackbar(validateMontecarloParams(data).second ?: "Error")
             return
-        } else {
-            _state.update {
-                it.copy(result = genMontecarloUsecase(data), isNewResult = true)
-            }
-            Log.d("MainViewModel", "genMontecarlo: ${_state.value.result}")
+        }
+        viewModelScope.launch {
+            val result = genMontecarloUsecase(data)
+            _state.update { it.copy(result = result, isNewResult = true) }
+            Log.d("MainViewModel", "genMontecarlo: $result")
         }
     }
 
@@ -244,11 +244,11 @@ class MainViewModel(
         if (!validateMarkovParams(data).first) {
             writeSnackbar(validateMarkovParams(data).second ?: "Error")
             return
-        } else {
-            _state.update {
-                it.copy(result = genMarkovUsecase(data), isNewResult = true)
-            }
-            Log.d("MainViewModel", "genMarkov: ${_state.value.result}")
+        }
+        viewModelScope.launch {
+            val result = genMarkovUsecase(data)
+            _state.update { it.copy(result = result, isNewResult = true) }
+            Log.d("MainViewModel", "genMarkov: $result")
         }
     }
 
