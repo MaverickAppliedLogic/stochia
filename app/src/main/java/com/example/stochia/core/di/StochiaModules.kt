@@ -1,8 +1,10 @@
 package com.example.stochia.core.di
 
+import com.example.stochia.core.network.createHttpClient
 import com.example.stochia.core.services.CalculationSystemService
 import com.example.stochia.data.calculation_system.`interface`.EngineServiceRepository
 import com.example.stochia.data.calculation_system.local_repository.LocalEngineServiceRepositoryImpl
+import com.example.stochia.data.calculation_system.remote_repository.RemoteEngineServiceRepositoryImpl
 import com.example.stochia.data.kstore.KstoreRepository
 import com.example.stochia.domain.usecase.GenMarkovUsecase
 import com.example.stochia.domain.usecase.GenMontecarloUsecase
@@ -20,9 +22,10 @@ import org.koin.dsl.module
 val appModule = module {
 
     single { LocalEngineServiceRepositoryImpl() } bind EngineServiceRepository::class
+    single { RemoteEngineServiceRepositoryImpl(get()) }
 
     single { KstoreRepository(androidContext()) }
-    single { CalculationSystemService(get()) }
+    single { CalculationSystemService(get(), get()) }
 
     factory { GenMarkovUsecase(get()) }
     factory { GenMontecarloUsecase(get()) }
@@ -43,5 +46,11 @@ val uiModule = module {
             get(),
             get()
         )
+    }
+}
+
+val networkModule = module {
+    single {
+        createHttpClient()
     }
 }

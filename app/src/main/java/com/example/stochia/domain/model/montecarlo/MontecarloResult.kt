@@ -2,6 +2,12 @@ package com.example.stochia.domain.model.montecarlo
 
 import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.interfaces.Result
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonPrimitive
 
 class MontecarloResult(
     val distribution: MontecarloType?,
@@ -26,13 +32,36 @@ class MontecarloResult(
     }
 }
 
-fun PyObject.toMontecarloResult(): MontecarloResult{
-    val mapPy = asMap().mapKeys { it.key.toString() }
-     return when (mapPy["distribution"]!!.toString()) {
-        "multinomial" -> MontecarloResultFactory.fromMultinomial(mapPy)
-        "geometrical" -> MontecarloResultFactory.fromGeometrical(mapPy)
-        "binomial" -> MontecarloResultFactory.withoutValues(mapPy)
-        "poisson" -> MontecarloResultFactory.withoutValues(mapPy)
-        else -> MontecarloResultFactory.withValues(mapPy)
+private fun buildMontecarloResult(map: Map<String, Any?>): MontecarloResult =
+    when (map["distribution"]!!.toString()) {
+        "multinomial" -> MontecarloResultFactory.fromMultinomial(map)
+        "geometrical" -> MontecarloResultFactory.fromGeometrical(map)
+        "binomial"    -> MontecarloResultFactory.withoutValues(map)
+        "poisson"     -> MontecarloResultFactory.withoutValues(map)
+        else          -> MontecarloResultFactory.withValues(map)
     }
+
+fun PyObject.toMontecarloResult(): MontecarloResult {
+    val map = asMap().mapKeys { it.key.toString() }.mapValues { (_, value) ->
+        val pyVal = value as PyObject
+        runCatching { pyVal.asList().map { (it as PyObject).toDouble() } }.getOrNull()
+            ?: runCatching { pyVal.toDouble() }.getOrNull()
+            ?: runCatching { pyVal.toInt() }.getOrNull()
+            ?: pyVal.toString()
+    }
+    return buildMontecarloResult(map)
+}
+
+fun JsonObject.toMontecarloResult(): MontecarloResult {
+    val map = entries.associate { (key, value) ->
+        key to when (value) {
+            is JsonArray -> value.map { it.jsonPrimitive.double }
+            is JsonPrimitive -> runCatching { value.int }.getOrNull()
+                ?: runCatching { value.double }.getOrNull()
+                ?: value.content
+
+            else -> null
+        }
+    }
+    return buildMontecarloResult(map)
 }

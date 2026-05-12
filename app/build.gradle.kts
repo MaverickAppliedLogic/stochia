@@ -1,5 +1,4 @@
-import org.gradle.kotlin.dsl.androidTestImplementation
-import org.gradle.kotlin.dsl.testImplementation
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,7 +8,15 @@ plugins {
     id("com.chaquo.python")
 }
 
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) load(file.inputStream())
+}
+val apiKey: String = localProperties.getProperty("API_KEY") ?: ""
+
 android {
+
+
     namespace = "com.example.stochia"
     compileSdk = 36
 
@@ -22,7 +29,7 @@ android {
         ndk{
             abiFilters += listOf("arm64-v8a", "x86_64")
         }
-
+        buildConfigField("String", "CALCSYS_API_KEY", "\"$apiKey\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -44,8 +51,10 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
+
 chaquopy{
     sourceSets {
         getByName("main") {
@@ -102,4 +111,10 @@ dependencies {
     implementation(libs.kstore)
     implementation(libs.kstore.file)
     implementation(libs.kotlinx.serialization.json)
+
+//Ktor
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 }

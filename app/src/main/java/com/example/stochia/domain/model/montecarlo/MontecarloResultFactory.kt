@@ -1,112 +1,96 @@
 package com.example.stochia.domain.model.montecarlo
 
-import com.chaquo.python.PyObject
-
 object MontecarloResultFactory {
 
-    fun fromGeometrical(mapPy: Map<String, PyObject>): MontecarloResult{
-        val triesValue = mapPy["tries"]!!.toInt()
-
+    fun fromGeometrical(map: Map<String, Any?>): MontecarloResult {
         return MontecarloResult(
             distribution = MontecarloType.GEOMETRICAL,
-            values = null,
-            mean = null,
-            stdDev = null,
-            p5 = null,
-            p50 = null,
-            p95 = null,
-            tries = triesValue,
+            values  = null,
+            mean    = null,
+            stdDev  = null,
+            p5      = null,
+            p50     = null,
+            p95     = null,
+            tries   = (map["tries"] as Number).toInt(),
             results = null
         )
     }
 
-    fun fromMultinomial(mapPy: Map<String, PyObject>): MontecarloResult {
-
-        val meanList = mapPy["mean"]!!.asList().map { it.toDouble() }
-        val stdList = mapPy["std"]!!.asList().map { it.toDouble() }
-        val p5List = mapPy["p5"]!!.asList().map { it.toDouble() }
-        val p95List = mapPy["p95"]!!.asList().map { it.toDouble() }
+    fun fromMultinomial(map: Map<String, Any?>): MontecarloResult {
+        @Suppress("UNCHECKED_CAST")
+        val meanList = map["mean"] as List<Double>
+        @Suppress("UNCHECKED_CAST")
+        val stdList  = map["std"]  as List<Double>
+        @Suppress("UNCHECKED_CAST")
+        val p5List   = map["p5"]   as List<Double>
+        @Suppress("UNCHECKED_CAST")
+        val p95List  = map["p95"]  as List<Double>
 
         val results = meanList.indices.map { i ->
             MontecarloResult(
                 distribution = MontecarloType.MULTINOMIAL,
-                values = null,
-                mean = meanList[i],
-                stdDev = stdList[i],
-                p5 = p5List[i],
-                p50 = null,
-                p95 = p95List[i],
-                tries = null,
+                values  = null,
+                mean    = meanList[i],
+                stdDev  = stdList[i],
+                p5      = p5List[i],
+                p50     = null,
+                p95     = p95List[i],
+                tries   = null,
                 results = null
             )
         }
 
         return MontecarloResult(
             distribution = MontecarloType.MULTINOMIAL,
-            values = null,
-            mean = null,
-            stdDev = null,
-            p5 = null,
-            p50 = null,
-            p95 = null,
-            tries = null,
+            values  = null,
+            mean    = null,
+            stdDev  = null,
+            p5      = null,
+            p50     = null,
+            p95     = null,
+            tries   = null,
             results = results
         )
     }
 
-    fun withoutValues(mapPy: Map<String, PyObject>): MontecarloResult{
-        val distPy = mapPy["distribution"]!!.toString()
-        val distribution = when(distPy){
-            "binomial" -> MontecarloType.BINOMIAL
-            "poisson" -> MontecarloType.POISSON
-            "multinomial" -> MontecarloType.MULTINOMIAL
-            else -> MontecarloType.NORMAL
+    fun withoutValues(map: Map<String, Any?>): MontecarloResult {
+        val distribution = when (map["distribution"] as String) {
+            "binomial"   -> MontecarloType.BINOMIAL
+            "poisson"    -> MontecarloType.POISSON
+            "multinomial"-> MontecarloType.MULTINOMIAL
+            else         -> MontecarloType.NORMAL
         }
-
-        val mean = mapPy["mean"]!!.toDouble()
-        val stdDev = mapPy["std"]!!.toDouble()
-        val p5 = mapPy["p5"]!!.toDouble()
-        val p50 = mapPy["p50"]?.toDouble()
-        val p95 = mapPy["p95"]!!.toDouble()
-
         return MontecarloResult(
             distribution = distribution,
-            values = null,
-            mean = mean,
-            stdDev = stdDev,
-            p5 = p5,
-            p50 = p50,
-            p95 = p95,
-            tries = null,
+            values  = null,
+            mean    = (map["mean"] as Number).toDouble(),
+            stdDev  = (map["std"]  as Number).toDouble(),
+            p5      = (map["p5"]   as Number).toDouble(),
+            p50     = (map["p50"]  as? Number)?.toDouble(),
+            p95     = (map["p95"]  as Number).toDouble(),
+            tries   = null,
             results = null
         )
     }
 
-    fun withValues(mapPy: Map<String, PyObject>): MontecarloResult{
-        val distPy = mapPy["distribution"]!!.toString()
-        val distribution = when(distPy){
-            "beta" -> MontecarloType.BETA
+    fun withValues(map: Map<String, Any?>): MontecarloResult {
+        val distribution = when (map["distribution"] as String) {
+            "beta"        -> MontecarloType.BETA
             "exponential" -> MontecarloType.EXPONENTIAL
-            "normal" -> MontecarloType.NORMAL
-            "uniform" -> MontecarloType.UNIFORM
-            else -> MontecarloType.NORMAL
+            "uniform"     -> MontecarloType.UNIFORM
+            else          -> MontecarloType.NORMAL
         }
-        val values = mapPy["values"]!!
-            .asList()
-            .map { it.toDouble() }
-        val mean = mapPy["mean"]!!.toDouble()
-        val stdDev = mapPy["std"]!!.toDouble()
-        val p5 = mapPy["p5"]!!.toDouble()
-        val p95 = mapPy["p95"]!!.toDouble()
-
+        @Suppress("UNCHECKED_CAST")
+        val values = map["values"] as List<Double>
         return MontecarloResult(
             distribution = distribution,
-            values = values,
-            mean = mean,
-            stdDev = stdDev,
-            p5 = p5,
-            p95 = p95,
-            tries = null,
+            values  = values,
+            mean    = (map["mean"] as Number).toDouble(),
+            stdDev  = (map["std"]  as Number).toDouble(),
+            p5      = (map["p5"]   as Number).toDouble(),
+            p50     = null,
+            p95     = (map["p95"]  as Number).toDouble(),
+            tries   = null,
             results = null
         )
     }

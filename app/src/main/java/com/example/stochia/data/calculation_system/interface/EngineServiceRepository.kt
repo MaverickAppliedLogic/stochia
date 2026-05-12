@@ -11,4 +11,6 @@ interface EngineServiceRepository {
     suspend fun genMarkov(states: IntArray, probs: DoubleArray, initState: Int, steps: Int): MarkovResult
 
     suspend fun getDistribution(params: DoubleArray): DistributionResult
+
+    suspend fun IsReacheable(): Boolean
 }

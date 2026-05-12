@@ -2,6 +2,10 @@ package com.example.stochia.domain.model.distribution
 
 import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.interfaces.Result
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 class DistributionResult(
     val frequencies: Map<String, String>,
@@ -28,39 +32,53 @@ class DistributionResult(
 }
 
 
+private fun buildDistributionResult(
+    frequencies: Map<String, String>,
+    probabilities: Map<String, Double>,
+    mean: Double, stdDev: Double,
+    p5: Double, p95: Double,
+    min: Double, max: Double, total: Double
+): DistributionResult = DistributionResult(
+    frequencies   = frequencies,
+    probabilities = probabilities.mapValues { (_, v) -> (v * 100).toString() },
+    mean          = mean,
+    stdDev        = stdDev,
+    p5            = p5,
+    p95           = p95,
+    min           = min,
+    max           = max,
+    total         = total
+)
+
 fun PyObject.toDistributionResult(): DistributionResult {
     val mapPy = asMap().mapKeys { it.key.toString() }
+    return buildDistributionResult(
+        frequencies   = mapPy["frequencies"]!!.asMap().map { (key, value) -> key.toString() to value.toString() }.toMap(),
+        probabilities = mapPy["probabilities"]!!.asMap().map { (key, value) -> key.toString() to value.toDouble() }.toMap(),
+        mean          = mapPy["mean"]!!.toDouble(),
+        stdDev        = mapPy["std_dev"]!!.toDouble(),
+        p5            = mapPy["p5"]!!.toDouble(),
+        p95           = mapPy["p95"]!!.toDouble(),
+        min           = mapPy["min"]!!.toDouble(),
+        max           = mapPy["max"]!!.toDouble(),
+        total         = mapPy["total"]!!.toDouble()
+    )
+}
 
-    // FREQUENCIES
-    val frequencies = mapPy["frequencies"]!!
-        .asMap()
-        .map { (k, v) -> k.toString() to  v.toString() }
-        .toMap()
-
-    // PROBABILITIES
-    val probabilities = mapPy["probabilities"]!!
-        .asMap()
-        .map { (k, v) -> k.toString() to v.toDouble().times(100).toString()  }
-        .toMap()
-
-    // STATISTICS
-    val mean = mapPy["mean"]!!.toDouble()
-    val stdDev = mapPy["std_dev"]!!.toDouble()
-    val p5 = mapPy["p5"]!!.toDouble()
-    val p95 = mapPy["p95"]!!.toDouble()
-    val min = mapPy["min"]!!.toDouble()
-    val max = mapPy["max"]!!.toDouble()
-    val total = mapPy["total"]!!.toDouble()
-
-    return DistributionResult(
-        frequencies = frequencies,
-        probabilities = probabilities,
-        mean = mean,
-        stdDev = stdDev,
-        p5 = p5,
-        p95 = p95,
-        min = min,
-        max = max,
-        total = total
+fun JsonObject.toDistributionResult(): DistributionResult {
+    return buildDistributionResult(
+        frequencies   = this["frequencies"]!!.jsonObject
+            .map { (key, value) -> key to value.jsonPrimitive.content }
+            .toMap(),
+        probabilities = this["probabilities"]!!.jsonObject
+            .map { (key, value) -> key to value.jsonPrimitive.double }
+            .toMap(),
+        mean          = this["mean"]!!.jsonPrimitive.double,
+        stdDev        = this["std_dev"]!!.jsonPrimitive.double,
+        p5            = this["p5"]!!.jsonPrimitive.double,
+        p95           = this["p95"]!!.jsonPrimitive.double,
+        min           = this["min"]!!.jsonPrimitive.double,
+        max           = this["max"]!!.jsonPrimitive.double,
+        total         = this["total"]!!.jsonPrimitive.double
     )
 }
