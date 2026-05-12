@@ -2,7 +2,6 @@ package com.example.stochia.domain.model.markov
 
 import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.interfaces.Result
-import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.double
 import kotlinx.serialization.json.int
@@ -22,73 +21,37 @@ class MarkovResult(
     }
 }
 
-fun PyObject.toMarkovResult(): MarkovResult {
-    val mapPy = asMap().mapKeys { it.key.toString() }
+private fun buildMarkovResult(
+    pathInts: List<Int>,
+    probsRaw: Map<String, List<Double>>,   // claves "0","1","2"
+    convRaw: List<Double>
+): MarkovResult {
+    fun stateLabel(key: String) = when (key) { "0" -> "A"; "1" -> "B"; else -> "C" }
 
-    val flatPath = mapPy["path"]!!.asList().map { it.toInt() }
-    val path = flatPath.let {
-        it.map { value ->
-            when (value) {
-                0 -> "A"
-                1 -> "B"
-                else -> "C"
-            }
-        }
-    }
-
-    val probsPy = mapPy["probs"]!!.asMap()
-    val probs: Map<String, List<Double>> = probsPy.map { (keyPy, valuePy) ->
-
-            val key = when(keyPy.toString()){
-                "0" -> "A"
-                "1" -> "B"
-                else -> "C"
-            }
-
-            val values = (valuePy as PyObject)
-                .asMap()
-                .values
-                .map { v ->
-                    (v as PyObject)
-                        .toJava(Number::class.java)
-                        .toDouble()
-                }
-            key to values
-        }.toMap()
-
-    val conv = mapPy["conv"]!!.asList().map { BigDecimal(it.toString())
-        .setScale(2, RoundingMode.HALF_UP).toDouble()  }
-
+    val path  = pathInts.map { stateLabel(it.toString()) }
+    val probs = probsRaw.entries.associate { (k, v) -> stateLabel(k) to v }
+    val conv  = convRaw.map { BigDecimal(it).setScale(2, RoundingMode.HALF_UP).toDouble() }
 
     return MarkovResult(path = path, probs = probs, conv = conv)
 }
 
+fun PyObject.toMarkovResult(): MarkovResult {
+    val mapPy    = asMap().mapKeys { it.key.toString() }
+    val pathInts = mapPy["path"]!!.asList().map { it.toInt() }
+    val probsRaw = mapPy["probs"]!!.asMap().entries.associate { (k, v) ->
+        k.toString() to (v as PyObject).asMap().values
+            .map { (it as PyObject).toJava(Number::class.java).toDouble() }
+    }
+    val convRaw  = mapPy["conv"]!!.asList().map { it.toString().toDouble() }
+    return buildMarkovResult(pathInts, probsRaw, convRaw)
+}
+
 fun JsonObject.toMarkovResult(): MarkovResult {
-    // path: array of ints  →  map 0→A, 1→B, 2→C
-    val path = this["path"]!!.jsonArray.map { element ->
-        when (element.jsonPrimitive.int) {
-            0    -> "A"
-            1    -> "B"
-            else -> "C"
-        }
+    val pathInts = this["path"]!!.jsonArray.map { it.jsonPrimitive.int }
+    val probsRaw = this["probs"]!!.jsonObject.entries.associate { (k, v) ->
+        k to v.jsonObject.values.map { it.jsonPrimitive.double }
     }
-
-    // probs: object whose keys are "0","1","2" and values are objects of doubles
-    val probs: Map<String, List<Double>> = this["probs"]!!.jsonObject.entries.associate { (stateKey, stateVal) ->
-        val label = when (stateKey) {
-            "0"  -> "A"
-            "1"  -> "B"
-            else -> "C"
-        }
-        val values = stateVal.jsonObject.values.map { it.jsonPrimitive.double }
-        label to values
-    }
-
-    // conv: array of doubles rounded to 2 decimals
-    val conv = this["conv"]!!.jsonArray.map {
-        BigDecimal(it.jsonPrimitive.double).setScale(2, RoundingMode.HALF_UP).toDouble()
-    }
-
-    return MarkovResult(path = path, probs = probs, conv = conv)
+    val convRaw  = this["conv"]!!.jsonArray.map { it.jsonPrimitive.double }
+    return buildMarkovResult(pathInts, probsRaw, convRaw)
 }
 

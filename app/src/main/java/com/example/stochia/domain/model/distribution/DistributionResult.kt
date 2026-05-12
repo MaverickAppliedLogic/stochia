@@ -32,71 +32,53 @@ class DistributionResult(
 }
 
 
+private fun buildDistributionResult(
+    frequencies: Map<String, String>,
+    probabilities: Map<String, Double>,
+    mean: Double, stdDev: Double,
+    p5: Double, p95: Double,
+    min: Double, max: Double, total: Double
+): DistributionResult = DistributionResult(
+    frequencies   = frequencies,
+    probabilities = probabilities.mapValues { (_, v) -> (v * 100).toString() },
+    mean          = mean,
+    stdDev        = stdDev,
+    p5            = p5,
+    p95           = p95,
+    min           = min,
+    max           = max,
+    total         = total
+)
+
 fun PyObject.toDistributionResult(): DistributionResult {
     val mapPy = asMap().mapKeys { it.key.toString() }
-
-    // FREQUENCIES
-    val frequencies = mapPy["frequencies"]!!
-        .asMap()
-        .map { (k, v) -> k.toString() to  v.toString() }
-        .toMap()
-
-    // PROBABILITIES
-    val probabilities = mapPy["probabilities"]!!
-        .asMap()
-        .map { (k, v) -> k.toString() to v.toDouble().times(100).toString()  }
-        .toMap()
-
-    // STATISTICS
-    val mean = mapPy["mean"]!!.toDouble()
-    val stdDev = mapPy["std_dev"]!!.toDouble()
-    val p5 = mapPy["p5"]!!.toDouble()
-    val p95 = mapPy["p95"]!!.toDouble()
-    val min = mapPy["min"]!!.toDouble()
-    val max = mapPy["max"]!!.toDouble()
-    val total = mapPy["total"]!!.toDouble()
-
-    return DistributionResult(
-        frequencies = frequencies,
-        probabilities = probabilities,
-        mean = mean,
-        stdDev = stdDev,
-        p5 = p5,
-        p95 = p95,
-        min = min,
-        max = max,
-        total = total
+    return buildDistributionResult(
+        frequencies   = mapPy["frequencies"]!!.asMap().map { (key, value) -> key.toString() to value.toString() }.toMap(),
+        probabilities = mapPy["probabilities"]!!.asMap().map { (key, value) -> key.toString() to value.toDouble() }.toMap(),
+        mean          = mapPy["mean"]!!.toDouble(),
+        stdDev        = mapPy["std_dev"]!!.toDouble(),
+        p5            = mapPy["p5"]!!.toDouble(),
+        p95           = mapPy["p95"]!!.toDouble(),
+        min           = mapPy["min"]!!.toDouble(),
+        max           = mapPy["max"]!!.toDouble(),
+        total         = mapPy["total"]!!.toDouble()
     )
 }
 
 fun JsonObject.toDistributionResult(): DistributionResult {
-    // frequencies: object of string → string
-    val frequencies = this["frequencies"]!!.jsonObject
-        .map { (k, v) -> k to v.jsonPrimitive.content }
-        .toMap()
-
-    // probabilities: object of string → double (multiply by 100 to match local impl)
-    val probabilities = this["probabilities"]!!.jsonObject
-        .map { (k, v) -> k to (v.jsonPrimitive.double * 100).toString() }
-        .toMap()
-
-    val mean   = this["mean"]!!.jsonPrimitive.double
-    val stdDev = this["std_dev"]!!.jsonPrimitive.double
-    val p5     = this["p5"]!!.jsonPrimitive.double
-    val p95    = this["p95"]!!.jsonPrimitive.double
-    val min    = this["min"]!!.jsonPrimitive.double
-    val max    = this["max"]!!.jsonPrimitive.double
-    val total  = this["total"]!!.jsonPrimitive.double
-
-    return DistributionResult(
-        frequencies   = frequencies,
-        probabilities = probabilities,
-        mean          = mean,
-        stdDev        = stdDev,
-        p5            = p5,
-        p95           = p95,
-        min           = min,
-        max           = max,
-        total         = total
+    return buildDistributionResult(
+        frequencies   = this["frequencies"]!!.jsonObject
+            .map { (key, value) -> key to value.jsonPrimitive.content }
+            .toMap(),
+        probabilities = this["probabilities"]!!.jsonObject
+            .map { (key, value) -> key to value.jsonPrimitive.double }
+            .toMap(),
+        mean          = this["mean"]!!.jsonPrimitive.double,
+        stdDev        = this["std_dev"]!!.jsonPrimitive.double,
+        p5            = this["p5"]!!.jsonPrimitive.double,
+        p95           = this["p95"]!!.jsonPrimitive.double,
+        min           = this["min"]!!.jsonPrimitive.double,
+        max           = this["max"]!!.jsonPrimitive.double,
+        total         = this["total"]!!.jsonPrimitive.double
     )
 }
