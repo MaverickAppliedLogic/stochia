@@ -1,5 +1,6 @@
 package com.example.stochia
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -20,7 +21,9 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             StochiaTheme {
-                MainScreen()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    MainScreen()
+                }
             }
         }
     }

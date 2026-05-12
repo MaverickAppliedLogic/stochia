@@ -4,6 +4,7 @@ import android.util.Log
 import com.chaquo.python.Python
 import com.chaquo.python.android.PyApplication
 import com.example.stochia.core.di.appModule
+import com.example.stochia.core.di.networkModule
 import com.example.stochia.core.di.uiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -16,7 +17,7 @@ class Stochia : PyApplication() {
         startKoin {
             androidLogger()
             androidContext(this@Stochia)
-            modules(appModule, uiModule)
+            modules(appModule, uiModule, networkModule)
         }
     }
 }

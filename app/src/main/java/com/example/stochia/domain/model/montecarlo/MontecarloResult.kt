@@ -2,6 +2,7 @@ package com.example.stochia.domain.model.montecarlo
 
 import com.chaquo.python.PyObject
 import com.example.stochia.domain.model.interfaces.Result
+import kotlinx.serialization.json.JsonObject
 
 class MontecarloResult(
     val distribution: MontecarloType?,
@@ -35,4 +36,8 @@ fun PyObject.toMontecarloResult(): MontecarloResult{
         "poisson" -> MontecarloResultFactory.withoutValues(mapPy)
         else -> MontecarloResultFactory.withValues(mapPy)
     }
+}
+
+fun JsonObject.toMontecarloResult(){
+TODO()
 }

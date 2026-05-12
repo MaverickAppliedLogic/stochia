@@ -1,5 +1,6 @@
 package com.example.stochia.core.di
 
+import com.example.stochia.core.network.createHttpClient
 import com.example.stochia.core.services.CalculationSystemService
 import com.example.stochia.data.calculation_system.`interface`.EngineServiceRepository
 import com.example.stochia.data.calculation_system.local_repository.LocalEngineServiceRepositoryImpl
@@ -43,5 +44,11 @@ val uiModule = module {
             get(),
             get()
         )
+    }
+}
+
+val networkModule = module {
+    single {
+        createHttpClient()
     }
 }
