@@ -12,8 +12,8 @@ import org.koin.core.context.startKoin
 class Stochia : PyApplication() {
     override fun onCreate() {
         super.onCreate()
-        Log.d("Python started?: ", "${Python.isStarted()}") //Check Python Started
-        startKoin { //Koin DI initiation
+        Log.d("Python started?: ", "${Python.isStarted()}")
+        startKoin {
             androidLogger()
             androidContext(this@Stochia)
             modules(appModule, uiModule)

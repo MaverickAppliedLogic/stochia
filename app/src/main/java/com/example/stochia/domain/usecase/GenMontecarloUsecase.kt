@@ -7,5 +7,5 @@ import com.example.stochia.domain.model.montecarlo.MontecarloResult
 class GenMontecarloUsecase(
     private val service: CalculationSystemService
 ) {
-    operator fun invoke(data: MontecarloParams): MontecarloResult = service.genMontecarlo(data)
+    suspend operator fun invoke(data: MontecarloParams): MontecarloResult = service.genMontecarlo(data)
 }

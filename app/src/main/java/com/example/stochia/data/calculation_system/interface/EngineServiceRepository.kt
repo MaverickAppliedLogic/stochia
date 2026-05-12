@@ -1,12 +1,14 @@
 package com.example.stochia.data.calculation_system.`interface`
 
-import com.chaquo.python.PyObject
+import com.example.stochia.domain.model.distribution.DistributionResult
+import com.example.stochia.domain.model.markov.MarkovResult
+import com.example.stochia.domain.model.montecarlo.MontecarloResult
 
 interface EngineServiceRepository {
 
-    fun genMontecarlo(distribution: String, params: DoubleArray, size: Int): PyObject
+    suspend fun genMontecarlo(distribution: String, params: DoubleArray, size: Int): MontecarloResult
 
-    fun genMarkov(states: IntArray, probs: DoubleArray, initState: Int, steps: Int): PyObject
+    suspend fun genMarkov(states: IntArray, probs: DoubleArray, initState: Int, steps: Int): MarkovResult
 
-    fun getDistribution(params: DoubleArray): PyObject
+    suspend fun getDistribution(params: DoubleArray): DistributionResult
 }
