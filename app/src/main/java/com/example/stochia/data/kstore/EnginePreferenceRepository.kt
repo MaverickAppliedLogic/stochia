@@ -1,7 +1,7 @@
 package com.example.stochia.data.kstore
 
 import android.content.Context
-import com.example.stochia.domain.model.EngineMode
+import com.example.stochia.domain.model.engineMode.EngineMode
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.storeOf
 import okio.Path.Companion.toPath

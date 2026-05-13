@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.stochia.domain.model.EngineMode
+import com.example.stochia.domain.model.engineMode.EngineMode
 import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
 import com.example.stochia.ui.theme.NeutralLight

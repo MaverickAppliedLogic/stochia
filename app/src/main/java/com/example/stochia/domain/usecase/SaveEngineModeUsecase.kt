@@ -1,7 +1,7 @@
 package com.example.stochia.domain.usecase
 
 import com.example.stochia.data.kstore.EnginePreferenceRepository
-import com.example.stochia.domain.model.EngineMode
+import com.example.stochia.domain.model.engineMode.EngineMode
 
 class SaveEngineModeUsecase(
     private val repository: EnginePreferenceRepository
