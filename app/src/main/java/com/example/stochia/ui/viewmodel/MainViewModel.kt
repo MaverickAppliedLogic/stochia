@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stochia.core.services.CalculationSystemService
-import com.example.stochia.data.kstore.EnginePreferenceRepository
 import com.example.stochia.domain.model.distribution.DistributionParams
 import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.interfaces.Params
@@ -14,8 +13,10 @@ import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.usecase.GenMarkovUsecase
 import com.example.stochia.domain.usecase.GenMontecarloUsecase
 import com.example.stochia.domain.usecase.GetDistributionUsecase
+import com.example.stochia.domain.usecase.GetEngineModeUsecase
 import com.example.stochia.domain.usecase.GetStudyUsecase
 import com.example.stochia.domain.usecase.ListAllStudyUsecase
+import com.example.stochia.domain.usecase.SaveEngineModeUsecase
 import com.example.stochia.domain.usecase.SaveStudyUsecase
 import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +32,8 @@ class MainViewModel(
     private val saveStudyUsecase: SaveStudyUsecase,
     private val getStudyUsecase: GetStudyUsecase,
     private val calculationService: CalculationSystemService,
-    private val enginePreferenceRepository: EnginePreferenceRepository
+    private val getEngineModeUsecase: GetEngineModeUsecase,
+    private val saveEngineModeUsecase: SaveEngineModeUsecase
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(MainScreenState())
@@ -44,7 +46,7 @@ class MainViewModel(
 
     private fun loadEngineMode() {
         viewModelScope.launch {
-            val savedMode = enginePreferenceRepository.get()
+            val savedMode = getEngineModeUsecase()
             calculationService.engineMode = savedMode
             _state.update { it.copy(engineMode = savedMode) }
         }
@@ -203,7 +205,7 @@ class MainViewModel(
             is MainScreenEvent.EngineSelected -> {
                 calculationService.engineMode = event.mode
                 _state.update { it.copy(engineMode = event.mode, engineMenuVisible = false) }
-                viewModelScope.launch { enginePreferenceRepository.save(event.mode) }
+                viewModelScope.launch { saveEngineModeUsecase(event.mode) }
             }
 
             is MainScreenEvent.EngineMenuDismissed -> {

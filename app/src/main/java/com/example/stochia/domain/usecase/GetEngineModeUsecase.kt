@@ -1,0 +1,10 @@
+package com.example.stochia.domain.usecase
+
+import com.example.stochia.data.kstore.EnginePreferenceRepository
+import com.example.stochia.domain.model.EngineMode
+
+class GetEngineModeUsecase(
+    private val repository: EnginePreferenceRepository
+) {
+    suspend operator fun invoke(): EngineMode = repository.get()
+}
