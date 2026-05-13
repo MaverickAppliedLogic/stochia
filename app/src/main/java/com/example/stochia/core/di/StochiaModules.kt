@@ -29,7 +29,7 @@ val appModule = module {
 
     single { KstoreRepository(androidContext()) }
     single { EnginePreferenceRepository(androidContext()) }
-    single { CalculationSystemService(get(), get()) }
+    single { CalculationSystemService(get(), get<RemoteEngineServiceRepositoryImpl>()) }
 
     factory { GenMarkovUsecase(get()) }
     factory { GenMontecarloUsecase(get()) }
@@ -45,6 +45,7 @@ val appModule = module {
 val uiModule = module {
     viewModel {
         MainViewModel(
+            get(),
             get(),
             get(),
             get(),
