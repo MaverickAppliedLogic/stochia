@@ -12,7 +12,7 @@ val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) load(file.inputStream())
 }
-val apiKey: String = localProperties.getProperty("API_KEY") ?: ""
+val apiKey: String = localProperties.getProperty("calc.api.key")?.trim() ?: ""
 
 android {
 

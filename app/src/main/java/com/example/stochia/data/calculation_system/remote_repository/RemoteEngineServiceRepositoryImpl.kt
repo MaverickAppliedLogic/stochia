@@ -11,6 +11,7 @@ import com.example.stochia.domain.model.markov.MarkovResult
 import com.example.stochia.domain.model.markov.toMarkovResult
 import com.example.stochia.domain.model.montecarlo.MontecarloResult
 import com.example.stochia.domain.model.montecarlo.toMontecarloResult
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -30,6 +31,7 @@ class RemoteEngineServiceRepositoryImpl(
         params: DoubleArray,
         size: Int
     ): MontecarloResult {
+        Log.i("CalcEngine", "[REMOTE] genMontecarlo executing → ${NetworkConfig.BASE_URL}montecarlo")
         val response: JsonObject = httpClient.post("${NetworkConfig.BASE_URL}montecarlo") {
             contentType(ContentType.Application.Json)
             header("X-API-Key", NetworkConfig.CALC_SYS_API_KEY)
@@ -44,6 +46,7 @@ class RemoteEngineServiceRepositoryImpl(
         initState: Int,
         steps: Int
     ): MarkovResult {
+        Log.i("CalcEngine", "[REMOTE] genMarkov executing → ${NetworkConfig.BASE_URL}markov")
         val response: JsonObject = httpClient.post("${NetworkConfig.BASE_URL}markov") {
             contentType(ContentType.Application.Json)
             header("X-API-Key", NetworkConfig.CALC_SYS_API_KEY)
@@ -60,11 +63,13 @@ class RemoteEngineServiceRepositoryImpl(
     }
 
     override suspend fun getDistribution(params: DoubleArray): DistributionResult {
+        Log.i("CalcEngine", "[REMOTE] getDistribution executing → ${NetworkConfig.BASE_URL}distribution key='${NetworkConfig.CALC_SYS_API_KEY}'")
         val response: JsonObject = httpClient.post("${NetworkConfig.BASE_URL}distribution") {
             contentType(ContentType.Application.Json)
             header("X-API-Key", NetworkConfig.CALC_SYS_API_KEY)
             setBody(DistributionDTO(data = params.toList()))
         }.body()
+        Log.d("CalcEngine", "[REMOTE] getDistribution raw response: $response")
         return response.toDistributionResult()
     }
 

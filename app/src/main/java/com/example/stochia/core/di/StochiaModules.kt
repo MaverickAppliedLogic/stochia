@@ -5,12 +5,15 @@ import com.example.stochia.core.services.CalculationSystemService
 import com.example.stochia.data.calculation_system.`interface`.EngineServiceRepository
 import com.example.stochia.data.calculation_system.local_repository.LocalEngineServiceRepositoryImpl
 import com.example.stochia.data.calculation_system.remote_repository.RemoteEngineServiceRepositoryImpl
+import com.example.stochia.data.kstore.EnginePreferenceRepository
 import com.example.stochia.data.kstore.KstoreRepository
 import com.example.stochia.domain.usecase.GenMarkovUsecase
 import com.example.stochia.domain.usecase.GenMontecarloUsecase
 import com.example.stochia.domain.usecase.GetDistributionUsecase
+import com.example.stochia.domain.usecase.GetEngineModeUsecase
 import com.example.stochia.domain.usecase.GetStudyUsecase
 import com.example.stochia.domain.usecase.ListAllStudyUsecase
+import com.example.stochia.domain.usecase.SaveEngineModeUsecase
 import com.example.stochia.domain.usecase.SaveStudyUsecase
 import com.example.stochia.domain.usecase.UpdateStudyUsecase
 import com.example.stochia.ui.viewmodel.MainViewModel
@@ -25,7 +28,8 @@ val appModule = module {
     single { RemoteEngineServiceRepositoryImpl(get()) }
 
     single { KstoreRepository(androidContext()) }
-    single { CalculationSystemService(get(), get()) }
+    single { EnginePreferenceRepository(androidContext()) }
+    single { CalculationSystemService(get(), get<RemoteEngineServiceRepositoryImpl>()) }
 
     factory { GenMarkovUsecase(get()) }
     factory { GenMontecarloUsecase(get()) }
@@ -34,11 +38,16 @@ val appModule = module {
     factory { ListAllStudyUsecase(get()) }
     factory { SaveStudyUsecase(get()) }
     factory { UpdateStudyUsecase(get()) }
+    factory { GetEngineModeUsecase(get()) }
+    factory { SaveEngineModeUsecase(get()) }
 }
 
 val uiModule = module {
     viewModel {
         MainViewModel(
+            get(),
+            get(),
+            get(),
             get(),
             get(),
             get(),

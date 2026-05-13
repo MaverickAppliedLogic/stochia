@@ -3,6 +3,7 @@ package com.example.stochia.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.stochia.core.services.CalculationSystemService
 import com.example.stochia.domain.model.distribution.DistributionParams
 import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.interfaces.Params
@@ -12,8 +13,10 @@ import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.domain.usecase.GenMarkovUsecase
 import com.example.stochia.domain.usecase.GenMontecarloUsecase
 import com.example.stochia.domain.usecase.GetDistributionUsecase
+import com.example.stochia.domain.usecase.GetEngineModeUsecase
 import com.example.stochia.domain.usecase.GetStudyUsecase
 import com.example.stochia.domain.usecase.ListAllStudyUsecase
+import com.example.stochia.domain.usecase.SaveEngineModeUsecase
 import com.example.stochia.domain.usecase.SaveStudyUsecase
 import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +30,10 @@ class MainViewModel(
     private val genMarkovUsecase: GenMarkovUsecase,
     private val listAllStudyUsecase: ListAllStudyUsecase,
     private val saveStudyUsecase: SaveStudyUsecase,
-    private val getStudyUsecase: GetStudyUsecase
+    private val getStudyUsecase: GetStudyUsecase,
+    private val calculationService: CalculationSystemService,
+    private val getEngineModeUsecase: GetEngineModeUsecase,
+    private val saveEngineModeUsecase: SaveEngineModeUsecase
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(MainScreenState())
@@ -35,6 +41,15 @@ class MainViewModel(
 
     init {
         fetchStudies()
+        loadEngineMode()
+    }
+
+    private fun loadEngineMode() {
+        viewModelScope.launch {
+            val savedMode = getEngineModeUsecase()
+            calculationService.engineMode = savedMode
+            _state.update { it.copy(engineMode = savedMode) }
+        }
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -181,6 +196,20 @@ class MainViewModel(
 
             is MainScreenEvent.UseDistributionResultAsMontecarlo -> {
                 useDistributionResultAsMontecarlo(event.id)
+            }
+
+            is MainScreenEvent.EngineButtonClicked -> {
+                _state.update { it.copy(engineMenuVisible = !it.engineMenuVisible) }
+            }
+
+            is MainScreenEvent.EngineSelected -> {
+                calculationService.engineMode = event.mode
+                _state.update { it.copy(engineMode = event.mode, engineMenuVisible = false) }
+                viewModelScope.launch { saveEngineModeUsecase(event.mode) }
+            }
+
+            is MainScreenEvent.EngineMenuDismissed -> {
+                _state.update { it.copy(engineMenuVisible = false) }
             }
 
         }

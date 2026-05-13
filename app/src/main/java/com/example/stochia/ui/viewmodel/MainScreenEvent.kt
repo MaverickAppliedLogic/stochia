@@ -1,5 +1,6 @@
 package com.example.stochia.ui.viewmodel
 
+import com.example.stochia.domain.model.engineMode.EngineMode
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.montecarlo_form_components.DistributionType
 import com.example.stochia.ui.viewmodel.MainViewModel.Screen
@@ -14,7 +15,6 @@ sealed class MainScreenEvent{
     data class ChangeMontecarloDistribution(val distribution: DistributionType) : MainScreenEvent()
     data class ChangeMontecarloParams(val params: List<Double>) : MainScreenEvent()
     data class ChangeMontecarloSize(val size: Int) : MainScreenEvent()
-
 
     data class ChangeMarkovStates(val states: List<String>): MainScreenEvent()
     data class ChangeMarkovProbs(val probs: List<Double>): MainScreenEvent()
@@ -31,8 +31,9 @@ sealed class MainScreenEvent{
     // Reutilización de Studies
     data class ReuseStudyParamsClicked(val id: String) : MainScreenEvent()
     data class UseDistributionResultAsMontecarlo(val id: String) : MainScreenEvent()
+
+    // Selección de motor de cálculo
+    data object EngineButtonClicked: MainScreenEvent()
+    data class EngineSelected(val mode: EngineMode): MainScreenEvent()
+    data object EngineMenuDismissed: MainScreenEvent()
 }
-
-
-
-
