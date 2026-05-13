@@ -38,6 +38,7 @@ import com.example.stochia.R
 import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
+import com.example.stochia.ui.screen.main_screen_components.EngineButton
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
 import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
@@ -97,6 +98,13 @@ fun MainScreen(
                     SettingsButton(
                         selected = state.settingsVisible,
                         onClick = { viewModel.onEvent(it) },
+                    )
+                },
+                actions = {
+                    EngineButton(
+                        engineMode = state.engineMode,
+                        menuVisible = state.engineMenuVisible,
+                        onClick = { viewModel.onEvent(it) }
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Neutral)
