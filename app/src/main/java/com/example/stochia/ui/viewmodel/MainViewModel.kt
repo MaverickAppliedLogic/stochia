@@ -3,6 +3,8 @@ package com.example.stochia.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.stochia.core.services.CalculationSystemService
+import com.example.stochia.data.kstore.EnginePreferenceRepository
 import com.example.stochia.domain.model.distribution.DistributionParams
 import com.example.stochia.domain.model.distribution.DistributionResult
 import com.example.stochia.domain.model.interfaces.Params
@@ -27,7 +29,9 @@ class MainViewModel(
     private val genMarkovUsecase: GenMarkovUsecase,
     private val listAllStudyUsecase: ListAllStudyUsecase,
     private val saveStudyUsecase: SaveStudyUsecase,
-    private val getStudyUsecase: GetStudyUsecase
+    private val getStudyUsecase: GetStudyUsecase,
+    private val calculationService: CalculationSystemService,
+    private val enginePreferenceRepository: EnginePreferenceRepository
 ) : ViewModel() {
 
     private var _state = MutableStateFlow(MainScreenState())
@@ -35,6 +39,15 @@ class MainViewModel(
 
     init {
         fetchStudies()
+        loadEngineMode()
+    }
+
+    private fun loadEngineMode() {
+        viewModelScope.launch {
+            val savedMode = enginePreferenceRepository.get()
+            calculationService.engineMode = savedMode
+            _state.update { it.copy(engineMode = savedMode) }
+        }
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -181,6 +194,20 @@ class MainViewModel(
 
             is MainScreenEvent.UseDistributionResultAsMontecarlo -> {
                 useDistributionResultAsMontecarlo(event.id)
+            }
+
+            is MainScreenEvent.EngineButtonClicked -> {
+                _state.update { it.copy(engineMenuVisible = !it.engineMenuVisible) }
+            }
+
+            is MainScreenEvent.EngineSelected -> {
+                calculationService.engineMode = event.mode
+                _state.update { it.copy(engineMode = event.mode, engineMenuVisible = false) }
+                viewModelScope.launch { enginePreferenceRepository.save(event.mode) }
+            }
+
+            is MainScreenEvent.EngineMenuDismissed -> {
+                _state.update { it.copy(engineMenuVisible = false) }
             }
 
         }
