@@ -63,12 +63,13 @@ class RemoteEngineServiceRepositoryImpl(
     }
 
     override suspend fun getDistribution(params: DoubleArray): DistributionResult {
-        Log.i("CalcEngine", "[REMOTE] getDistribution executing → ${NetworkConfig.BASE_URL}distribution")
+        Log.i("CalcEngine", "[REMOTE] getDistribution executing → ${NetworkConfig.BASE_URL}distribution key='${NetworkConfig.CALC_SYS_API_KEY}'")
         val response: JsonObject = httpClient.post("${NetworkConfig.BASE_URL}distribution") {
             contentType(ContentType.Application.Json)
             header("X-API-Key", NetworkConfig.CALC_SYS_API_KEY)
             setBody(DistributionDTO(data = params.toList()))
         }.body()
+        Log.d("CalcEngine", "[REMOTE] getDistribution raw response: $response")
         return response.toDistributionResult()
     }
 
