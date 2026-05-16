@@ -251,9 +251,14 @@ class MainViewModel(
             return
         }
         viewModelScope.launch {
-            val result = getDistributionUsecase(data)
-            _state.update { it.copy(result = result, isNewResult = true) }
-            Log.d("MainViewModel", "analyzeDistribution: $result")
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = getDistributionUsecase(data)
+                _state.update { it.copy(result = result, isNewResult = true, isLoading = false) }
+                Log.d("MainViewModel", "analyzeDistribution: $result")
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
@@ -263,9 +268,14 @@ class MainViewModel(
             return
         }
         viewModelScope.launch {
-            val result = genMontecarloUsecase(data)
-            _state.update { it.copy(result = result, isNewResult = true) }
-            Log.d("MainViewModel", "genMontecarlo: $result")
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = genMontecarloUsecase(data)
+                _state.update { it.copy(result = result, isNewResult = true, isLoading = false) }
+                Log.d("MainViewModel", "genMontecarlo: $result")
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
@@ -275,9 +285,14 @@ class MainViewModel(
             return
         }
         viewModelScope.launch {
-            val result = genMarkovUsecase(data)
-            _state.update { it.copy(result = result, isNewResult = true) }
-            Log.d("MainViewModel", "genMarkov: $result")
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = genMarkovUsecase(data)
+                _state.update { it.copy(result = result, isNewResult = true, isLoading = false) }
+                Log.d("MainViewModel", "genMarkov: $result")
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
