@@ -39,6 +39,7 @@ import com.example.stochia.domain.model.markov.MarkovParams
 import com.example.stochia.domain.model.montecarlo.MontecarloParams
 import com.example.stochia.ui.screen.main_screen_components.BottomBarButton
 import com.example.stochia.ui.screen.main_screen_components.EngineButton
+import com.example.stochia.ui.screen.main_screen_components.LoadingOverlay
 import com.example.stochia.ui.screen.main_screen_components.SettingsButton
 import com.example.stochia.ui.theme.LocalDimens
 import com.example.stochia.ui.theme.Neutral
@@ -192,6 +193,9 @@ fun MainScreen(
                     )
                 }
 
+            if (state.isLoading) {
+                LoadingOverlay()
+            }
         }
     }
 }

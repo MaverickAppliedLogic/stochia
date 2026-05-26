@@ -17,4 +17,5 @@ data class MainScreenState(
     val settingsVisible: Boolean = false,
     val engineMode: EngineMode = EngineMode.DYNAMIC,
     val engineMenuVisible: Boolean = false,
+    val isLoading: Boolean = false,
 )

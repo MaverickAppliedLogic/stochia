@@ -66,11 +66,13 @@ class MainViewModel(
             is MainScreenEvent.SimulateMontecarloButtonClicked -> {
                 Log.d("MainViewModel", "SimulateMontecarloButtonClicked")
                 genMontecarlo(event.data)
+                navigateTo(Screen.RESULT)
             }
 
             is MainScreenEvent.SimulateMarkovButtonClicked -> {
                 Log.d("MainViewModel", "SimulateMarkovButtonClicked")
                 genMarkov(_state.value.params as? MarkovParams?: MarkovParams())
+                navigateTo(Screen.RESULT)
             }
 
             is MainScreenEvent.DistributionButtonClicked -> {
@@ -78,6 +80,7 @@ class MainViewModel(
                 analyzeDistribution(
                     _state.value.params as? DistributionParams?: DistributionParams()
                 )
+                navigateTo(Screen.RESULT)
             }
 
             is MainScreenEvent.ChangeMontecarloDistribution -> {
@@ -251,9 +254,14 @@ class MainViewModel(
             return
         }
         viewModelScope.launch {
-            val result = getDistributionUsecase(data)
-            _state.update { it.copy(result = result, isNewResult = true) }
-            Log.d("MainViewModel", "analyzeDistribution: $result")
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = getDistributionUsecase(data)
+                _state.update { it.copy(result = result, isNewResult = true, isLoading = false) }
+                Log.d("MainViewModel", "analyzeDistribution: $result")
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
@@ -263,9 +271,14 @@ class MainViewModel(
             return
         }
         viewModelScope.launch {
-            val result = genMontecarloUsecase(data)
-            _state.update { it.copy(result = result, isNewResult = true) }
-            Log.d("MainViewModel", "genMontecarlo: $result")
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = genMontecarloUsecase(data)
+                _state.update { it.copy(result = result, isNewResult = true, isLoading = false) }
+                Log.d("MainViewModel", "genMontecarlo: $result")
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
@@ -275,9 +288,14 @@ class MainViewModel(
             return
         }
         viewModelScope.launch {
-            val result = genMarkovUsecase(data)
-            _state.update { it.copy(result = result, isNewResult = true) }
-            Log.d("MainViewModel", "genMarkov: $result")
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val result = genMarkovUsecase(data)
+                _state.update { it.copy(result = result, isNewResult = true, isLoading = false) }
+                Log.d("MainViewModel", "genMarkov: $result")
+            } finally {
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
