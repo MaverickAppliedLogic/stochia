@@ -66,11 +66,13 @@ class MainViewModel(
             is MainScreenEvent.SimulateMontecarloButtonClicked -> {
                 Log.d("MainViewModel", "SimulateMontecarloButtonClicked")
                 genMontecarlo(event.data)
+                navigateTo(Screen.RESULT)
             }
 
             is MainScreenEvent.SimulateMarkovButtonClicked -> {
                 Log.d("MainViewModel", "SimulateMarkovButtonClicked")
                 genMarkov(_state.value.params as? MarkovParams?: MarkovParams())
+                navigateTo(Screen.RESULT)
             }
 
             is MainScreenEvent.DistributionButtonClicked -> {
@@ -78,6 +80,7 @@ class MainViewModel(
                 analyzeDistribution(
                     _state.value.params as? DistributionParams?: DistributionParams()
                 )
+                navigateTo(Screen.RESULT)
             }
 
             is MainScreenEvent.ChangeMontecarloDistribution -> {
