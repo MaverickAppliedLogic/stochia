@@ -83,7 +83,7 @@ fun MainScreen(
                 title = {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth(0.9f)
+                            .fillMaxWidth(1f)
                             .background(Neutral),
                         horizontalArrangement = Arrangement.Center
                     ) {
